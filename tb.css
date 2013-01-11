@@ -1,0 +1,56 @@
+.hide {
+	display: none;
+}
+
+.palette {
+	width: 32px;
+	height: 32px;
+}
+
+.inBoard {
+	position: absolute;
+}
+
+#empty {
+	background-color: black;
+}
+
+#wall {
+	background-color: white;
+}
+
+#redBrick {
+	background-color: red;
+}
+
+#greenBrick {
+	background-color: green;
+}
+
+#game {
+	width: 704px;
+	height: 512px;
+	position: absolute;
+	top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#board {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 512px;
+	height: 512px;
+}
+
+#panel {
+	position: absolute;
+	top: 0;
+	left: 512px;
+	width: 192px;
+	height: 512px;
+	background-color: yellow;
+}
