@@ -1,5 +1,5 @@
-var BOARD_SIZE = 16;
-var SQUARE_SIZE = 32;
+var BOARD_SIZE = 12;
+var SQUARE_SIZE = 48;
 
 // state constants
 var STATE_LOADING = 0;
@@ -51,7 +51,7 @@ function loadLevel(name) {
 		success : function (data) {
 			data = data.replace(/\s/g, "");
 			for (var i = 0; i < data.length; ++i) {
-				board[Math.floor(i / 16)][i % 16].code = data.charAt(i);
+				board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE].code = data.charAt(i);
 			}
 			$(".inBoard").remove();
 			for (var i = 0; i < board.length; ++i) {
