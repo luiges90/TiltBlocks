@@ -18,7 +18,7 @@ var state;
 $(document).ready(function() {
 	state = STATE_LOADING;
 	initialize();
-	loadLevel("1-2");
+	loadLevel("1-1");
 	$(document).keyup(keyPressed);
 });
 
@@ -86,13 +86,13 @@ function step(dirX, dirY) {
 }
 
 function moveBlock(startR, startC, endR, endC) {
-	if (startR == endR && startC == endC) return false;
-
 	var start = [startR, startC];
 	var end = [endR, endC];
 	
-	board[end[0]][end[1]] = board[start[0]][start[1]];
-	board[start[0]][start[1]] = ".";
+	if (startR != endR || startC != endC) {
+		board[end[0]][end[1]] = board[start[0]][start[1]];
+		board[start[0]][start[1]] = ".";
+	}
 	
 	var elem = new Object();
 	elem.start = start;
@@ -229,6 +229,7 @@ function eliminateBlocks() {
 }
 
 var MOVING_SPEED = 100;
+var ELIMINATE_SPEED = 400;
 function animateBlocks(steps) {
 	state = STATE_ANIMATING;
 	
@@ -239,24 +240,33 @@ function animateBlocks(steps) {
 		for (var j in steps[i]) {
 			var start = steps[i][j].start;
 			var end = steps[i][j].end;
-
 			var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
 			if (distance > maxDistance) {
 				maxDistance = distance;
 			}
+		}
+
+		for (var j in steps[i]) {
+			var start = steps[i][j].start;
+			var end = steps[i][j].end;
+			var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
 			
 			$(".r" + start[0] + "c" + start[1]).animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
-				.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]);
+				.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]).delay(maxDistance * MOVING_SPEED - distance * MOVING_SPEED);
 		}
 		animationTime += maxDistance * MOVING_SPEED;
 		
 		// eliminate
 		for (var j in steps[i+1]) {
-			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).fadeOut(400, function(){$(this).remove();});
+			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).fadeOut(ELIMINATE_SPEED, function(){$(this).remove();});
 		}
 		
 		if (steps[i+1].length > 0){
-			animationTime += 400;
+			animationTime += ELIMINATE_SPEED;
+			for (var j in steps[i]) {
+				var end = steps[i][j].end;
+				$(".r" + end[0] + "c" + end[1]).delay(ELIMINATE_SPEED);
+			}
 		}
 	}
 
