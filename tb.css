@@ -11,19 +11,19 @@
 	position: absolute;
 }
 
-#empty {
+.empty {
 	background-color: black;
 }
 
-#wall {
+.wall {
 	background-color: white;
 }
 
-#redBrick {
+.redBlock {
 	background-color: red;
 }
 
-#greenBrick {
+.greenBlock {
 	background-color: green;
 }
 
