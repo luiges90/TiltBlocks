@@ -76,8 +76,12 @@ function keyPressed(e) {
 
 function step(dirX, dirY) {
 	var steps = new Array();
-	steps.push(moveBlocks(dirX, dirY));
-	steps.push(eliminateBlocks());
+	do {
+		var moved = moveBlocks(dirX, dirY);
+		steps.push(moved);
+		var eliminated = eliminateBlocks();
+		steps.push(eliminated);
+	} while (eliminated.length > 0);
 	animateBlocks(steps);
 }
 
