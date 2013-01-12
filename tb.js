@@ -18,7 +18,7 @@ var state;
 $(document).ready(function() {
 	state = STATE_LOADING;
 	initialize();
-	loadLevel("1-1");
+	loadLevel("1-2");
 	$(document).keyup(keyPressed);
 });
 
@@ -253,6 +253,10 @@ function animateBlocks(steps) {
 		// eliminate
 		for (var j in steps[i+1]) {
 			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).fadeOut(400, function(){$(this).remove();});
+		}
+		
+		if (steps[i+1].length > 0){
+			animationTime += 400;
 		}
 	}
 
