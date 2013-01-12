@@ -4,7 +4,7 @@ var SQUARE_SIZE = 48;
 // state constants
 var STATE_LOADING = 0;
 var STATE_READY = 1;
-var STATE_MOVING = 2;
+var STATE_ANIMATING = 2;
 var STATE_ALERTING = 3;
 
 // key constants
@@ -56,11 +56,11 @@ function loadLevel(name) {
 			$(".inBoard").remove();
 			for (var i = 0; i < board.length; ++i) {
 				for (var j = 0; j < board.length; ++j){
-					var $palette = $(codeDivs[board[i][j]]);
-					$palette = $palette.clone();
-					$palette.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j);
-					$palette.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j});
-					$palette.appendTo("#board");
+					if (typeof codeDivs[board[i][j]] !== 'undefined'){
+						$(codeDivs[board[i][j]]).clone()
+							.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j)
+							.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo("#board");
+					}
 				}
 			}
 			state = STATE_READY;
@@ -80,6 +80,7 @@ function keyPressed(e) {
 
 function step(dirX, dirY) {
 	var changeSet = moveBlocks(dirX, dirY);
+	var eliminateSet = elminateBlocks();
 	animateBlocks(changeSet);
 }
 
@@ -180,8 +181,26 @@ function moveBlocks(dirR, dirC) {
 	return changeSet;
 }
 
+function eliminateBlocks() {
+	
+}
+
+var MOVING_SPEED = 100;
 function animateBlocks(changeSet) {
+	state = STATE_ANIMATING;
+	
+	var maxDistance = -1;
 	for (var elem in changeSet) {
-		console.log(changeSet[elem]);
+		var start = changeSet[elem].start;
+		var end = changeSet[elem].end;
+		var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
+		if (distance > maxDistance) {
+			maxDistance = distance;
+		}
+		
+		$(".r" + start[0] + "c" + start[1]).animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
+			.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]);
 	}
+
+	setTimeout(function(){state = STATE_READY;}, maxDistance * MOVING_SPEED);
 }

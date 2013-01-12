@@ -10,10 +10,6 @@
 	position: absolute;
 }
 
-.empty {
-	background-color: black;
-}
-
 .wall {
 	background-color: white;
 }
@@ -43,6 +39,7 @@
 	top: 0;
 	width: 576px;
 	height: 576px;
+	background-color: black;
 }
 
 #panel {
