@@ -58,7 +58,7 @@ function loadLevel(name) {
 				for (var j = 0; j < board.length; ++j){
 					var $palette = $(codeDivs[board[i][j]]);
 					$palette = $palette.clone();
-					$palette.addClass("inBoard").addClass("r" + i + "c" + j);
+					$palette.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j);
 					$palette.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j});
 					$palette.appendTo("#board");
 				}

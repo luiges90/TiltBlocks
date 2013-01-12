@@ -1,13 +1,12 @@
-.hide {
-	display: none;
-}
-
 .palette {
 	width: 48px;
 	height: 48px;
+	display: none;
 }
 
 .inBoard {
+	width: 48px;
+	height: 48px;
 	position: absolute;
 }
 
