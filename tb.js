@@ -31,10 +31,6 @@ function initialize() {
 	for (var i = 0; i < BOARD_SIZE; ++i) 
 	{
 		board[i] = new Array();
-		for (var j = 0; j < BOARD_SIZE; ++j)
-		{
-			board[i][j] = new Object();
-		}
 	}
 	
 	// initialize code map
@@ -79,9 +75,9 @@ function keyPressed(e) {
 }
 
 function step(dirX, dirY) {
-	var changeSet = moveBlocks(dirX, dirY);
-	var eliminateSet = elminateBlocks();
-	animateBlocks(changeSet);
+	var moveSet = moveBlocks(dirX, dirY);
+	var eliminateSet = eliminateBlocks();
+	animateBlocks(moveSet);
 }
 
 function moveBlock(startR, startC, endR, endC) {
@@ -182,7 +178,48 @@ function moveBlocks(dirR, dirC) {
 }
 
 function eliminateBlocks() {
-	
+	var eliminateSet = new Array();
+	for (var i = 0; i < BOARD_SIZE; ++i){
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if ($.inArray(board[i][j], ['1', '2', '3', '4']) >= 0) {
+				var color = board[i][j];
+				var visited = new Array();
+				for (var k = 0; k < BOARD_SIZE; ++k) 
+				{
+					visited[k] = new Array();
+					for (var l = 0; l < BOARD_SIZE; ++l) 
+					{
+						visited[k][l] = false;
+					}
+				}
+				var eliminated = new Array();
+				
+				(function dfs(startR, startC){
+					visited[startR][startC] = true;
+					eliminated.push([startR, startC]);
+					if (startR > 0 && !visited[startR - 1][startC] && board[startR - 1][startC] == color) {
+						dfs(startR - 1, startC);
+					}
+					if (startR < BOARD_SIZE && !visited[startR + 1][startC] && board[startR + 1][startC] == color) {
+						dfs(startR + 1, startC);
+					}
+					if (startC > 0 && !visited[startR][startC - 1] && board[startR][startC - 1] == color) {
+						dfs(startR, startC - 1);
+					}
+					if (startC < BOARD_SIZE && !visited[startR][startC + 1] && board[startR][startC + 1] == color) {
+						dfs(startR, startC + 1);
+					}
+				})(i, j);
+				
+				if (eliminated.length > 1) {
+					for (var elem in eliminated) {
+						board[eliminated[elem][0]][eliminated[elem][1]] = ".";
+					}
+					eliminateSet.push(eliminated);
+				}
+			}
+		}
+	}
 }
 
 var MOVING_SPEED = 100;
