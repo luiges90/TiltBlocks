@@ -75,9 +75,10 @@ function keyPressed(e) {
 }
 
 function step(dirX, dirY) {
-	var moveSet = moveBlocks(dirX, dirY);
-	var eliminateSet = eliminateBlocks();
-	animateBlocks(moveSet);
+	var steps = new Array();
+	steps.push(moveBlocks(dirX, dirY));
+	steps.push(eliminateBlocks());
+	animateBlocks(steps);
 }
 
 function moveBlock(startR, startC, endR, endC) {
@@ -212,32 +213,44 @@ function eliminateBlocks() {
 				})(i, j);
 				
 				if (eliminated.length > 1) {
-					for (var elem in eliminated) {
-						board[eliminated[elem][0]][eliminated[elem][1]] = ".";
+					for (var i in eliminated) {
+						board[eliminated[i][0]][eliminated[i][1]] = ".";
+						eliminateSet.push(eliminated[i]);
 					}
-					eliminateSet.push(eliminated);
 				}
 			}
 		}
 	}
+	return eliminateSet;
 }
 
 var MOVING_SPEED = 100;
-function animateBlocks(changeSet) {
+function animateBlocks(steps) {
 	state = STATE_ANIMATING;
 	
-	var maxDistance = -1;
-	for (var elem in changeSet) {
-		var start = changeSet[elem].start;
-		var end = changeSet[elem].end;
-		var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
-		if (distance > maxDistance) {
-			maxDistance = distance;
+	var animationTime = 0;
+	for (var i = 0; i < steps.length; i += 2) {
+		// move
+		var maxDistance = -1;
+		for (var j in steps[i]) {
+			var start = steps[i][j].start;
+			var end = steps[i][j].end;
+
+			var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
+			if (distance > maxDistance) {
+				maxDistance = distance;
+			}
+			
+			$(".r" + start[0] + "c" + start[1]).animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
+				.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]);
 		}
+		animationTime += maxDistance * MOVING_SPEED;
 		
-		$(".r" + start[0] + "c" + start[1]).animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
-			.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]);
+		// eliminate
+		for (var j in steps[i+1]) {
+			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).fadeOut(400, function(){$(this).remove();});
+		}
 	}
 
-	setTimeout(function(){state = STATE_READY;}, maxDistance * MOVING_SPEED);
+	setTimeout(function(){state = STATE_READY;}, animationTime);
 }
