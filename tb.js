@@ -30,14 +30,14 @@ var codeDivs;
 
 function initialize() {
     // initialize board
-	board = new Array();
+	board = [];
 	for (var i = 0; i < BOARD_SIZE; ++i) 
 	{
-		board[i] = new Array();
+		board[i] = [];
 	}
 	
 	// initialize code map
-	codeDivs = new Array();
+	codeDivs = [];
 	$(".palette").each(function() {
 		codeDivs[$(this).data('code')] = this;
 	});
@@ -118,7 +118,7 @@ function arrowPressed(e) {
 }
 
 function makeStep(dirX, dirY) {
-	var steps = new Array();
+	var steps = [];
 	do {
 		var moved = moveBlocks(dirX, dirY);
 		steps.push(moved);
@@ -137,14 +137,11 @@ function moveBlock(startR, startC, endR, endC) {
 		board[start[0]][start[1]] = ".";
 	}
 	
-	var elem = new Object();
-	elem.start = start;
-	elem.end = end;
-	return elem;
+	return {start: start, end: end};
 }
 
 function moveBlocks(dirR, dirC) {
-	var changeSet = new Array();
+	var changeSet = [];
 	
 	if (dirC < 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
@@ -226,21 +223,21 @@ function moveBlocks(dirR, dirC) {
 }
 
 function eliminateBlocks() {
-	var eliminateSet = new Array();
+	var eliminateSet = [];
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if ($.inArray(board[i][j], ['1', '2', '3', '4']) >= 0) {
 				var color = board[i][j];
-				var visited = new Array();
+				var visited = [];
 				for (var k = 0; k < BOARD_SIZE; ++k) 
 				{
-					visited[k] = new Array();
+					visited[k] = [];
 					for (var l = 0; l < BOARD_SIZE; ++l) 
 					{
 						visited[k][l] = false;
 					}
 				}
-				var eliminated = new Array();
+				var eliminated = [];
 				
 				(function dfs(startR, startC){
 					visited[startR][startC] = true;
