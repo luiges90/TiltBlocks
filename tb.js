@@ -138,6 +138,8 @@ function makeStep(dirX, dirY) {
 		steps.push(eliminated);
 	} while (eliminated.length > 0);
 	animateBlocks(steps);
+	--step;
+	$("#steps .content").html(step + "/" + stepLimit);
 }
 
 function moveBlock(startR, startC, endR, endC) {
