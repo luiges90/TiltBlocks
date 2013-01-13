@@ -15,11 +15,14 @@ var KEY_DOWN = 40;
 
 var state;
 
+var step, stepLimit;
+
 $(document).ready(function() {
 	state = STATE_LOADING;
+	$(document).keyup(keyPressed);
+	$(".arrow").mousedown(arrowPressed);
 	initialize();
 	loadLevel("1-1");
-	$(document).keyup(keyPressed);
 });
 
 var board;
@@ -64,17 +67,57 @@ function loadLevel(name) {
 	});
 }
 
+function markMoved(dir) {
+	$(".arrow").removeClass("lastDir");
+	$("." + dir).addClass("lastDir");
+}
+
 function keyPressed(e) {
 	if (state != STATE_READY) return;
 	switch (e.which) {
-		case KEY_UP: step(-1, 0); break;
-		case KEY_DOWN: step(1, 0); break;
-		case KEY_LEFT: step(0, -1); break;
-		case KEY_RIGHT: step(0, 1); break;
+		case KEY_UP: 
+			if ($(".up").hasClass("lastDir")) return;
+			makeStep(-1, 0); 
+			markMoved("up"); 
+			break;
+		case KEY_DOWN: 
+			if ($(".down").hasClass("lastDir")) return;
+			makeStep(1, 0); 
+			markMoved("down"); 
+			break;
+		case KEY_LEFT: 
+			if ($(".left").hasClass("lastDir")) return;
+			makeStep(0, -1); 
+			markMoved("left"); 
+			break;
+		case KEY_RIGHT: 
+			if ($(".right").hasClass("lastDir")) return;
+			makeStep(0, 1); 
+			markMoved("right"); 
+			break;
 	}
 }
 
-function step(dirX, dirY) {
+function arrowPressed(e) {
+	if (state != STATE_READY) return;
+	var $this = $(this);
+	if ($this.hasClass("lastDir")) return;
+	if ($this.hasClass("up")) {
+		makeStep(-1, 0);
+		markMoved("up"); 
+	} else if ($this.hasClass("down")) {
+		makeStep(1, 0);
+		markMoved("down"); 
+	} else if ($this.hasClass("left")) {
+		makeStep(0, -1);
+		markMoved("left"); 
+	} else if ($this.hasClass("right")) {
+		makeStep(0, 1);
+		markMoved("right"); 
+	}
+}
+
+function makeStep(dirX, dirY) {
 	var steps = new Array();
 	do {
 		var moved = moveBlocks(dirX, dirY);

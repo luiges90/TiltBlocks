@@ -26,6 +26,90 @@
 	background-color: blue;
 }
 
+.info {
+	margin: 5px 0;
+}
+
+.info .title{
+	font: 36px arial,sans-serif;
+}
+
+.info .content {
+	font: 28px arial,sans-serif;
+	color: #999;
+}
+
+#arrows {
+	position: relative;
+	border: 1px solid #CCC;
+	background-color: #CCC;
+	width: 180px;
+	height: 180px;
+	margin: 10px 0;
+}
+
+.arrow {
+	position: absolute;
+	width: 60px;
+	height: 60px;
+}
+
+#up {
+	position: absolute;
+	left: 60px;
+	top: 0px;
+	background-image: url('img/arrows.png');
+	background-position: 0px 0px;
+}
+#up:hover {
+	background-position: 0px 60px;
+}
+#up.lastDir {
+	background-position: 0px 120px;
+}
+
+#down {
+	position: absolute;
+	left: 60px;
+	top: 120px;
+	background-image: url('img/arrows.png');
+	background-position: 120px 0px;
+}
+#down:hover {
+	background-position: 120px 60px;
+}
+#down.lastDir {
+	background-position: 120px 120px;
+}
+
+#left {
+	position: absolute;
+	left: 0px;
+	top: 60px;
+	background-image: url('img/arrows.png');
+	background-position: 60px 0px;
+}
+#left:hover {
+	background-position: 60px 60px;
+}
+#left.lastDir {
+	background-position: 60px 120px;
+}
+
+#right {
+	position: absolute;
+	left: 120px;
+	top: 60px;
+	background-image: url('img/arrows.png');
+	background-position: 180px 0px;
+}
+#right:hover {
+	background-position: 180px 60px;
+}
+#right.lastDir {
+	background-position: 180px 120px;
+}
+
 #game {
 	width: 768px;
 	height: 576px;
@@ -50,7 +134,7 @@
 	position: absolute;
 	top: 0;
 	left: 576px;
-	width: 192px;
-	height: 576px;
-	background-color: yellow;
+	width: 182px;
+	height: 566px;
+	border: 5px solid black;
 }
