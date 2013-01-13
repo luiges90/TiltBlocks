@@ -27,6 +27,7 @@ $(document).ready(function() {
 
 var board;
 var codeDivs;
+var step, stepLimit;
 
 function initialize() {
     // initialize board
@@ -48,10 +49,15 @@ function loadLevel(name) {
 		url : "levels/" + name + ".txt",
 		dataType: "text",
 		success : function (data) {
+			// read and parse level file
 			data = data.replace(/\s/g, "");
-			for (var i = 0; i < data.length; ++i) {
+			for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
 				board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE] = data.charAt(i);
 			}
+			stepLimit = parseInt(data.slice(-2));
+			step = stepLimit;
+			
+			// setup board
 			$(".inBoard").remove();
 			for (var i = 0; i < board.length; ++i) {
 				for (var j = 0; j < board.length; ++j){
@@ -62,6 +68,12 @@ function loadLevel(name) {
 					}
 				}
 			}
+			
+			// setup info
+			$("#level .content").html(name);
+			$("#steps .content").html(step + "/" + stepLimit);
+			
+			// ready
 			state = STATE_READY;
 		}
 	});
