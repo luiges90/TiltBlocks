@@ -35,6 +35,7 @@ $(document).ready(function() {
 		loadLevel(level);
 		$("#popup-layer").fadeOut();
 		$(".popup").fadeOut();
+		$(".popup-bg").fadeOut();
 	});
 });
 
@@ -356,7 +357,7 @@ function checkComplete() {
 	}
 	if (completed) {
 		$(".level-cleared .content").html("Steps remain: " + step);
-		$("#popup-layer").css('background-color', '#fff').fadeIn();
+		$("#popup-layer").css('background-color', 'transparent').fadeIn();
 		$(".level-cleared").fadeIn();
 		state = STATE_CLEARED;
 		$(".next").one("click", function() {
