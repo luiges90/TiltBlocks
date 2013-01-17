@@ -18,7 +18,7 @@ var state;
 
 var step, stepLimit;
 
-var level = 0;
+var level = 2;
 
 function getLevelString(){
 	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
@@ -370,14 +370,37 @@ function checkComplete() {
 }
 
 function checkFail() {
-	if (step <= 0 && state == STATE_READY) {
-		//$("#popup-layer").show();
-		$(".level-failed").show();
+	var failed = false;
+	if (step <= 0) {
+		failed = "Too many steps!";
+	}
+	var counts = [];
+	for (var i = 0; i < BOARD_SIZE; ++i){
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if ($.inArray(board[i][j], ['1', '2', '3', '4']) >= 0) {
+				if (counts[board[i][j]] === undefined){
+					counts[board[i][j]] = 1;
+				} else {
+					counts[board[i][j]]++;
+				}
+			}
+		}
+	}
+	for (var i in counts){
+		if (counts[i] == 1){
+			failed = "Impossible to clear now!";
+		}
+	}
+	
+	if (failed) {
+		$(".level-failed .content").html(failed);
+		$("#popup-layer").fadeIn();
+		$(".level-failed").fadeIn();
 		state = STATE_FAILED;
 		$(".retry").one("click", function() {
 			loadLevel(level);
-			//$("#popup-layer").hide();
-			$(".level-failed").hide();
+			$("#popup-layer").fadeOut();
+			$(".level-failed").fadeOut();
 		});
 	}
 }
