@@ -354,12 +354,15 @@ function checkComplete() {
 		$(".level-cleared").show();
 		state = STATE_CLEARED;
 		$(".retry").one("click", function() {
+			$(".next").off("click");
 			loadLevel(level);
 			//$("#popup-layer").hide();
 			$(".level-cleared").hide();
 		});
 		$(".next").one("click", function() {
-			loadLevel(++level);
+			$(".retry").off("click");
+			level++;
+			loadLevel(level);
 			//$("#popup-layer").hide();
 			$(".level-cleared").hide();
 		});
