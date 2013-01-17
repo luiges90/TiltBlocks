@@ -5,7 +5,8 @@ var SQUARE_SIZE = 48;
 var STATE_LOADING = 0;
 var STATE_READY = 1;
 var STATE_ANIMATING = 2;
-var STATE_ALERTING = 3;
+var STATE_COMPLETED = 3;
+var STATE_FAILED = 4;
 
 // key constants
 var KEY_LEFT = 37;
@@ -17,12 +18,18 @@ var state;
 
 var step, stepLimit;
 
+var level = 0;
+
+function getLevelString(){
+	return (level / 10 + 1) + '-' + (level % 10 + 1);
+}
+
 $(document).ready(function() {
 	state = STATE_LOADING;
 	$(document).keyup(keyPressed);
 	$(".arrow").mousedown(arrowPressed);
 	initialize();
-	loadLevel("1-1");
+	loadLevel(level);
 });
 
 var board;
@@ -46,7 +53,7 @@ function initialize() {
 
 function loadLevel(name) {
 	$.ajax({
-		url : "levels/" + name + ".txt",
+		url : "levels/" + getLevelString() + ".txt",
 		dataType: "text",
 		success : function (data) {
 			// read and parse level file
@@ -70,7 +77,7 @@ function loadLevel(name) {
 			}
 			
 			// setup info
-			$("#level .content").html(name);
+			$("#level .content").html(getLevelString);
 			$("#steps .content").html(step + "/" + stepLimit);
 			
 			// ready
@@ -324,5 +331,24 @@ function animateBlocks(steps) {
 		}
 	}
 
-	setTimeout(function(){state = STATE_READY;}, animationTime);
+	setTimeout(function(){
+		state = STATE_READY;
+		checkComplete();
+		checkFail();
+	}, animationTime);
+}
+
+function checkComplete() {
+	
+}
+
+function checkFail() {
+	if (step <= 0 && state == STATE_READY) {
+		$("#popup-layer").show();
+		$(".level-failed").show();
+		state = STATE_FAILED;
+		$(".retry").click(function() {
+			loadLevel(level);
+		});
+	}
 }

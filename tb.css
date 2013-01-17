@@ -1,3 +1,7 @@
+body {
+	overflow: hidden;
+}
+
 .palette {
 	width: 48px;
 	height: 48px;
@@ -52,6 +56,10 @@
 	position: absolute;
 	width: 60px;
 	height: 60px;
+}
+
+.arrow:hover {
+	cursor: pointer;
 }
 
 #up {
@@ -140,6 +148,7 @@
 }
 
 #level-cleared-background {
+	display: none;
 	position: absolute;
 	width: 500px;
 	height: 250px;
@@ -155,7 +164,7 @@
 }
 
 #level-cleared {
-	/*display: none;*/
+	display: none;
 	position: absolute;
 	width: 500px;
 	height: 250px;
@@ -198,4 +207,95 @@
 	text-shadow: 1px 1px #77F;
 	border-radius: 3px;
 	box-shadow: 0px 0px 3px #070;
+}
+
+#level-cleared .button:hover {
+	background-color: #393;
+	box-shadow: 0px 0px 3px #393;
+	cursor: pointer;
+}
+
+#level-failed-background {
+	display: none;
+	position: absolute;
+	width: 500px;
+	height: 250px;
+	left: 50%;
+	top: 50%;
+	margin-left: -250px;
+	margin-top: -125px;
+	background-color: #999;
+	box-shadow: 0px 0px 40px #EEE, 0px 0px 40px #EEE;
+	border-radius: 5px;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
+#level-failed {
+	display: none;
+	position: absolute;
+	width: 500px;
+	height: 250px;
+	left: 50%;
+	top: 50%;
+	margin-left: -250px;
+	margin-top: -125px;
+	text-align: center;
+}
+
+#level-failed .title{
+	color: #00D;
+	font: 48px arial,sans-serif;
+	line-height: 96px;
+	text-shadow: 0px 0px 10px #007, 0px 0px 20px #007;
+}
+
+#level-failed .info {
+	color: #AAA;
+	font: 24px arial,sans-serif;
+	line-height: 48px;
+	text-shadow: 1px 1px #666;
+}
+
+#level-failed .buttons {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+}
+
+#level-failed .button {
+	width: 25%;
+	height: 100%;
+	display: inline-block;
+	margin: 12px;
+	font: 18px arial,sans-serif;
+	color: #007;
+	background-color: #070;
+	line-height: 36px;
+	text-shadow: 1px 1px #77F;
+	border-radius: 3px;
+	box-shadow: 0px 0px 3px #070;
+}
+
+#level-failed .button:hover {
+	background-color: #393;
+	box-shadow: 0px 0px 3px #393;
+	cursor: pointer;
+}
+
+.popup {
+	z-index: 100;
+}
+
+#popup-layer {
+	width: 3000px;
+	height: 3000px;
+	z-index: 50;
+	left: 0;
+	top: 0;
+	background-color: #000;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	display: none;
+	position: absolute;
 }
