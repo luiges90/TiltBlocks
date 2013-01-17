@@ -145,9 +145,13 @@ function makeStep(dirX, dirY) {
 		var eliminated = eliminateBlocks();
 		steps.push(eliminated);
 	} while (eliminated.length > 0);
-	animateBlocks(steps);
 	--step;
 	$("#steps .content").html(step + "/" + stepLimit);
+	animateBlocks(steps, function(){
+		state = STATE_READY;
+		checkComplete();
+		checkFail();
+	});
 }
 
 function moveBlock(startR, startC, endR, endC) {
@@ -292,7 +296,7 @@ function eliminateBlocks() {
 
 var MOVING_SPEED = 100;
 var ELIMINATE_SPEED = 400;
-function animateBlocks(steps) {
+function animateBlocks(steps, callback) {
 	state = STATE_ANIMATING;
 	
 	var animationTime = 0;
@@ -332,11 +336,7 @@ function animateBlocks(steps) {
 		}
 	}
 
-	setTimeout(function(){
-		state = STATE_READY;
-		checkComplete();
-		checkFail();
-	}, animationTime);
+	setTimeout(callback, animationTime);
 }
 
 function checkComplete() {
