@@ -30,6 +30,14 @@ body {
 	background-color: blue;
 }
 
+.yellowBlock {
+	background-color: yellow;
+}
+
+.stoneBlock {
+	background-color: grey;
+}
+
 #panel .info {
 	margin: 5px 0;
 }
