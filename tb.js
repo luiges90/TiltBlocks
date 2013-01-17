@@ -5,7 +5,7 @@ var SQUARE_SIZE = 48;
 var STATE_LOADING = 0;
 var STATE_READY = 1;
 var STATE_ANIMATING = 2;
-var STATE_COMPLETED = 3;
+var STATE_CLEARED = 3;
 var STATE_FAILED = 4;
 
 // key constants
@@ -21,7 +21,7 @@ var step, stepLimit;
 var level = 0;
 
 function getLevelString(){
-	return (level / 10 + 1) + '-' + (level % 10 + 1);
+	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
 }
 
 $(document).ready(function() {
@@ -79,6 +79,7 @@ function loadLevel(name) {
 			// setup info
 			$("#level .content").html(getLevelString);
 			$("#steps .content").html(step + "/" + stepLimit);
+			$(".arrow").removeClass("lastDir");
 			
 			// ready
 			state = STATE_READY;
@@ -339,16 +340,41 @@ function animateBlocks(steps) {
 }
 
 function checkComplete() {
-	
+	var completed = true;
+	for (var i = 0; i < BOARD_SIZE; ++i){
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if ($.inArray(board[i][j], ['1', '2', '3', '4']) >= 0) {
+				completed = false;
+			}
+		}
+	}
+	if (completed) {
+		$(".level-cleared .content").html("Steps remain: " + step);
+		//$("#popup-layer").show();
+		$(".level-cleared").show();
+		state = STATE_CLEARED;
+		$(".retry").one("click", function() {
+			loadLevel(level);
+			//$("#popup-layer").hide();
+			$(".level-cleared").hide();
+		});
+		$(".next").one("click", function() {
+			loadLevel(++level);
+			//$("#popup-layer").hide();
+			$(".level-cleared").hide();
+		});
+	}
 }
 
 function checkFail() {
 	if (step <= 0 && state == STATE_READY) {
-		$("#popup-layer").show();
+		//$("#popup-layer").show();
 		$(".level-failed").show();
 		state = STATE_FAILED;
-		$(".retry").click(function() {
+		$(".retry").one("click", function() {
 			loadLevel(level);
+			//$("#popup-layer").hide();
+			$(".level-failed").hide();
 		});
 	}
 }
