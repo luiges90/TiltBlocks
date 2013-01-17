@@ -18,7 +18,7 @@ var state;
 
 var step, stepLimit;
 
-var level = 2;
+var level = 0;
 
 function getLevelString(){
 	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
@@ -351,25 +351,27 @@ function checkComplete() {
 	if (completed) {
 		$(".level-cleared .content").html("Steps remain: " + step);
 		//$("#popup-layer").show();
-		$(".level-cleared").show();
+		$(".level-cleared").fadeIn();
 		state = STATE_CLEARED;
 		$(".retry").one("click", function() {
 			$(".next").off("click");
 			loadLevel(level);
 			//$("#popup-layer").hide();
-			$(".level-cleared").hide();
+			$(".level-cleared").fadeOut();
 		});
 		$(".next").one("click", function() {
 			$(".retry").off("click");
 			level++;
 			loadLevel(level);
 			//$("#popup-layer").hide();
-			$(".level-cleared").hide();
+			$(".level-cleared").fadeOut();
 		});
 	}
 }
 
 function checkFail() {
+	if (state == STATE_CLEARED) return;
+
 	var failed = false;
 	if (step <= 0) {
 		failed = "Too many steps!";
@@ -388,7 +390,7 @@ function checkFail() {
 	}
 	for (var i in counts){
 		if (counts[i] == 1){
-			failed = "Impossible to clear now!";
+			failed = "Impossible to clear!";
 		}
 	}
 	
