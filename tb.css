@@ -190,39 +190,6 @@ body {
 	text-shadow: 0px 0px 10px #FC0, 0px 0px 20px #FC0;
 }
 
-#level-cleared .info {
-	color: #AAA;
-	font: 24px arial,sans-serif;
-	line-height: 48px;
-	text-shadow: 1px 1px #666;
-}
-
-#level-cleared .buttons {
-	position: absolute;
-	bottom: 0px;
-	width: 100%;
-}
-
-#level-cleared .button {
-	width: 25%;
-	height: 100%;
-	display: inline-block;
-	margin: 12px;
-	font: 18px arial,sans-serif;
-	color: #007;
-	background-color: #070;
-	line-height: 36px;
-	text-shadow: 1px 1px #77F;
-	border-radius: 3px;
-	box-shadow: 0px 0px 3px #070;
-}
-
-#level-cleared .button:hover {
-	background-color: #393;
-	box-shadow: 0px 0px 3px #393;
-	cursor: pointer;
-}
-
 #level-failed-background {
 	display: none;
 	position: absolute;
@@ -258,20 +225,20 @@ body {
 	text-shadow: 0px 0px 10px #007, 0px 0px 20px #007;
 }
 
-#level-failed .info {
+.popup .info {
 	color: #AAA;
 	font: 24px arial,sans-serif;
 	line-height: 48px;
 	text-shadow: 1px 1px #666;
 }
 
-#level-failed .buttons {
+.popup .buttons {
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
 }
 
-#level-failed .button {
+.popup .button {
 	width: 25%;
 	height: 100%;
 	display: inline-block;
@@ -285,7 +252,28 @@ body {
 	box-shadow: 0px 0px 3px #070;
 }
 
-#level-failed .button:hover {
+.popup .button:hover {
+	background-color: #393;
+	box-shadow: 0px 0px 3px #393;
+	cursor: pointer;
+}
+
+#panel .button {
+	width: 158px;
+	height: 30px;
+	margin: 12px;
+	font: 18px arial,sans-serif;
+	color: #007;
+	background-color: #070;
+	line-height: 36px;
+	text-shadow: 1px 1px #77F;
+	border-radius: 3px;
+	box-shadow: 0px 0px 3px #070;
+	text-align: center;
+	vertical-align: center;
+}
+
+#panel .button:hover {
 	background-color: #393;
 	box-shadow: 0px 0px 3px #393;
 	cursor: pointer;

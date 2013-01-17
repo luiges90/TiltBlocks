@@ -30,6 +30,12 @@ $(document).ready(function() {
 	$(".arrow").mousedown(arrowPressed);
 	initialize();
 	loadLevel(level);
+	$(".retry").click(function() {
+		$(".next").off("click");
+		loadLevel(level);
+		$("#popup-layer").fadeOut();
+		$(".popup").fadeOut();
+	});
 });
 
 var board;
@@ -350,20 +356,13 @@ function checkComplete() {
 	}
 	if (completed) {
 		$(".level-cleared .content").html("Steps remain: " + step);
-		//$("#popup-layer").show();
+		$("#popup-layer").css('background-color', '#fff').fadeIn();
 		$(".level-cleared").fadeIn();
 		state = STATE_CLEARED;
-		$(".retry").one("click", function() {
-			$(".next").off("click");
-			loadLevel(level);
-			//$("#popup-layer").hide();
-			$(".level-cleared").fadeOut();
-		});
 		$(".next").one("click", function() {
-			$(".retry").off("click");
 			level++;
 			loadLevel(level);
-			//$("#popup-layer").hide();
+			$("#popup-layer").fadeOut();
 			$(".level-cleared").fadeOut();
 		});
 	}
@@ -396,13 +395,8 @@ function checkFail() {
 	
 	if (failed) {
 		$(".level-failed .content").html(failed);
-		$("#popup-layer").fadeIn();
+		$("#popup-layer").css('background-color', '#000').fadeIn();
 		$(".level-failed").fadeIn();
 		state = STATE_FAILED;
-		$(".retry").one("click", function() {
-			loadLevel(level);
-			$("#popup-layer").fadeOut();
-			$(".level-failed").fadeOut();
-		});
 	}
 }
