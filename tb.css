@@ -39,13 +39,21 @@ body {
 }
 
 #panel {
-	background-color: #DDD;
+	background: #dddddd; /* Old browsers */
+	background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #dddddd 0%,#ffffff 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
 #panel .info {
 	margin: 5px 0;
 	color: #FF8;
 	text-shadow: 2px 2px #AAA;
+	text-align: left;
 }
 
 #panel .info .title{
@@ -57,13 +65,17 @@ body {
 	color: #FFF;
 }
 
+#panel .info .content.warning {
+	color: #F00;
+}
+
 #arrows {
 	position: relative;
 	border: 6px ridge #BBB;
-	background-color: #CCC;
 	width: 180px;
 	height: 180px;
 	margin: 10px 0;
+	background: #CCC; 
 }
 
 .arrow {
@@ -231,18 +243,32 @@ body {
 	margin: 12px;
 	font: 18px arial,sans-serif;
 	color: #007;
-	background-color: #070;
 	line-height: 36px;
 	text-shadow: 1px 1px #77F;
 	border-radius: 3px;
 	box-shadow: 0px 0px 3px #070;
 	text-align: center;
+	background: #007700; /* Old browsers */
+	background: -moz-linear-gradient(-45deg, #007700 0%, #65a000 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#007700), color-stop(100%,#65a000)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(-45deg, #007700 0%,#65a000 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(-45deg, #007700 0%,#65a000 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(-45deg, #007700 0%,#65a000 100%); /* IE10+ */
+	background: linear-gradient(135deg, #007700 0%,#65a000 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007700', endColorstr='#65a000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .button:hover {
-	background-color: #393;
-	box-shadow: 0px 0px 3px #393;
+	box-shadow: 0px 0px 3px #0a0;
 	cursor: pointer;
+	background: #00a600; /* Old browsers */
+	background: -moz-linear-gradient(-45deg, #00a600 0%, #80ca00 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#00a600), color-stop(100%,#80ca00)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(-45deg, #00a600 0%,#80ca00 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(-45deg, #00a600 0%,#80ca00 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(-45deg, #00a600 0%,#80ca00 100%); /* IE10+ */
+	background: linear-gradient(135deg, #00a600 0%,#80ca00 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00a600', endColorstr='#80ca00',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .popup .button {
@@ -274,9 +300,16 @@ body {
 	position: absolute;
 }
 
-#main-menu-scene {
+.scene {
 	text-align: center;
-	background-color: #EEE;
+	background: #dddddd;
+	background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #dddddd 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #dddddd 0%,#ffffff 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #dddddd 0%,#ffffff 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #dddddd 0%,#ffffff 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
 #main-menu-scene .title {
@@ -302,11 +335,9 @@ body {
 	line-height: 50px;
 }
 
-#level-select-scene {
-	background-color: #EEE;
-}
-
 #level-select-scene .title {
-	font: 48px arial,sans-serif
+	font: 48px arial,sans-serif;
 	line-height: 60px;
+	color: #FF0;
+	text-shadow: 2px 2px #CCC;
 }

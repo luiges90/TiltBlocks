@@ -44,7 +44,7 @@ $(document).ready(function() {
 		$("#game-scene").show();
 		loadLevel(0);
 	});
-	$("#main-menu-scene .start").click();
+
 	$("#main-menu-scene .level-select").click(function(){
 		$(".scene").hide();
 		$("#level-select-scene").show();
@@ -58,6 +58,7 @@ $(document).ready(function() {
 
 	$(".retry").click(function() {
 		$(".next").off("click");
+		$("#steps .content").removeClass("warning");
 		loadLevel(level);
 		$("#popup-layer").fadeOut();
 		$(".popup").fadeOut();
@@ -182,6 +183,9 @@ function makeStep(dirX, dirY) {
 	} while (eliminated.length > 0);
 	--step;
 	$("#steps .content").html(step + "/" + stepLimit);
+	if (step < 2) {
+		$("#steps .content").addClass("warning");
+	}
 	animateBlocks(steps, function(){
 		state = STATE_READY;
 		checkComplete();
