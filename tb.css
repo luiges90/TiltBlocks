@@ -155,7 +155,7 @@ body {
 	border: 5px solid black;
 }
 
-#level-cleared-background {
+.popup-bg {
 	display: none;
 	position: absolute;
 	width: 500px;
@@ -164,14 +164,10 @@ body {
 	top: 50%;
 	margin-left: -250px;
 	margin-top: -125px;
-	background-color: #DD0;
-	box-shadow: 0px 0px 40px #FF0, 0px 0px 40px #FF0;
 	border-radius: 5px;
-	opacity: 0.8;
-	filter: alpha(opacity=80);
 }
 
-#level-cleared {
+.popup {
 	display: none;
 	position: absolute;
 	width: 500px;
@@ -181,47 +177,34 @@ body {
 	margin-left: -250px;
 	margin-top: -125px;
 	text-align: center;
+}
+
+#level-cleared-background {
+	background-color: #DD0;
+	box-shadow: 0px 0px 40px #FF0, 0px 0px 40px #FF0;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
+#level-failed-background {
+	background-color: #999;
+	box-shadow: 0px 0px 40px #EEE, 0px 0px 40px #EEE;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
+.popup .title {
+	font: 48px arial,sans-serif;
+	line-height: 96px;
 }
 
 #level-cleared .title{
 	color: #F00;
-	font: 48px arial,sans-serif;
-	line-height: 96px;
 	text-shadow: 0px 0px 10px #FC0, 0px 0px 20px #FC0;
-}
-
-#level-failed-background {
-	display: none;
-	position: absolute;
-	width: 500px;
-	height: 250px;
-	left: 50%;
-	top: 50%;
-	margin-left: -250px;
-	margin-top: -125px;
-	background-color: #999;
-	box-shadow: 0px 0px 40px #EEE, 0px 0px 40px #EEE;
-	border-radius: 5px;
-	opacity: 0.8;
-	filter: alpha(opacity=80);
-}
-
-#level-failed {
-	display: none;
-	position: absolute;
-	width: 500px;
-	height: 250px;
-	left: 50%;
-	top: 50%;
-	margin-left: -250px;
-	margin-top: -125px;
-	text-align: center;
 }
 
 #level-failed .title{
 	color: #00D;
-	font: 48px arial,sans-serif;
-	line-height: 96px;
 	text-shadow: 0px 0px 10px #007, 0px 0px 20px #007;
 }
 
@@ -238,29 +221,7 @@ body {
 	width: 100%;
 }
 
-.popup .button {
-	width: 25%;
-	height: 100%;
-	display: inline-block;
-	margin: 12px;
-	font: 18px arial,sans-serif;
-	color: #007;
-	background-color: #070;
-	line-height: 36px;
-	text-shadow: 1px 1px #77F;
-	border-radius: 3px;
-	box-shadow: 0px 0px 3px #070;
-}
-
-.popup .button:hover {
-	background-color: #393;
-	box-shadow: 0px 0px 3px #393;
-	cursor: pointer;
-}
-
-#panel .button {
-	width: 158px;
-	height: 30px;
+.button {
 	margin: 12px;
 	font: 18px arial,sans-serif;
 	color: #007;
@@ -273,10 +234,21 @@ body {
 	vertical-align: center;
 }
 
-#panel .button:hover {
+.button:hover {
 	background-color: #393;
 	box-shadow: 0px 0px 3px #393;
 	cursor: pointer;
+}
+
+.popup .button {
+	width: 25%;
+	height: 100%;
+	display: inline-block;
+}
+
+#panel .button {
+	width: 158px;
+	height: 30px;
 }
 
 .popup {
