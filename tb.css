@@ -248,6 +248,7 @@ body {
 #panel .button {
 	width: 168px;
 	height: 30px;
+	line-height: 30px;
 }
 
 .popup {

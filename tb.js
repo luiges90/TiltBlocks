@@ -39,7 +39,11 @@ $(document).ready(function() {
 	$(".scene").hide();
 	$("#main-menu-scene").show();
 	
-	
+	$("#main-menu-scene .start").click(function(){
+		$(".scene").hide();
+		$("#game-scene").show();
+		loadLevel(0);
+	});
 
 	$(".retry").click(function() {
 		$(".next").off("click");
@@ -47,6 +51,11 @@ $(document).ready(function() {
 		$("#popup-layer").fadeOut();
 		$(".popup").fadeOut();
 		$(".popup-bg").fadeOut();
+	});
+	$(".home").click(function() {
+		$(".scene").hide();
+		$("#main-menu-scene").show();
+		state = STATE_MAIN_MENU;
 	});
 });
 
