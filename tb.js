@@ -32,6 +32,7 @@ function getLevelString(){
 $(document).ready(function() {
 	state = STATE_MAIN_MENU;
 	initialize();
+	createLevelSelectScene();
 	
 	$(document).keyup(keyPressed);
 	$(".arrow").mousedown(arrowPressed);
@@ -42,7 +43,8 @@ $(document).ready(function() {
 	$("#main-menu-scene .start").click(function(){
 		$(".scene").hide();
 		$("#game-scene").show();
-		loadLevel(0);
+		level = 0;
+		loadLevel(level);
 	});
 
 	$("#main-menu-scene .level-select").click(function(){
@@ -84,6 +86,24 @@ function initialize() {
 	$(".palette").each(function() {
 		codeDivs[$(this).data('code')] = this;
 	});
+}
+
+function createLevelSelectScene() {
+	for (var i = 0; i < 10; ++i) {
+		for (var j = 0; j < 10; ++j) {
+			var levelBtn = $('<div>');
+			levelBtn.addClass("level").data('level', i * 10 + j);
+			levelBtn.css("left", j * 60).css("top", i * 50);
+			levelBtn.html((i + 1) + "-" + (j + 1));
+			levelBtn.click(function() {
+				$(".scene").hide();
+				$("#game-scene").show();
+				level = $(this).data('level');
+				loadLevel(level);
+			});
+			$("#level-select-scene .levels").append(levelBtn);
+		}
+	}
 }
 
 function loadLevel(name) {
