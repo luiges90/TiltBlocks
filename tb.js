@@ -20,6 +20,10 @@ var step, stepLimit;
 
 var level = 0;
 
+var BLOCK_CODE = ['1', '2', '3', '4', '5', '6'];
+var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
+var SOLID_CODE = MOVABLE_CODE.concat(['X']);
+
 function getLevelString(){
 	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
 }
@@ -179,10 +183,10 @@ function moveBlocks(dirR, dirC) {
 	if (dirC < 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
-				if ($.inArray(board[i][j], ['1', '2', '3', '4', '5', '6']) >= 0) {
+				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
 					for (var k = j - 1; k >= 0; --k) 
 					{
-						if ($.inArray(board[i][k], ['X', '1', '2', '3', '4', '5', '6']) >= 0) {
+						if ($.inArray(board[i][k], SOLID_CODE) >= 0) {
 							var elem = moveBlock(i, j, i, k + 1);
 							if (elem) {
 								changeSet.push(elem);
@@ -198,10 +202,10 @@ function moveBlocks(dirR, dirC) {
 	if (dirC > 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
-				if ($.inArray(board[i][j], ['1', '2', '3', '4', '5', '6']) >= 0) {
+				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
 					for (var k = j + 1; k >= 0; ++k) 
 					{
-						if ($.inArray(board[i][k], ['X', '1', '2', '3', '4', '5', '6']) >= 0) {
+						if ($.inArray(board[i][k], SOLID_CODE) >= 0) {
 							var elem = moveBlock(i, j, i, k - 1);
 							if (elem) {
 								changeSet.push(elem);
@@ -217,10 +221,10 @@ function moveBlocks(dirR, dirC) {
 	if (dirR < 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
-				if ($.inArray(board[j][i], ['1', '2', '3', '4', '5', '6']) >= 0) {
+				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0) {
 					for (var k = j - 1; k >= 0; --k) 
 					{
-						if ($.inArray(board[k][i], ['X', '1', '2', '3', '4', '5', '6']) >= 0) {
+						if ($.inArray(board[k][i], SOLID_CODE) >= 0) {
 							var elem = moveBlock(j, i, k + 1, i);
 							if (elem) {
 								changeSet.push(elem);
@@ -236,10 +240,10 @@ function moveBlocks(dirR, dirC) {
 	if (dirR > 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
-				if ($.inArray(board[j][i], ['1', '2', '3', '4', '5', '6']) >= 0) {
+				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0) {
 					for (var k = j + 1; k >= 0; ++k) 
 					{
-						if ($.inArray(board[k][i], ['X', '1', '2', '3', '4', '5', '6']) >= 0) {
+						if ($.inArray(board[k][i], SOLID_CODE) >= 0) {
 							var elem = moveBlock(j, i, k - 1, i);
 							if (elem) {
 								changeSet.push(elem);
@@ -259,7 +263,7 @@ function eliminateBlocks() {
 	var eliminateSet = [];
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if ($.inArray(board[i][j], ['1', '2', '3', '4', '5', '6']) >= 0) {
+			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
 				var color = board[i][j];
 				var visited = [];
 				for (var k = 0; k < BOARD_SIZE; ++k) 
@@ -350,7 +354,7 @@ function checkComplete() {
 	var completed = true;
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if ($.inArray(board[i][j], ['1', '2', '3', '4', '5', '6']) >= 0) {
+			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
 				completed = false;
 			}
 		}
@@ -379,7 +383,7 @@ function checkFail() {
 	var counts = [];
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if ($.inArray(board[i][j], ['1', '2', '3', '4', '5', '6']) >= 0) {
+			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
 				if (counts[board[i][j]] === undefined){
 					counts[board[i][j]] = 1;
 				} else {

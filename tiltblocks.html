@@ -11,49 +11,56 @@
 	
 </head>
 <body>
-	<div class="palette-table">
-		<div class="palette wall" data-code="X"></div>
-		<div class="palette redBlock" data-code="1"></div>
-		<div class="palette greenBlock" data-code="2"></div>
-		<div class="palette blueBlock" data-code="3"></div>
-		<div class="palette yellowBlock" data-code="4"></div>
-		<div class="palette stoneBlock" data-code="O"></div>
+	<div class="main-menu-scene">
+		<div class="title">Tilt Blocks</div>
+		<div class="button start">Start Game</div>
+		<div class="button level-select">Level Select</div>
 	</div>
-	<div id="game">
-		<div id="board">
+	<div class="game-scene">
+		<div class="palette-table">
+			<div class="palette wall" data-code="X"></div>
+			<div class="palette redBlock" data-code="1"></div>
+			<div class="palette greenBlock" data-code="2"></div>
+			<div class="palette blueBlock" data-code="3"></div>
+			<div class="palette yellowBlock" data-code="4"></div>
+			<div class="palette stoneBlock" data-code="0"></div>
 		</div>
-		<div id="panel">
-			<div id="level" class="info"><span class="title">Level:</span><span class="content">10-10</span></div>
-			<div id="steps" class="info"><span class="title">Step:</span><span class="content">15/15</span></div>
-			<div id="arrows">
-				<div id="up" class="arrow up"></div>
-				<div id="down" class="arrow down"></div>
-				<div id="left" class="arrow left"></div>
-				<div id="right" class="arrow right"></div>
+		<div id="game">
+			<div id="board">
 			</div>
-			<div class="button retry">Retry</div>
-			<div class="button home">Main Menu</div>
+			<div id="panel">
+				<div id="level" class="info"><span class="title">Level:</span><span class="content">10-10</span></div>
+				<div id="steps" class="info"><span class="title">Step:</span><span class="content">15/15</span></div>
+				<div id="arrows">
+					<div id="up" class="arrow up"></div>
+					<div id="down" class="arrow down"></div>
+					<div id="left" class="arrow left"></div>
+					<div id="right" class="arrow right"></div>
+				</div>
+				<div class="button retry">Retry</div>
+				<div class="button home">Main Menu</div>
+			</div>
 		</div>
-	</div>
-	<div id="level-cleared-background" class="level-cleared popup-bg"></div>
-	<div id="level-cleared" class="level-cleared popup">
-		<div class="title">Level cleared!</div>
-		<div class="info"><span class="content">Steps remain: 1</span></div>
-		<div class="buttons">
-			<div class="button home">Main Menu</div>
-			<div class="button retry">Retry</div>
-			<div class="button next">Next Level</div>
+		<div id="level-cleared-background" class="level-cleared popup-bg"></div>
+		<div id="level-cleared" class="level-cleared popup">
+			<div class="title">Level cleared!</div>
+			<div class="info"><span class="content">Steps remain: 1</span></div>
+			<div class="buttons">
+				<div class="button home">Main Menu</div>
+				<div class="button retry">Retry</div>
+				<div class="button next">Next Level</div>
+			</div>
 		</div>
-	</div>
-	<div id="level-failed-background" class="level-failed popup-bg"></div>
-	<div id="level-failed" class="level-failed popup">
-		<div class="title">Level failed...</div>
-		<div class="info"><span class="content">Too many steps!</span></div>
-		<div class="buttons">
-			<div class="button home">Main Menu</div>
-			<div class="button retry">Retry</div>
+		<div id="level-failed-background" class="level-failed popup-bg"></div>
+		<div id="level-failed" class="level-failed popup">
+			<div class="title">Level failed...</div>
+			<div class="info"><span class="content">Too many steps!</span></div>
+			<div class="buttons">
+				<div class="button home">Main Menu</div>
+				<div class="button retry">Retry</div>
+			</div>
 		</div>
+		<div id="popup-layer"></div>
 	</div>
-	<div id="popup-layer"></div>
 </body>
 </html>
