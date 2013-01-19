@@ -38,8 +38,14 @@ body {
 	background-color: gray;
 }
 
+#panel {
+	background-color: #DDD;
+}
+
 #panel .info {
 	margin: 5px 0;
+	color: #FF8;
+	text-shadow: 2px 2px #AAA;
 }
 
 #panel .info .title{
@@ -48,15 +54,15 @@ body {
 
 #panel .info .content {
 	font: 28px arial,sans-serif;
-	color: #999;
+	color: #FFF;
 }
 
 #arrows {
 	position: relative;
-	border: 1px solid #CCC;
+	border: 6px ridge #BBB;
 	background-color: #CCC;
-	width: 190px;
-	height: 190px;
+	width: 180px;
+	height: 180px;
 	margin: 10px 0;
 }
 
@@ -274,9 +280,10 @@ body {
 }
 
 #main-menu-scene .title {
-	font: 60px arial,sans-serif;
-	line-height: 120px;
-	
+	font: 72px arial,sans-serif;
+	line-height: 144px;
+	color: #FF0;
+	text-shadow: 2px 2px #CCC;
 }
 
 #main-menu-scene .buttons {
@@ -288,8 +295,18 @@ body {
 }
 
 #main-menu-scene .button {
+	font: 26px arial,sans-serif;
 	margin: 40px 0;
 	height: 50px;
 	text-align: center;
 	line-height: 50px;
+}
+
+#level-select-scene {
+	background-color: #EEE;
+}
+
+#level-select-scene .title {
+	font: 48px arial,sans-serif
+	line-height: 60px;
 }

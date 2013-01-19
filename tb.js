@@ -44,6 +44,17 @@ $(document).ready(function() {
 		$("#game-scene").show();
 		loadLevel(0);
 	});
+	$("#main-menu-scene .start").click();
+	$("#main-menu-scene .level-select").click(function(){
+		$(".scene").hide();
+		$("#level-select-scene").show();
+	});
+	
+	$(".home").click(function() {
+		$(".scene").hide();
+		$("#main-menu-scene").show();
+		state = STATE_MAIN_MENU;
+	});
 
 	$(".retry").click(function() {
 		$(".next").off("click");
@@ -52,11 +63,7 @@ $(document).ready(function() {
 		$(".popup").fadeOut();
 		$(".popup-bg").fadeOut();
 	});
-	$(".home").click(function() {
-		$(".scene").hide();
-		$("#main-menu-scene").show();
-		state = STATE_MAIN_MENU;
-	});
+	
 });
 
 var board;
