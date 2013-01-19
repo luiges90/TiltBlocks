@@ -7,6 +7,7 @@ var STATE_READY = 1;
 var STATE_ANIMATING = 2;
 var STATE_CLEARED = 3;
 var STATE_FAILED = 4;
+var STATE_MAIN_MENU = 5;
 
 // key constants
 var KEY_LEFT = 37;
@@ -29,11 +30,17 @@ function getLevelString(){
 }
 
 $(document).ready(function() {
-	state = STATE_LOADING;
+	state = STATE_MAIN_MENU;
+	initialize();
+	
 	$(document).keyup(keyPressed);
 	$(".arrow").mousedown(arrowPressed);
-	initialize();
-	loadLevel(level);
+	
+	$(".scene").hide();
+	$("#main-menu-scene").show();
+	
+	
+
 	$(".retry").click(function() {
 		$(".next").off("click");
 		loadLevel(level);
@@ -63,6 +70,7 @@ function initialize() {
 }
 
 function loadLevel(name) {
+	state = STATE_LOADING;
 	$.ajax({
 		url : "levels/" + getLevelString() + ".txt",
 		dataType: "text",
