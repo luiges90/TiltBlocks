@@ -28,8 +28,6 @@ var SOLID_CODE = MOVABLE_CODE.concat(['X']);
 var PROGRESS_KEY = 'tb_level';
 
 function getLevelString(){
-	level = parseInt(level);
-	if (isNaN(level)) level = 0;
 	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
 }
 
@@ -50,7 +48,9 @@ $(document).ready(function() {
 		$(".scene").fadeOut();
 		$("#game-scene").fadeIn();
 		level = localStorage.getItem(PROGRESS_KEY);
-		if (level === null) level = 0;
+		level = parseInt(level);
+		if (isNaN(level)) level = 0;
+		$("#main-menu-scene #progress-clear-alert").hide();
 		loadLevel(level);
 	});
 
