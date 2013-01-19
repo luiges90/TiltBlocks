@@ -335,6 +335,24 @@ body {
 	line-height: 50px;
 }
 
+#main-menu-scene #progress-clear-alert {
+	position: absolute;
+	font: 16px arial,sans-serif;
+	color: red;
+	top: 185px;
+	width: 384px;
+	text-align: center;
+	display: none;
+}
+
+#main-menu-scene #progress-clear-alert a {
+	color: #F70;
+}
+
+#main-menu-scene #progress-clear-alert a:hover {
+	color: #FA7;
+}
+
 #level-select-scene .title {
 	font: 48px arial,sans-serif;
 	line-height: 60px;

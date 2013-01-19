@@ -28,8 +28,12 @@ var SOLID_CODE = MOVABLE_CODE.concat(['X']);
 var PROGRESS_KEY = 'tb_level';
 
 function getLevelString(){
+	level = parseInt(level);
+	if (isNaN(level)) level = 0;
 	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
 }
+
+var stored_level = 0;
 
 $(document).ready(function() {
 	state = STATE_MAIN_MENU;
@@ -53,6 +57,21 @@ $(document).ready(function() {
 	$("#main-menu-scene .level-select").click(function(){
 		$(".scene").fadeOut();
 		$("#level-select-scene").fadeIn();
+	});
+	
+	$("#main-menu-scene .clear-progress").click(function(){
+		if (level > 0){
+			stored_level = level;
+		}
+		localStorage.removeItem(PROGRESS_KEY);
+		$("#main-menu-scene #progress-clear-alert").html('Progress cleared. <a href="#">Ouch! Undo my clear!!</a>').show();
+		$("#main-menu-scene #progress-clear-alert a").click(function(e) {
+			e.preventDefault();
+			level = stored_level;
+			localStorage.setItem(PROGRESS_KEY, stored_level);
+			$("#main-menu-scene #progress-clear-alert").html("OK, your progress has been restored. :)").delay(5000).fadeOut();
+		});
+		level = 0;
 	});
 	
 	$(".home").click(function() {
@@ -419,9 +438,9 @@ function checkComplete() {
 		$("#popup-layer").css('background-color', 'transparent').fadeIn();
 		$(".level-cleared").fadeIn();
 		state = STATE_CLEARED;
-		localStorage.setItem(PROGRESS_KEY, level + 1);
 		$(".next").one("click", function() {
 			level++;
+			localStorage.setItem(PROGRESS_KEY, level);
 			loadLevel(level);
 			$("#popup-layer").fadeOut();
 			$(".level-cleared").fadeOut();
