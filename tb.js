@@ -61,15 +61,22 @@ $(document).ready(function() {
 	$("#main-menu-scene .level-select").click(function(){
 		$("#level-select-scene .level").each(function(){
 			if ($(this).data('level') < furthestLevel) {
-				$(this).css("background-color", "#0F0");
+				$(this).css("background-color", "#0F0").addClass("cleared-level open-level");
 			} else if ($(this).data('level') == furthestLevel) {
-				$(this).css("background-color", "#FF0");
+				$(this).css("background-color", "#FF0").addClass("current-level open-level");
 			} else {
-				$(this).css("background-color", "#CCC");
+				$(this).css("background-color", "#CCC").addClass("locked-level");
 			}
 		});
 		$(".scene").fadeOut();
 		$("#level-select-scene").fadeIn();
+	});
+	
+	$("#level-select-scene").on('click', '.level.open-level', function() {
+		$(".scene").fadeOut();
+		$("#game-scene").fadeIn();
+		level = $(this).data('level');
+		loadLevel(level);
 	});
 	
 	$("#main-menu-scene .clear-progress").click(function(){
@@ -86,6 +93,11 @@ $(document).ready(function() {
 		});
 		level = 0;
 		furthestLevel = 0;
+	});
+	
+	$("#level-select-scene .left").click(function() {
+		$(".scene").fadeOut();
+		$("#main-menu-scene").fadeIn();
 	});
 	
 	$(".home").click(function() {
@@ -134,12 +146,6 @@ function createLevelSelectScene() {
 			levelBtn.addClass("level").data('level', i * 10 + j);
 			levelBtn.css("left", j * 60).css("top", i * 50);
 			levelBtn.html((i + 1) + "-" + (j + 1));
-			levelBtn.click(function() {
-				$(".scene").fadeOut();
-				$("#game-scene").fadeIn();
-				level = $(this).data('level');
-				loadLevel(level);
-			});
 			$("#level-select-scene .levels").append(levelBtn);
 		}
 	}
