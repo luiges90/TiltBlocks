@@ -196,7 +196,7 @@ function loadLevel(number) {
 
 function markMoved(dir) {
 	$(".arrow").removeClass("lastDir");
-	$("." + dir).addClass("lastDir");
+	$(".arrow." + dir).addClass("lastDir");
 }
 
 function keyPressed(e) {
