@@ -53,6 +53,10 @@ $(document).ready(function() {
 	});
 	
 	$(".home").click(function() {
+		$(".next").off("click");
+		$("#popup-layer").hide();
+		$(".popup").hide();
+		$(".popup-bg").hide();
 		$(".scene").hide();
 		$("#main-menu-scene").show();
 		state = STATE_MAIN_MENU;
@@ -60,7 +64,6 @@ $(document).ready(function() {
 
 	$(".retry").click(function() {
 		$(".next").off("click");
-		$("#steps .content").removeClass("warning");
 		loadLevel(level);
 		$("#popup-layer").fadeOut();
 		$(".popup").fadeOut();
@@ -136,6 +139,7 @@ function loadLevel(name) {
 			$("#level .content").html(getLevelString);
 			$("#steps .content").html(step + "/" + stepLimit);
 			$(".arrow").removeClass("lastDir");
+			$("#steps .content").removeClass("warning");
 			
 			// ready
 			state = STATE_READY;
