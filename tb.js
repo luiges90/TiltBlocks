@@ -25,6 +25,8 @@ var BLOCK_CODE = ['1', '2', '3', '4', '5', '6'];
 var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
 var SOLID_CODE = MOVABLE_CODE.concat(['X']);
 
+var PROGRESS_KEY = 'tb_level';
+
 function getLevelString(){
 	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
 }
@@ -41,24 +43,25 @@ $(document).ready(function() {
 	$("#main-menu-scene").show();
 	
 	$("#main-menu-scene .start").click(function(){
-		$(".scene").hide();
-		$("#game-scene").show();
-		level = 0;
+		$(".scene").fadeOut();
+		$("#game-scene").fadeIn();
+		level = localStorage.getItem(PROGRESS_KEY);
+		if (level === null) level = 0;
 		loadLevel(level);
 	});
 
 	$("#main-menu-scene .level-select").click(function(){
-		$(".scene").hide();
-		$("#level-select-scene").show();
+		$(".scene").fadeOut();
+		$("#level-select-scene").fadeIn();
 	});
 	
 	$(".home").click(function() {
 		$(".next").off("click");
-		$("#popup-layer").hide();
-		$(".popup").hide();
-		$(".popup-bg").hide();
-		$(".scene").hide();
-		$("#main-menu-scene").show();
+		$("#popup-layer").fadeOut();
+		$(".popup").fadeOut();
+		$(".popup-bg").fadeOut();
+		$(".scene").fadeOut();
+		$("#main-menu-scene").fadeIn();
 		state = STATE_MAIN_MENU;
 	});
 
@@ -99,8 +102,8 @@ function createLevelSelectScene() {
 			levelBtn.css("left", j * 60).css("top", i * 50);
 			levelBtn.html((i + 1) + "-" + (j + 1));
 			levelBtn.click(function() {
-				$(".scene").hide();
-				$("#game-scene").show();
+				$(".scene").fadeOut();
+				$("#game-scene").fadeIn();
 				level = $(this).data('level');
 				loadLevel(level);
 			});
@@ -416,6 +419,7 @@ function checkComplete() {
 		$("#popup-layer").css('background-color', 'transparent').fadeIn();
 		$(".level-cleared").fadeIn();
 		state = STATE_CLEARED;
+		localStorage.setItem(PROGRESS_KEY, level + 1);
 		$(".next").one("click", function() {
 			level++;
 			loadLevel(level);
