@@ -27,14 +27,21 @@ var SOLID_CODE = MOVABLE_CODE.concat(['X']);
 
 var PROGRESS_KEY = 'tb_level';
 
-function getLevelString(){
-	return (Math.floor(level / 10) + 1) + '-' + (level % 10 + 1);
+function getLevelString(number){
+	return (Math.floor(number / 10) + 1) + '-' + (number % 10 + 1);
 }
 
-var stored_level = 0;
+var furthestLevel = 0;
+var storedLevel = 0;
 
 $(document).ready(function() {
 	state = STATE_MAIN_MENU;
+	
+	furthestLevel = localStorage.getItem(PROGRESS_KEY);
+	furthestLevel = parseInt(furthestLevel);
+	if (isNaN(furthestLevel)) furthestLevel = 0;
+	level = furthestLevel;
+	
 	initialize();
 	createLevelSelectScene();
 	
@@ -47,31 +54,38 @@ $(document).ready(function() {
 	$("#main-menu-scene .start").click(function(){
 		$(".scene").fadeOut();
 		$("#game-scene").fadeIn();
-		level = localStorage.getItem(PROGRESS_KEY);
-		level = parseInt(level);
-		if (isNaN(level)) level = 0;
 		$("#main-menu-scene #progress-clear-alert").hide();
-		loadLevel(level);
+		loadLevel(furthestLevel);
 	});
 
 	$("#main-menu-scene .level-select").click(function(){
+		$("#level-select-scene .level").each(function(){
+			if ($(this).data('level') < furthestLevel) {
+				$(this).css("background-color", "#0F0");
+			} else if ($(this).data('level') == furthestLevel) {
+				$(this).css("background-color", "#FF0");
+			} else {
+				$(this).css("background-color", "#CCC");
+			}
+		});
 		$(".scene").fadeOut();
 		$("#level-select-scene").fadeIn();
 	});
 	
 	$("#main-menu-scene .clear-progress").click(function(){
 		if (level > 0){
-			stored_level = level;
+			storedLevel = furthestLevel;
 		}
 		localStorage.removeItem(PROGRESS_KEY);
 		$("#main-menu-scene #progress-clear-alert").html('Progress cleared. <a href="#">Ouch! Undo my clear!!</a>').show();
 		$("#main-menu-scene #progress-clear-alert a").click(function(e) {
 			e.preventDefault();
-			level = stored_level;
-			localStorage.setItem(PROGRESS_KEY, stored_level);
+			furthestLevel = storedLevel;
+			localStorage.setItem(PROGRESS_KEY, storedLevel);
 			$("#main-menu-scene #progress-clear-alert").html("OK, your progress has been restored. :)").delay(5000).fadeOut();
 		});
 		level = 0;
+		furthestLevel = 0;
 	});
 	
 	$(".home").click(function() {
@@ -131,10 +145,10 @@ function createLevelSelectScene() {
 	}
 }
 
-function loadLevel(name) {
+function loadLevel(number) {
 	state = STATE_LOADING;
 	$.ajax({
-		url : "levels/" + getLevelString() + ".txt",
+		url : "levels/" + getLevelString(number) + ".txt",
 		dataType: "text",
 		success : function (data) {
 			// read and parse level file
@@ -158,10 +172,15 @@ function loadLevel(name) {
 			}
 			
 			// setup info
-			$("#level .content").html(getLevelString);
+			$("#level .content").html(getLevelString(number));
 			$("#steps .content").html(step + "/" + stepLimit);
 			$(".arrow").removeClass("lastDir");
 			$("#steps .content").removeClass("warning");
+			
+			level = number;
+			if (level > furthestLevel){
+				furtherLevel = level;
+			}
 			
 			// ready
 			state = STATE_READY;
@@ -438,12 +457,20 @@ function checkComplete() {
 		$("#popup-layer").css('background-color', 'transparent').fadeIn();
 		$(".level-cleared").fadeIn();
 		state = STATE_CLEARED;
+		if (level >= furthestLevel){
+			furthestLevel++;
+		}
+		localStorage.setItem(PROGRESS_KEY, furthestLevel);
 		$(".next").one("click", function() {
 			level++;
-			localStorage.setItem(PROGRESS_KEY, level);
 			loadLevel(level);
 			$("#popup-layer").fadeOut();
 			$(".level-cleared").fadeOut();
+		});
+		$(document).keyup(function(e){
+			if (e.which == 13){
+				$(".next").click();
+			}
 		});
 	}
 }
