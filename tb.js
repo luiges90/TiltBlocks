@@ -218,13 +218,24 @@ function createLevelEditorActions() {
 		$(".editor.save").fadeIn();
 	});
 	
+	$("#level-editor-scene .panel .load").click(function() {
+		$(".editor.load").fadeIn();
+	});
+	
+	$("#level-editor-scene .load.popup .ok").click(function() {
+		var data = $("#level-editor-scene .load.popup .level-code").val();
+		loadLevelFromString(data, "#level-editor-scene .board");
+		$("#level-editor-scene .steps .step-limit").val(step);
+	});
+	
 	$("#level-editor-scene .ok").click(function(){
 		$(".popup").fadeOut();
 		$(".popup-bg").fadeOut();
 	});
+
 }
 
-function loadLevelFromString(string) {
+function loadLevelFromString(string, blockAppendTo) {
 	string = string.replace(/\s/g, "");
 	for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
 		board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE] = string.charAt(i);
@@ -239,7 +250,7 @@ function loadLevelFromString(string) {
 			if (typeof codeDivs[board[i][j]] !== 'undefined'){
 				$(codeDivs[board[i][j]]).clone()
 					.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j)
-					.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo("#game-scene .board");
+					.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo(blockAppendTo);
 			}
 		}
 	}
@@ -252,7 +263,7 @@ function loadLevel(number) {
 		dataType: "text",
 		success : function (data) {
 			// read and parse level file
-			loadLevelFromString(data);
+			loadLevelFromString(data, "#game-scene .board");
 			
 			// setup info
 			$("#game-scene .level .content").html(getLevelString(number));
