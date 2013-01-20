@@ -222,6 +222,13 @@ body {
 	filter: alpha(opacity=80);
 }
 
+.editor.popup-bg {
+	background-color: #088;
+	box-shadow: 0px 0px 40px #0AA, 0px 0px 40px #0AA;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
 .popup .title {
 	font: 48px arial,sans-serif;
 	line-height: 96px;
@@ -235,6 +242,12 @@ body {
 #level-failed .title{
 	color: #00D;
 	text-shadow: 0px 0px 10px #007, 0px 0px 20px #007;
+}
+
+.editor.popup .level-code {
+	resize: none;
+	width: 460px;
+	height: 130px;
 }
 
 .popup .info {

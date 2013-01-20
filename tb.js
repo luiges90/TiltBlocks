@@ -116,11 +116,7 @@ $(document).ready(function() {
 		$("#main-menu-scene").fadeIn();
 		state = STATE_MAIN_MENU;
 		// clear board data
-		board = [];
-		for (var i = 0; i < BOARD_SIZE; ++i) 
-		{
-			board[i] = [];
-		}
+		clearBoard();
 	});
 
 	$(".retry").click(function() {
@@ -137,13 +133,19 @@ var board;
 var codeDivs;
 var step, stepLimit;
 
-function initialize() {
-    // initialize board
+function clearBoard() {
+	// initialize board
 	board = [];
-	for (var i = 0; i < BOARD_SIZE; ++i) 
-	{
+	for (var i = 0; i < BOARD_SIZE; ++i) {
 		board[i] = [];
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			board[i][j] = '.';
+		}
 	}
+}
+
+function initialize() {
+	clearBoard();
 	
 	// initialize code map
 	codeDivs = [];
@@ -192,13 +194,30 @@ function createLevelEditorActions() {
 		}).mousemove();
 	});
 	
-	$(window).mouseup(function(e) {
+	$(window).mouseup(function() {
 		$("#level-editor-scene .board").off('mousemove');
 	});
 	
-	$(".palette").click(function(e) {
+	$(".palette").click(function() {
 		$(".palette").removeClass("active");
 		$(this).addClass("active");
+	});
+	
+	$("#level-editor-scene .panel .save").click(function() {
+		var code = '';
+		for (var i = 0; i < board.length; ++i) {
+			for (var j = 0; j < board.length; ++j){
+				code += board[i][j];
+			}
+		}
+	
+		$(".editor.save .level-code").val(code);
+		$(".editor.save").fadeIn();
+	});
+	
+	$("#level-editor-scene .ok").click(function(){
+		$(".popup").fadeOut();
+		$(".popup-bg").fadeOut();
 	});
 }
 
