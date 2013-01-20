@@ -115,6 +115,12 @@ $(document).ready(function() {
 		$(".scene").fadeOut();
 		$("#main-menu-scene").fadeIn();
 		state = STATE_MAIN_MENU;
+		// clear board data
+		board = [];
+		for (var i = 0; i < BOARD_SIZE; ++i) 
+		{
+			board[i] = [];
+		}
 	});
 
 	$(".retry").click(function() {
@@ -174,8 +180,8 @@ function createLevelEditorActions() {
 			var currentCode = $(".palette.active").data('code');
 			if (typeof currentCode === "undefined") currentCode = '.';
 			
-			if (board[boardLeft][boardTop] != currentCode) {
-				board[boardLeft][boardTop] = currentCode;
+			if (board[boardTop][boardLeft] != currentCode) {
+				board[boardTop][boardLeft] = currentCode;
 				$("#level-editor-scene .inBoard.r" + boardTop + "c" + boardLeft).remove();
 				$(codeDivs[currentCode]).clone()
 							.removeClass("palette").removeClass("active").addClass("inBoard").addClass("r" + boardTop + "c" + boardLeft)
