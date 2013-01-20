@@ -210,6 +210,7 @@ function createLevelEditorActions() {
 				code += board[i][j];
 			}
 		}
+		code += $("#level-editor-scene .panel .step-limit").val();
 	
 		$(".editor.save .level-code").val(code);
 		$(".editor.save").fadeIn();
@@ -248,10 +249,10 @@ function loadLevel(number) {
 			}
 			
 			// setup info
-			$("#level .content").html(getLevelString(number));
-			$("#steps .content").html(step + "/" + stepLimit);
+			$(".level .content").html(getLevelString(number));
+			$(".steps .content").html(step + "/" + stepLimit);
 			$(".arrow").removeClass("lastDir");
-			$("#steps .content").removeClass("warning");
+			$(".steps .content").removeClass("warning");
 			
 			level = number;
 			if (level > furthestLevel){
@@ -323,9 +324,9 @@ function makeStep(dirX, dirY) {
 		steps.push(eliminated);
 	} while (eliminated.length > 0);
 	--step;
-	$("#steps .content").html(step + "/" + stepLimit);
+	$("#game-scene .steps .content").html(step + "/" + stepLimit);
 	if (step < 2) {
-		$("#steps .content").addClass("warning");
+		$("#game-scene .steps .content").addClass("warning");
 	}
 	animateBlocks(steps, function(){
 		state = STATE_READY;

@@ -248,6 +248,8 @@ body {
 	resize: none;
 	width: 460px;
 	height: 130px;
+	background-color: #FFA;
+	border: 2px inset #FF0;
 }
 
 .popup .info {
@@ -442,4 +444,13 @@ body {
 	opacity: 0.8;
 	filter: alpha(opacity=80);
 	cursor: pointer;
+}
+
+#level-editor-scene .panel .step-limit {
+	width: 60px;
+	height: 40px;
+	font: 28px arial,sans-serif;
+	line-height: 40px;
+	background-color: #CCC;
+	color: #FFF;
 }

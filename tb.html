@@ -32,8 +32,8 @@
 			<div class="board">
 			</div>
 			<div class="panel">
-				<div id="level" class="info"><span class="title">Level:</span><span class="content">10-10</span></div>
-				<div id="steps" class="info"><span class="title">Step:</span><span class="content">15/15</span></div>
+				<div class="level info"><span class="title">Level:</span><span class="content">10-10</span></div>
+				<div class="steps info"><span class="title">Step:</span><span class="content">15/15</span></div>
 				<div id="arrows">
 					<div id="up" class="arrow up"></div>
 					<div id="down" class="arrow down"></div>
@@ -69,6 +69,10 @@
 			<div class="board">
 			</div>
 			<div class="panel">
+				<div class="steps info">
+					<span class="title">Step:</span>
+					<span class="content"><input type="text" class="step-limit" value="99" maxlength="2"/></span>
+				</div>
 				<div class="button load">Load</div>
 				<div class="button save">Save</div>
 				<div class="button play">Play</div>
@@ -88,7 +92,7 @@
 		<div id="editor-save" class="editor save popup">
 			<div class="info">
 				Copy your level code somewhere and save it.<br/>
-				<textarea class="level-code"></textarea>
+				<textarea class="level-code" readonly></textarea>
 			</div>
 			<div class="buttons">
 				<div class="button ok">OK</div>
