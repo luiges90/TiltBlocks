@@ -100,6 +100,13 @@ $(document).ready(function() {
 		$("#main-menu-scene").fadeIn();
 	});
 	
+	$("#main-menu-scene .level-editor").click(function(){
+		$(".scene").fadeOut();
+		$("#level-editor-scene").fadeIn();
+	});
+	
+	createLevelEditorActions();
+	
 	$(".home").click(function() {
 		$(".next").off("click");
 		$("#popup-layer").fadeOut();
@@ -151,6 +158,27 @@ function createLevelSelectScene() {
 	}
 }
 
+function createLevelEditorActions() {
+	$("#level-editor-scene .board").mousedown(function(d) {
+		$("#level-editor-scene .board").on('mousemove', function(e) {
+			var x = e.pageX;
+			var y = e.pageY;
+			if (typeof x === "undefined") x = d.pageX;
+			if (typeof y === "undefined") y = d.pageY;
+			console.log(x, y);
+		}).mousemove();
+	});
+	
+	$(window).mouseup(function(e) {
+		$("#level-editor-scene .board").off('mousemove');
+	});
+	
+	$(".palette").click(function(e) {
+		$(".palette").removeClass("active");
+		$(this).addClass("active");
+	});
+}
+
 function loadLevel(number) {
 	state = STATE_LOADING;
 	$.ajax({
@@ -172,7 +200,7 @@ function loadLevel(number) {
 					if (typeof codeDivs[board[i][j]] !== 'undefined'){
 						$(codeDivs[board[i][j]]).clone()
 							.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j)
-							.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo("#board");
+							.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo("#game-scene .board");
 					}
 				}
 			}

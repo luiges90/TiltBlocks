@@ -28,10 +28,10 @@
 		<div class="right"></div>
 	</div>
 	<div class="scene" id="game-scene">
-		<div id="game">
-			<div id="board">
+		<div class="game">
+			<div class="board">
 			</div>
-			<div id="panel">
+			<div class="panel">
 				<div id="level" class="info"><span class="title">Level:</span><span class="content">10-10</span></div>
 				<div id="steps" class="info"><span class="title">Step:</span><span class="content">15/15</span></div>
 				<div id="arrows">
@@ -64,14 +64,27 @@
 			</div>
 		</div>
 	</div>
-	<div id="popup-layer"></div>
-	<div class="palette-table">
-		<div class="palette wall" data-code="X"></div>
-		<div class="palette redBlock" data-code="1"></div>
-		<div class="palette greenBlock" data-code="2"></div>
-		<div class="palette blueBlock" data-code="3"></div>
-		<div class="palette yellowBlock" data-code="4"></div>
-		<div class="palette stoneBlock" data-code="0"></div>
+	<div class="scene" id="level-editor-scene">
+		<div class="game">
+			<div class="board">
+			</div>
+			<div class="panel">
+				<div class="button load">Load</div>
+				<div class="button save">Save</div>
+				<div class="button play">Play</div>
+				<div class="button home">Main Menu</div>
+				<div class="palette-table">
+					<div class="palette empty active"></div>
+					<div class="palette wall" data-code="X"></div>
+					<div class="palette redBlock" data-code="1"></div>
+					<div class="palette greenBlock" data-code="2"></div>
+					<div class="palette blueBlock" data-code="3"></div>
+					<div class="palette yellowBlock" data-code="4"></div>
+					<div class="palette stoneBlock" data-code="0"></div>
+				</div>
+			</div>
+		</div>
 	</div>
+	<div id="popup-layer"></div>
 </body>
 </html>

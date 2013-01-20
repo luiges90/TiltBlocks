@@ -5,13 +5,24 @@ body {
 .palette {
 	width: 48px;
 	height: 48px;
-	display: none;
+	display: inline-block;
+	margin: 5px;
+}
+
+.palette.active {
+	border: 3px dashed orange;
+	width: 42px;
+	height: 42px;
 }
 
 .inBoard {
 	width: 48px;
 	height: 48px;
 	position: absolute;
+}
+
+.empty {
+	background-color: black;
 }
 
 .wall {
@@ -38,7 +49,7 @@ body {
 	background-color: gray;
 }
 
-#panel {
+.panel {
 	background: #dddddd; /* Old browsers */
 	background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
@@ -49,23 +60,23 @@ body {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
-#panel .info {
+.panel .info {
 	margin: 5px 0;
 	color: #FF8;
 	text-shadow: 2px 2px #AAA;
 	text-align: left;
 }
 
-#panel .info .title{
+.panel .info .title{
 	font: 36px arial,sans-serif;
 }
 
-#panel .info .content {
+.panel .info .content {
 	font: 28px arial,sans-serif;
 	color: #FFF;
 }
 
-#panel .info .content.warning {
+.panel .info .content.warning {
 	color: #F00;
 }
 
@@ -156,7 +167,7 @@ body {
 	border: 5px solid black;
 }
 
-#board {
+.board {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -165,7 +176,7 @@ body {
 	background-color: black;
 }
 
-#panel {
+.panel {
 	position: absolute;
 	top: 0;
 	left: 576px;
@@ -277,7 +288,7 @@ body {
 	display: inline-block;
 }
 
-#panel .button {
+.panel .button {
 	width: 168px;
 	height: 30px;
 	line-height: 30px;
