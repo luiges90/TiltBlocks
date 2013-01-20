@@ -224,6 +224,27 @@ function createLevelEditorActions() {
 	});
 }
 
+function loadLevelFromString(string) {
+	string = string.replace(/\s/g, "");
+	for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
+		board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE] = string.charAt(i);
+	}
+	stepLimit = parseInt(string.slice(-2));
+	step = stepLimit;
+	
+	// setup board
+	$(".inBoard").remove();
+	for (var i = 0; i < board.length; ++i) {
+		for (var j = 0; j < board.length; ++j){
+			if (typeof codeDivs[board[i][j]] !== 'undefined'){
+				$(codeDivs[board[i][j]]).clone()
+					.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j)
+					.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo("#game-scene .board");
+			}
+		}
+	}
+}
+
 function loadLevel(number) {
 	state = STATE_LOADING;
 	$.ajax({
@@ -231,30 +252,13 @@ function loadLevel(number) {
 		dataType: "text",
 		success : function (data) {
 			// read and parse level file
-			data = data.replace(/\s/g, "");
-			for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
-				board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE] = data.charAt(i);
-			}
-			stepLimit = parseInt(data.slice(-2));
-			step = stepLimit;
-			
-			// setup board
-			$(".inBoard").remove();
-			for (var i = 0; i < board.length; ++i) {
-				for (var j = 0; j < board.length; ++j){
-					if (typeof codeDivs[board[i][j]] !== 'undefined'){
-						$(codeDivs[board[i][j]]).clone()
-							.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j)
-							.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo("#game-scene .board");
-					}
-				}
-			}
+			loadLevelFromString(data);
 			
 			// setup info
-			$(".level .content").html(getLevelString(number));
-			$(".steps .content").html(step + "/" + stepLimit);
-			$(".arrow").removeClass("lastDir");
-			$(".steps .content").removeClass("warning");
+			$("#game-scene .level .content").html(getLevelString(number));
+			$("#game-scene .steps .content").html(step + "/" + stepLimit);
+			$("#game-scene .arrow").removeClass("lastDir");
+			$("#game-scene .steps .content").removeClass("warning");
 			
 			level = number;
 			if (level > furthestLevel){
