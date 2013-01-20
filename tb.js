@@ -210,7 +210,9 @@ function createLevelEditorActions() {
 				code += board[i][j];
 			}
 		}
-		code += $("#level-editor-scene .panel .step-limit").val();
+		var step = $("#level-editor-scene .panel .step-limit").val();
+		if (step < 10) step = '0' + step;
+		code += step;
 	
 		$(".editor.save .level-code").val(code);
 		$(".editor.save").fadeIn();
