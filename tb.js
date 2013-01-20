@@ -159,13 +159,30 @@ function createLevelSelectScene() {
 }
 
 function createLevelEditorActions() {
-	$("#level-editor-scene .board").mousedown(function(d) {
-		$("#level-editor-scene .board").on('mousemove', function(e) {
+	var $board = $("#level-editor-scene .board");
+
+	$board.mousedown(function(d) {
+		$board.on('mousemove', function(e) {
 			var x = e.pageX;
 			var y = e.pageY;
 			if (typeof x === "undefined") x = d.pageX;
 			if (typeof y === "undefined") y = d.pageY;
-			console.log(x, y);
+			
+			var boardLeft = Math.floor((x - $board.offset().left) / SQUARE_SIZE);
+			var boardTop = Math.floor((y - $board.offset().top) / SQUARE_SIZE);
+			
+			var currentCode = $(".palette.active").data('code');
+			if (typeof currentCode === "undefined") currentCode = '.';
+			
+			if (board[boardLeft][boardTop] != currentCode) {
+				board[boardLeft][boardTop] = currentCode;
+				$("#level-editor-scene .inBoard.r" + boardTop + "c" + boardLeft).remove();
+				$(codeDivs[currentCode]).clone()
+							.removeClass("palette").removeClass("active").addClass("inBoard").addClass("r" + boardTop + "c" + boardLeft)
+							.offset({top: SQUARE_SIZE * boardTop, left: SQUARE_SIZE * boardLeft}).appendTo("#level-editor-scene .board");
+			}
+			
+			
 		}).mousemove();
 	});
 	
