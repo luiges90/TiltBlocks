@@ -470,16 +470,16 @@ function eliminateBlocks() {
 					visited[startR][startC] = true;
 					eliminated.push([startR, startC]);
 					if (board[startR][startC] == '9'){
-						if ($.inArray(board[startR - 1][startC], BLOCK_CODE) >= 0){
+						if ($.inArray(board[startR - 1][startC], BLOCK_CODE) >= 0 && !visited[startR - 1][startC]){
 							dfs(startR - 1, startC);
 						}
-						if ($.inArray(board[startR + 1][startC], BLOCK_CODE) >= 0){
+						if ($.inArray(board[startR + 1][startC], BLOCK_CODE) >= 0 && !visited[startR + 1][startC]){
 							dfs(startR + 1, startC);
 						}
-						if ($.inArray(board[startR][startC - 1], BLOCK_CODE) >= 0){
+						if ($.inArray(board[startR][startC - 1], BLOCK_CODE) >= 0 && !visited[startR][startC - 1]){
 							dfs(startR, startC - 1);
 						}
-						if ($.inArray(board[startR][startC + 1], BLOCK_CODE) >= 0){
+						if ($.inArray(board[startR][startC + 1], BLOCK_CODE) >= 0 && !visited[startR][startC + 1]){
 							dfs(startR, startC + 1);
 						}
 					}
