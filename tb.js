@@ -142,6 +142,8 @@ function clearBoard() {
 			board[i][j] = '.';
 		}
 	}
+	
+	$(".inBoard").remove();
 }
 
 function initialize() {
@@ -226,6 +228,8 @@ function createLevelEditorActions() {
 		var data = $("#level-editor-scene .load.popup .level-code").val();
 		loadLevelFromString(data, "#level-editor-scene .board");
 		$("#level-editor-scene .steps .step-limit").val(step);
+		$("#game-scene .arrow").removeClass("lastDir");
+		state = STATE_MAIN_MENU;
 	});
 	
 	$("#level-editor-scene .ok").click(function(){
