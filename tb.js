@@ -143,7 +143,7 @@ function clearBoard() {
 		}
 	}
 	
-	$(".inBoard").remove();
+	$(".inBoard").fadeOut(function(){$(this).remove()});
 }
 
 function initialize() {
