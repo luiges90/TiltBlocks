@@ -487,16 +487,16 @@ function eliminateBlocks() {
 							dfs(startR, startC + 1);
 						}
 					}
-					if (startR > 0 && !visited[startR - 1][startC] && (board[startR - 1][startC] == color || board[startR - 1][startC] == '9')) {
+					if (startR > 0 && !visited[startR - 1][startC] && (board[startR - 1][startC] == board[startR][startC] || board[startR - 1][startC] == '9')) {
 						dfs(startR - 1, startC);
 					}
-					if (startR < BOARD_SIZE && !visited[startR + 1][startC] && (board[startR + 1][startC] == color || board[startR + 1][startC] == '9')) {
+					if (startR < BOARD_SIZE - 1 && !visited[startR + 1][startC] && (board[startR + 1][startC] == board[startR][startC] || board[startR + 1][startC] == '9')) {
 						dfs(startR + 1, startC);
 					}
-					if (startC > 0 && !visited[startR][startC - 1] && (board[startR][startC - 1] == color || board[startR][startC - 1] == '9')) {
+					if (startC > 0 && !visited[startR][startC - 1] && (board[startR][startC - 1] == board[startR][startC] || board[startR][startC - 1] == '9')) {
 						dfs(startR, startC - 1);
 					}
-					if (startC < BOARD_SIZE && !visited[startR][startC + 1] && (board[startR][startC + 1] == color || board[startR][startC + 1] == '9')) {
+					if (startC < BOARD_SIZE - 1 && !visited[startR][startC + 1] && (board[startR][startC + 1] == board[startR][startC] || board[startR][startC + 1] == '9')) {
 						dfs(startR, startC + 1);
 					}
 				})(i, j);
