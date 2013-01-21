@@ -3,10 +3,12 @@
 <head>
 	<title>Tilt Blocks</title>
 	
-	<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script language="javascript" type="text/javascript" src="tb.js"></script>
+	<!--<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>-->
+	<script type="text/javascript" src="lib/jquery.js"></script>
+	<script type="text/javascript" src="tb.js"></script>
 	
-	<link type="text/css" href="http://reset5.googlecode.com/hg/reset.min.css" rel="stylesheet" media="all" />
+	<!--<link type="text/css" href="http://reset5.googlecode.com/hg/reset.min.css" rel="stylesheet" media="all" />-->
+	<link type="text/css" href="lib/reset.css" rel="stylesheet" media="all" />
 	<link type="text/css" href="tb.css" rel="stylesheet" media="all" />
 	
 </head>
@@ -85,6 +87,7 @@
 					<div class="palette blueBlock" data-code="3"></div>
 					<div class="palette yellowBlock" data-code="4"></div>
 					<div class="palette stoneBlock" data-code="0"></div>
+					<div class="palette rainbowBlock" data-code="9"></div>
 				</div>
 			</div>
 		</div>
@@ -95,7 +98,8 @@
 				<textarea class="level-code" spellcheck="false"></textarea>
 			</div>
 			<div class="buttons">
-				<div class="button ok">OK</div>
+				<div class="button ok">Cancel</div>
+				<div class="button load-level ok">OK</div>
 			</div>
 		</div>
 		<div id="editor-save-background" class="editor save popup-bg"></div>

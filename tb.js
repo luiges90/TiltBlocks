@@ -21,7 +21,7 @@ var step, stepLimit;
 
 var level = 0;
 
-var BLOCK_CODE = ['1', '2', '3', '4', '5', '6'];
+var BLOCK_CODE = ['1', '2', '3', '4', '5', '6', '9'];
 var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
 var SOLID_CODE = MOVABLE_CODE.concat(['X']);
 
@@ -179,8 +179,8 @@ function createLevelEditorActions() {
 			var boardLeft = Math.floor((x - $board.offset().left) / SQUARE_SIZE);
 			var boardTop = Math.floor((y - $board.offset().top) / SQUARE_SIZE);
 			
-			var currentCode = $(".palette.active").data('code');
-			if (typeof currentCode === "undefined") currentCode = '.';
+			var currentCode = String($(".palette.active").data('code'));
+			if (currentCode == "undefined") currentCode = '.';
 			
 			if (board[boardTop][boardLeft] != currentCode) {
 				board[boardTop][boardLeft] = currentCode;
@@ -211,7 +211,7 @@ function createLevelEditorActions() {
 			}
 		}
 		var step = $("#level-editor-scene .panel .step-limit").val();
-		if (step < 10) step = '0' + step;
+		if (step.length < 2) step = '0' + step;
 		code += step;
 	
 		$(".editor.save .level-code").val(code);
@@ -222,7 +222,7 @@ function createLevelEditorActions() {
 		$(".editor.load").fadeIn();
 	});
 	
-	$("#level-editor-scene .load.popup .ok").click(function() {
+	$("#level-editor-scene .load.popup .load-level").click(function() {
 		var data = $("#level-editor-scene .load.popup .level-code").val();
 		loadLevelFromString(data, "#level-editor-scene .board");
 		$("#level-editor-scene .steps .step-limit").val(step);
@@ -233,6 +233,9 @@ function createLevelEditorActions() {
 		$(".popup-bg").fadeOut();
 	});
 
+	$("#level-editor-scene .panel .play").click(function() {
+		state = STATE_READY;
+	});
 }
 
 function loadLevelFromString(string, blockAppendTo) {
@@ -466,16 +469,30 @@ function eliminateBlocks() {
 				(function dfs(startR, startC){
 					visited[startR][startC] = true;
 					eliminated.push([startR, startC]);
-					if (startR > 0 && !visited[startR - 1][startC] && board[startR - 1][startC] == color) {
+					if (board[startR][startC] == '9'){
+						if ($.inArray(board[startR - 1][startC], BLOCK_CODE) >= 0){
+							dfs(startR - 1, startC);
+						}
+						if ($.inArray(board[startR + 1][startC], BLOCK_CODE) >= 0){
+							dfs(startR + 1, startC);
+						}
+						if ($.inArray(board[startR][startC - 1], BLOCK_CODE) >= 0){
+							dfs(startR, startC - 1);
+						}
+						if ($.inArray(board[startR][startC + 1], BLOCK_CODE) >= 0){
+							dfs(startR, startC + 1);
+						}
+					}
+					if (startR > 0 && !visited[startR - 1][startC] && (board[startR - 1][startC] == color || board[startR - 1][startC] == '9')) {
 						dfs(startR - 1, startC);
 					}
-					if (startR < BOARD_SIZE && !visited[startR + 1][startC] && board[startR + 1][startC] == color) {
+					if (startR < BOARD_SIZE && !visited[startR + 1][startC] && (board[startR + 1][startC] == color || board[startR - 1][startC] == '9')) {
 						dfs(startR + 1, startC);
 					}
-					if (startC > 0 && !visited[startR][startC - 1] && board[startR][startC - 1] == color) {
+					if (startC > 0 && !visited[startR][startC - 1] && (board[startR][startC - 1] == color || board[startR - 1][startC] == '9')) {
 						dfs(startR, startC - 1);
 					}
-					if (startC < BOARD_SIZE && !visited[startR][startC + 1] && board[startR][startC + 1] == color) {
+					if (startC < BOARD_SIZE && !visited[startR][startC + 1] && (board[startR][startC + 1] == color || board[startR - 1][startC] == '9')) {
 						dfs(startR, startC + 1);
 					}
 				})(i, j);
@@ -576,7 +593,7 @@ function checkFail() {
 	if (step <= 0) {
 		failed = "Too many steps!";
 	}
-	var counts = [];
+	/*var counts = [];
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
@@ -592,7 +609,7 @@ function checkFail() {
 		if (counts[i] == 1){
 			failed = "Impossible to clear!";
 		}
-	}
+	}*/
 	
 	if (failed) {
 		$(".level-failed .content").html(failed);
