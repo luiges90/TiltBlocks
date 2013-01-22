@@ -26,38 +26,38 @@ body {
 }
 
 .wall {
-	background-color: white;
+	background-image: url('img/blocks.png');
+	background-position: 0px 0px;
 }
 
 .redBlock {
-	background-color: red;
+	background-image: url('img/blocks.png');
+	background-position: -48px 0px;
 }
 
 .greenBlock {
-	background-color: green;
+	background-image: url('img/blocks.png');
+	background-position: -96px 0px;
 }
 
 .blueBlock {
-	background-color: blue;
+	background-image: url('img/blocks.png');
+	background-position: -144px 0px;
 }
 
 .yellowBlock {
-	background-color: yellow;
+	background-image: url('img/blocks.png');
+	background-position: -192px 0px;
 }
 
 .stoneBlock {
-	background-color: gray;
+	background-image: url('img/blocks.png');
+	background-position: -240px 0px;
 }
 
 .rainbowBlock {
-	background: rgb(255,0,0); /* Old browsers */
-	background: -moz-linear-gradient(-45deg, rgba(255,0,0,1) 0%, rgba(255,255,0,1) 20%, rgba(0,255,0,1) 40%, rgba(0,255,255,1) 60%, rgba(0,0,255,1) 80%, rgba(255,0,255,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,0,0,1)), color-stop(20%,rgba(255,255,0,1)), color-stop(40%,rgba(0,255,0,1)), color-stop(60%,rgba(0,255,255,1)), color-stop(80%,rgba(0,0,255,1)), color-stop(100%,rgba(255,0,255,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(-45deg, rgba(255,0,0,1) 0%,rgba(255,255,0,1) 20%,rgba(0,255,0,1) 40%,rgba(0,255,255,1) 60%,rgba(0,0,255,1) 80%,rgba(255,0,255,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(-45deg, rgba(255,0,0,1) 0%,rgba(255,255,0,1) 20%,rgba(0,255,0,1) 40%,rgba(0,255,255,1) 60%,rgba(0,0,255,1) 80%,rgba(255,0,255,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(-45deg, rgba(255,0,0,1) 0%,rgba(255,255,0,1) 20%,rgba(0,255,0,1) 40%,rgba(0,255,255,1) 60%,rgba(0,0,255,1) 80%,rgba(255,0,255,1) 100%); /* IE10+ */
-	background: linear-gradient(135deg, rgba(255,0,0,1) 0%,rgba(255,255,0,1) 20%,rgba(0,255,0,1) 40%,rgba(0,255,255,1) 60%,rgba(0,0,255,1) 80%,rgba(255,0,255,1) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff0000', endColorstr='#ff00ff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	background-image: url('img/blocks.png');
+	background-position: -288px 0px;
 }
 
 .panel {
