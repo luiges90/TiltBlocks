@@ -33,31 +33,57 @@ body {
 .redBlock {
 	background-image: url('img/blocks.png');
 	background-position: -48px 0px;
+	z-index: 10;
 }
 
 .greenBlock {
 	background-image: url('img/blocks.png');
 	background-position: -96px 0px;
+	z-index: 10;
 }
 
 .blueBlock {
 	background-image: url('img/blocks.png');
 	background-position: -144px 0px;
+	z-index: 10;
 }
 
 .yellowBlock {
 	background-image: url('img/blocks.png');
 	background-position: -192px 0px;
+	z-index: 10;
 }
 
 .stoneBlock {
 	background-image: url('img/blocks.png');
 	background-position: -240px 0px;
+	z-index: 10;
 }
 
 .rainbowBlock {
 	background-image: url('img/blocks.png');
 	background-position: -288px 0px;
+	z-index: 10;
+}
+
+.upArrow {
+	background-image: url('img/blocks.png');
+	background-position: -336px 0px;
+}
+
+.rightArrow {
+	background-image: url('img/blocks.png');
+	background-position: -384px 0px;
+}
+
+.downArrow {
+	background-image: url('img/blocks.png');
+	background-position: -432px 0px;
+}
+
+.leftArrow {
+	background-image: url('img/blocks.png');
+	background-position: 0px -48px;
 }
 
 .panel {
