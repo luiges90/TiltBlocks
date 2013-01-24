@@ -263,6 +263,7 @@ function loadLevelFromString(string, blockAppendTo) {
 					.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j)
 					.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo(blockAppendTo);
 			}
+			bottomBoard[i][j] = '.';
 		}
 	}
 }
@@ -480,6 +481,8 @@ function eliminateBlocks() {
 				var eliminated = [];
 				
 				(function dfs(startR, startC){
+					startR = parseInt(startR, 10);
+					startC = parseInt(startC, 10);
 					visited[startR][startC] = true;
 					eliminated.push([startR, startC]);
 					if (board[startR][startC] == '9'){
