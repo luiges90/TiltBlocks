@@ -130,17 +130,20 @@ $(document).ready(function() {
 	
 });
 
-var board;
+var board, bottomBoard;
 var codeDivs;
 var step, stepLimit;
 
 function clearBoard() {
 	// initialize board
 	board = [];
+	bottomBoard = [];
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		board[i] = [];
+		bottomBoard[i] = [];
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			board[i][j] = '.';
+			bottomBoard[i][j] = '.';
 		}
 	}
 	
@@ -361,9 +364,13 @@ function makeStep(dirX, dirY) {
 }
 
 function moveBlock(startR, startC, endR, endC) {
+	if ($.inArray(board[endR][endC], BOTTOM_LAYER_CODE) >= 0){
+		bottomBoard[endR][endC] = board[endR][endC];
+	}
+
 	if (startR != endR || startC != endC) {
 		board[endR][endC] = board[startR][startC];
-		board[startR][startC] = ".";
+		board[startR][startC] = bottomBoard[startR][startC];
 	}
 	
 	return {start: [startR, startC], end: [endR, endC]};
@@ -505,7 +512,7 @@ function eliminateBlocks() {
 				
 				if (eliminated.length > 1) {
 					for (var i in eliminated) {
-						board[eliminated[i][0]][eliminated[i][1]] = ".";
+						board[eliminated[i][0]][eliminated[i][1]] = bottomBoard[eliminated[i][0]][eliminated[i][1]];
 						eliminateSet.push(eliminated[i]);
 					}
 				}
@@ -545,7 +552,8 @@ function animateBlocks(steps, callback) {
 		
 		// eliminate
 		for (var j in steps[i+1]) {
-			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).fadeOut(ELIMINATE_SPEED, function(){$(this).remove();});
+			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).not('.upArrow').not('.leftArrow').not('.downArrow').not('.rightArrow')
+				.fadeOut(ELIMINATE_SPEED, function(){$(this).remove();});
 		}
 		
 		if (steps[i+1].length > 0){
