@@ -232,6 +232,7 @@ body {
 	margin-left: -250px;
 	margin-top: -125px;
 	border-radius: 5px;
+	z-index: 100;
 }
 
 .popup {
@@ -244,6 +245,7 @@ body {
 	margin-left: -250px;
 	margin-top: -125px;
 	text-align: center;
+	z-index: 100;
 }
 
 #level-cleared-background {
