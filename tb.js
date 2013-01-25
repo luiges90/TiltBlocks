@@ -548,7 +548,8 @@ function animateBlocks(steps, callback) {
 			var end = steps[i][j].end;
 			var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
 			
-			$(".r" + start[0] + "c" + start[1]).animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
+			$(".r" + start[0] + "c" + start[1]).not('.upArrow').not('.leftArrow').not('.downArrow').not('.rightArrow')
+				.animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
 				.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]).delay(maxDistance * MOVING_SPEED - distance * MOVING_SPEED);
 		}
 		animationTime += maxDistance * MOVING_SPEED;
