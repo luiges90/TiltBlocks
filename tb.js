@@ -25,7 +25,8 @@ var level = 0;
 var BLOCK_CODE = ['1', '2', '3', '4', '5', '6', '9'];
 var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
 var SOLID_CODE = MOVABLE_CODE.concat(['X']);
-var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D'];
+var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T'];
+var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .leftArrow, .rightArrow, .sticky';
 
 var PROGRESS_KEY = 'tb_level';
 
@@ -419,23 +420,30 @@ function moveBlocks(dirR, dirC) {
 	if (dirC < 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
-				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j - 1; ; --k) 
-					{
-						if (k == -1 || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'D']) >= 0) {
-							var elem = moveBlock(i, j, i, k + 1);
-							if (elem) {
-								changeSet.push(elem);
-							}
-							break;
-						} 
-						else if (board[i][k] == 'T') 
+				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
+					if (bottomBoard[i][j] == 'T') {
+						var elem = moveBlock(i, j, i, j);
+						if (elem) {
+							changeSet.push(elem);
+						}
+					} else {
+						for (var k = j - 1; ; --k) 
 						{
-							var elem = moveBlock(i, j, i, k);
-							if (elem) {
-								changeSet.push(elem);
+							if (k == -1 || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'D']) >= 0) {
+								var elem = moveBlock(i, j, i, k + 1);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
+							} 
+							else if (board[i][k] == 'T') 
+							{
+								var elem = moveBlock(i, j, i, k);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -447,23 +455,30 @@ function moveBlocks(dirR, dirC) {
 	if (dirC > 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
-				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j + 1; ; ++k) 
-					{
-						if (k == BOARD_SIZE || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'A']) >= 0) {
-							var elem = moveBlock(i, j, i, k - 1);
-							if (elem) {
-								changeSet.push(elem);
-							}
-							break;
-						} 
-						else if (board[i][k] == 'T') 
+				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
+					if (bottomBoard[i][j] == 'T') {
+						var elem = moveBlock(i, j, i, j);
+						if (elem) {
+							changeSet.push(elem);
+						}
+					} else {
+						for (var k = j + 1; ; ++k) 
 						{
-							var elem = moveBlock(i, j, i, k);
-							if (elem) {
-								changeSet.push(elem);
+							if (k == BOARD_SIZE || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'A']) >= 0) {
+								var elem = moveBlock(i, j, i, k - 1);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
+							} 
+							else if (board[i][k] == 'T') 
+							{
+								var elem = moveBlock(i, j, i, k);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -475,23 +490,30 @@ function moveBlocks(dirR, dirC) {
 	if (dirR < 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
-				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j - 1; ; --k) 
-					{
-						if (k == -1 || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['A', 'S', 'D']) >= 0) {
-							var elem = moveBlock(j, i, k + 1, i);
-							if (elem) {
-								changeSet.push(elem);
-							}
-							break;
-						} 
-						else if (board[i][k] == 'T') 
+				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0) {
+					if (bottomBoard[j][i] == 'T') {
+						var elem = moveBlock(j, i, j, i);
+						if (elem) {
+							changeSet.push(elem);
+						}
+					} else {
+						for (var k = j - 1; ; --k) 
 						{
-							var elem = moveBlock(j, i, k, i);
-							if (elem) {
-								changeSet.push(elem);
+							if (k == -1 || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['A', 'S', 'D']) >= 0) {
+								var elem = moveBlock(j, i, k + 1, i);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
+							} 
+							else if (board[k][i] == 'T') 
+							{
+								var elem = moveBlock(j, i, k, i);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -503,23 +525,30 @@ function moveBlocks(dirR, dirC) {
 	if (dirR > 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
-				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j + 1; ; ++k) 
-					{
-						if (k == BOARD_SIZE || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['W', 'A', 'D']) >= 0) {
-							var elem = moveBlock(j, i, k - 1, i);
-							if (elem) {
-								changeSet.push(elem);
-							}
-							break;
-						} 
-						else if (board[i][k] == 'T') 
+				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0) {
+					if (bottomBoard[j][i] == 'T') {
+						var elem = moveBlock(j, i, j, i);
+						if (elem) {
+							changeSet.push(elem);
+						}
+					} else {
+						for (var k = j + 1; ; ++k) 
 						{
-							var elem = moveBlock(j, i, k, i);
-							if (elem) {
-								changeSet.push(elem);
+							if (k == BOARD_SIZE || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['W', 'A', 'D']) >= 0) {
+								var elem = moveBlock(j, i, k - 1, i);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
+							} 
+							else if (board[k][i] == 'T') 
+							{
+								var elem = moveBlock(j, i, k, i);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -615,7 +644,7 @@ function animateBlocks(steps, callback) {
 			var end = steps[i][j].end;
 			var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
 			
-			$(".r" + start[0] + "c" + start[1]).not('.upArrow').not('.leftArrow').not('.downArrow').not('.rightArrow')
+			$(".r" + start[0] + "c" + start[1]).not(BOTTOM_LAYER_CLASSES)
 				.animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
 				.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]).delay(maxDistance * MOVING_SPEED - distance * MOVING_SPEED);
 		}
@@ -623,7 +652,7 @@ function animateBlocks(steps, callback) {
 		
 		// eliminate
 		for (var j in steps[i+1]) {
-			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).not('.upArrow').not('.leftArrow').not('.downArrow').not('.rightArrow')
+			$(".r" + steps[i+1][j][0] + "c" + steps[i+1][j][1]).not(BOTTOM_LAYER_CLASSES)
 				.fadeOut(ELIMINATE_SPEED, function(){$(this).remove();});
 		}
 		
