@@ -87,6 +87,11 @@ body {
 	background-position: 0px -48px;
 }
 
+.sticky {
+	background-image: url('img/blocks.png');
+	background-position: -48px -48px;
+}
+
 .panel {
 	background: #dddddd; /* Old browsers */
 	background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%); /* FF3.6+ */
