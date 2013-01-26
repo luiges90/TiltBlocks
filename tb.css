@@ -256,8 +256,8 @@ body {
 }
 
 #level-failed-background {
-	background-color: #999;
-	box-shadow: 0px 0px 40px #EEE, 0px 0px 40px #EEE;
+	background-color: #777;
+	box-shadow: 0px 0px 40px #CCC, 0px 0px 40px #CCC;
 	opacity: 0.8;
 	filter: alpha(opacity=80);
 }
