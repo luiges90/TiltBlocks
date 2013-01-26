@@ -8,6 +8,7 @@ var STATE_ANIMATING = 2;
 var STATE_CLEARED = 3;
 var STATE_FAILED = 4;
 var STATE_MAIN_MENU = 5;
+var inEditor = false;
 
 // key constants
 var KEY_LEFT = 37;
@@ -103,7 +104,9 @@ $(document).ready(function() {
 	
 	$("#main-menu-scene .level-editor").click(function(){
 		$(".scene").fadeOut();
+		$("#level-editor-scene .panel.playing").hide();
 		$("#level-editor-scene").fadeIn();
+		inEditor = true;
 	});
 	
 	createLevelEditorActions();
@@ -118,6 +121,7 @@ $(document).ready(function() {
 		state = STATE_MAIN_MENU;
 		// clear board data
 		clearBoard();
+		inEditor = false;
 	});
 
 	$(".retry").click(function() {
@@ -173,10 +177,12 @@ function createLevelSelectScene() {
 }
 
 function createLevelEditorActions() {
+	var backupBoard;
 	var $board = $("#level-editor-scene .board");
 
 	$board.mousedown(function(d) {
 		$board.on('mousemove', function(e) {
+			if (state != STATE_MAIN_MENU) return;
 			var x = e.pageX;
 			var y = e.pageY;
 			if (typeof x === "undefined") x = d.pageX;
@@ -195,8 +201,6 @@ function createLevelEditorActions() {
 							.removeClass("palette").removeClass("active").addClass("inBoard").addClass("r" + boardTop + "c" + boardLeft)
 							.offset({top: SQUARE_SIZE * boardTop, left: SQUARE_SIZE * boardLeft}).appendTo("#level-editor-scene .board");
 			}
-			
-			
 		}).mousemove();
 	});
 	
@@ -232,7 +236,7 @@ function createLevelEditorActions() {
 		var data = $("#level-editor-scene .load.popup .level-code").val();
 		loadLevelFromString(data, "#level-editor-scene .board");
 		$("#level-editor-scene .steps .step-limit").val(step);
-		$("#game-scene .arrow").removeClass("lastDir");
+		$(".arrow").removeClass("lastDir");
 		state = STATE_MAIN_MENU;
 	});
 	
@@ -240,20 +244,38 @@ function createLevelEditorActions() {
 		$(".popup").fadeOut();
 		$(".popup-bg").fadeOut();
 	});
+	
+	function returnToEdit() {
+		board = $.extend(true, [], backupBoard);
+		updateBoardFromData("#level-editor-scene .board");
+		$("#level-editor-scene .panel.playing").hide();
+		$("#level-editor-scene .panel.editing").show();
+		$(".popup").fadeOut();
+		$(".popup-bg").fadeOut();
+		$("#popup-layer").fadeOut();
+		state = STATE_MAIN_MENU;
+	}
+	
+	$(".popup .ok").click(returnToEdit);
+	
+	$("#level-editor-scene .panel .back").click(returnToEdit);
 
 	$("#level-editor-scene .panel .play").click(function() {
+		backupBoard = $.extend(true, [], board);
+		stepLimit = $("#level-editor-scene .panel.editing .step-limit").val();
+		step = stepLimit;
+		$("#level-editor-scene .panel.playing").show();
+		$("#level-editor-scene .panel.editing").hide();
+		$("#level-editor-scene .panel.playing .steps .content").html(step + "/" + stepLimit);
+		$(".arrow").removeClass("lastDir");
+		$("#level-editor-scene .panel.playing .steps .content").removeClass("warning");
 		state = STATE_READY;
 	});
+
 }
 
-function loadLevelFromString(string, blockAppendTo) {
-	string = string.replace(/\s/g, "");
-	for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
-		board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE] = string.charAt(i);
-	}
-	stepLimit = parseInt(string.slice(-2));
-	step = stepLimit;
-	
+function updateBoardFromData(blockAppendTo)
+{
 	// setup board
 	$(".inBoard").remove();
 	for (var i = 0; i < board.length; ++i) {
@@ -268,6 +290,17 @@ function loadLevelFromString(string, blockAppendTo) {
 	}
 }
 
+function loadLevelFromString(string, blockAppendTo) {
+	string = string.replace(/\s/g, "");
+	for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
+		board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE] = string.charAt(i);
+	}
+	stepLimit = parseInt(string.slice(-2));
+	step = stepLimit;
+	
+	updateBoardFromData(blockAppendTo);
+}
+
 function loadLevel(number) {
 	state = STATE_LOADING;
 	$.ajax({
@@ -280,7 +313,7 @@ function loadLevel(number) {
 			// setup info
 			$("#game-scene .level .content").html(getLevelString(number));
 			$("#game-scene .steps .content").html(step + "/" + stepLimit);
-			$("#game-scene .arrow").removeClass("lastDir");
+			$(".arrow").removeClass("lastDir");
 			$("#game-scene .steps .content").removeClass("warning");
 			
 			level = number;
@@ -354,8 +387,10 @@ function makeStep(dirX, dirY) {
 	} while (eliminated.length > 0);
 	--step;
 	$("#game-scene .steps .content").html(step + "/" + stepLimit);
+	$("#level-editor-scene .panel.playing .steps .content").html(step + "/" + stepLimit);
 	if (step < 2) {
 		$("#game-scene .steps .content").addClass("warning");
+		$("#level-editor-scene .panel.playing .steps .content").addClass("warning");
 	}
 	animateBlocks(steps, function(){
 		state = STATE_READY;
@@ -586,21 +621,30 @@ function checkComplete() {
 		$("#popup-layer").css('background-color', 'transparent').fadeIn();
 		$(".level-cleared").fadeIn();
 		state = STATE_CLEARED;
-		if (level >= furthestLevel){
-			furthestLevel++;
+		if (inEditor){
+			$(".popup .buttons.main").hide();
+			$(".popup .buttons.editor").show();
+		} else {
+			$(".popup .buttons.editor").hide();
+			$(".popup .buttons.main").show();
 		}
-		localStorage.setItem(PROGRESS_KEY, furthestLevel);
-		$(".next").one("click", function() {
-			level++;
-			loadLevel(level);
-			$("#popup-layer").fadeOut();
-			$(".level-cleared").fadeOut();
-		});
-		$(document).keyup(function(e){
-			if (e.which == 13){
-				$(".next").click();
+		if (!inEditor) {
+			if (level >= furthestLevel){
+				furthestLevel++;
 			}
-		});
+			localStorage.setItem(PROGRESS_KEY, furthestLevel);
+			$(".next").one("click", function() {
+				level++;
+				loadLevel(level);
+				$("#popup-layer").fadeOut();
+				$(".level-cleared").fadeOut();
+			});
+			$(document).keyup(function(e){
+				if (e.which == 13){
+					$(".next").click();
+				}
+			});
+		}
 	}
 }
 
@@ -632,6 +676,13 @@ function checkFail() {
 	if (failed) {
 		$(".level-failed .content").html(failed);
 		$("#popup-layer").css('background-color', '#000').fadeIn();
+		if (inEditor){
+			$(".popup .buttons.main").hide();
+			$(".popup .buttons.editor").show();
+		} else {
+			$(".popup .buttons.editor").hide();
+			$(".popup .buttons.main").show();
+		}
 		$(".level-failed").fadeIn();
 		state = STATE_FAILED;
 	}

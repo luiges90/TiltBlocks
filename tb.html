@@ -46,31 +46,22 @@
 				<div class="button home">Main Menu</div>
 			</div>
 		</div>
-		<div id="level-cleared-background" class="level-cleared popup-bg"></div>
-		<div id="level-cleared" class="level-cleared popup">
-			<div class="title">Level cleared!</div>
-			<div class="info"><span class="content">Steps remain: 1</span></div>
-			<div class="buttons">
-				<div class="button home">Main Menu</div>
-				<div class="button retry">Retry</div>
-				<div class="button next">Next Level</div>
-			</div>
-		</div>
-		<div id="level-failed-background" class="level-failed popup-bg"></div>
-		<div id="level-failed" class="level-failed popup">
-			<div class="title">Level failed...</div>
-			<div class="info"><span class="content">Too many steps!</span></div>
-			<div class="buttons">
-				<div class="button home">Main Menu</div>
-				<div class="button retry">Retry</div>
-			</div>
-		</div>
 	</div>
 	<div class="scene" id="level-editor-scene">
 		<div class="game">
 			<div class="board">
 			</div>
-			<div class="panel">
+			<div class="panel playing">
+				<div class="steps info"><span class="title">Step:</span><span class="content">15/15</span></div>
+				<div id="arrows">
+					<div id="up" class="arrow up"></div>
+					<div id="down" class="arrow down"></div>
+					<div id="left" class="arrow left"></div>
+					<div id="right" class="arrow right"></div>
+				</div>
+				<div class="button back">Back</div>
+			</div>
+			<div class="panel editing">
 				<div class="steps info">
 					<span class="title">Step:</span>
 					<span class="content"><input type="text" class="step-limit" value="99" maxlength="2"/></span>
@@ -115,6 +106,31 @@
 			<div class="buttons">
 				<div class="button ok">OK</div>
 			</div>
+		</div>
+	</div>
+	<div id="level-cleared-background" class="level-cleared popup-bg"></div>
+	<div id="level-cleared" class="level-cleared popup">
+		<div class="title">Level cleared!</div>
+		<div class="info"><span class="content">Steps remain: 1</span></div>
+		<div class="buttons main">
+			<div class="button home">Main Menu</div>
+			<div class="button retry">Retry</div>
+			<div class="button next">Next Level</div>
+		</div>
+		<div class="buttons editor">
+			<div class="button ok">OK</div>
+		</div>
+	</div>
+	<div id="level-failed-background" class="level-failed popup-bg"></div>
+	<div id="level-failed" class="level-failed popup">
+		<div class="title">Level failed...</div>
+		<div class="info"><span class="content">Too many steps!</span></div>
+		<div class="buttons main">
+			<div class="button home">Main Menu</div>
+			<div class="button retry">Retry</div>
+		</div>
+		<div class="buttons editor">
+			<div class="button ok">OK</div>
 		</div>
 	</div>
 	<div id="popup-layer"></div>
