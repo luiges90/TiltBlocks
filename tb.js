@@ -1,3 +1,5 @@
+"use strict";
+
 var BOARD_SIZE = 12;
 var SQUARE_SIZE = 48;
 
