@@ -240,7 +240,7 @@ function createLevelEditorActions() {
 		state = STATE_MAIN_MENU;
 	});
 	
-	$("#level-editor-scene .ok").click(function(){
+	$("#level-editor-scene .save-load-ok").click(function(){
 		$(".popup").fadeOut();
 		$(".popup-bg").fadeOut();
 	});
@@ -420,9 +420,9 @@ function moveBlocks(dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
 				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j - 1; k >= 0; --k) 
+					for (var k = j - 1; ; --k) 
 					{
-						if ($.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'D']) >= 0) {
+						if (k == -1 || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'D']) >= 0) {
 							var elem = moveBlock(i, j, i, k + 1);
 							if (elem) {
 								changeSet.push(elem);
@@ -448,10 +448,18 @@ function moveBlocks(dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
 				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j + 1; k >= 0; ++k) 
+					for (var k = j + 1; ; ++k) 
 					{
-						if ($.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'A']) >= 0) {
+						if (k == BOARD_SIZE || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'A']) >= 0) {
 							var elem = moveBlock(i, j, i, k - 1);
+							if (elem) {
+								changeSet.push(elem);
+							}
+							break;
+						} 
+						else if (board[i][k] == 'T') 
+						{
+							var elem = moveBlock(i, j, i, k);
 							if (elem) {
 								changeSet.push(elem);
 							}
@@ -468,10 +476,18 @@ function moveBlocks(dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
 				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j - 1; k >= 0; --k) 
+					for (var k = j - 1; ; --k) 
 					{
-						if ($.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['A', 'S', 'D']) >= 0) {
+						if (k == -1 || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['A', 'S', 'D']) >= 0) {
 							var elem = moveBlock(j, i, k + 1, i);
+							if (elem) {
+								changeSet.push(elem);
+							}
+							break;
+						} 
+						else if (board[i][k] == 'T') 
+						{
+							var elem = moveBlock(j, i, k, i);
 							if (elem) {
 								changeSet.push(elem);
 							}
@@ -488,10 +504,18 @@ function moveBlocks(dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
 				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0 && board[i][j] != 'T') {
-					for (var k = j + 1; k >= 0; ++k) 
+					for (var k = j + 1; ; ++k) 
 					{
-						if ($.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['W', 'A', 'D']) >= 0) {
+						if (k == BOARD_SIZE || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['W', 'A', 'D']) >= 0) {
 							var elem = moveBlock(j, i, k - 1, i);
+							if (elem) {
+								changeSet.push(elem);
+							}
+							break;
+						} 
+						else if (board[i][k] == 'T') 
+						{
+							var elem = moveBlock(j, i, k, i);
 							if (elem) {
 								changeSet.push(elem);
 							}
