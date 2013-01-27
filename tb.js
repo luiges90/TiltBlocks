@@ -28,7 +28,7 @@ var BLOCK_CODE = ['1', '2', '3', '4', '5', '6', '9'];
 var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
 var SOLID_CODE = MOVABLE_CODE.concat(['X']);
 var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T'];
-var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .leftArrow, .rightArrow, .sticky';
+var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .upArrow, .downArrow, .sticky';
 
 var PROGRESS_KEY = 'tb_level';
 
