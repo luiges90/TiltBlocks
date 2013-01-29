@@ -26,9 +26,10 @@ var level = 0;
 
 var BLOCK_CODE = ['1', '2', '3', '4', '5', '6', '9'];
 var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
-var SOLID_CODE = MOVABLE_CODE.concat(['X']);
-var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T'];
-var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .upArrow, .downArrow, .sticky';
+var GATE_CODE = ['U', 'I', 'O', 'P'];
+var SOLID_CODE = MOVABLE_CODE.concat(GATE_CODE).concat(['X']);
+var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T', 'H', 'J', 'K', 'L'];
+var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .upArrow, .downArrow, .sticky, .redTrigger, .greenTrigger, .blueTrigger, .yellowTrigger';
 
 var PROGRESS_KEY = 'tb_level';
 
@@ -558,6 +559,18 @@ function moveBlocks(dirR, dirC) {
 		}
 	}
 	
+	// gate "moves" to fix animation
+	for (var i = 0; i < BOARD_SIZE; ++i) {
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if ($.inArray(board[i][j], GATE_CODE) >= 0) {
+				var elem = moveBlock(i, j, i, j);
+				if (elem) {
+					changeSet.push(elem);
+				}
+			}
+		}
+	}
+	
 	return changeSet;
 }
 
@@ -566,6 +579,7 @@ function eliminateBlocks() {
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
+				// normal blocks
 				var color = board[i][j];
 				var visited = [];
 				for (var k = 0; k < BOARD_SIZE; ++k) 
@@ -615,6 +629,51 @@ function eliminateBlocks() {
 					for (var i in eliminated) {
 						board[eliminated[i][0]][eliminated[i][1]] = bottomBoard[eliminated[i][0]][eliminated[i][1]];
 						eliminateSet.push(eliminated[i]);
+					}
+				}
+				
+				// gates
+				if (bottomBoard[i][j] == 'H') {
+					for (var k = 0; k < BOARD_SIZE; ++k){
+						for (var l = 0; l < BOARD_SIZE; ++l) {
+							if (board[k][l] == 'U') {
+								board[k][l] = '.';
+								eliminateSet.push([k, l]);
+							}
+						}
+					}
+				}
+				
+				if (bottomBoard[i][j] == 'J') {
+					for (var k = 0; k < BOARD_SIZE; ++k){
+						for (var l = 0; l < BOARD_SIZE; ++l) {
+							if (board[k][l] == 'I') {
+								board[k][l] = '.';
+								eliminateSet.push([k, l]);
+							}
+						}
+					}
+				}
+				
+				if (bottomBoard[i][j] == 'K') {
+					for (var k = 0; k < BOARD_SIZE; ++k){
+						for (var l = 0; l < BOARD_SIZE; ++l) {
+							if (board[k][l] == 'O') {
+								board[k][l] = '.';
+								eliminateSet.push([k, l]);
+							}
+						}
+					}
+				}
+				
+				if (bottomBoard[i][j] == 'L') {
+					for (var k = 0; k < BOARD_SIZE; ++k){
+						for (var l = 0; l < BOARD_SIZE; ++l) {
+							if (board[k][l] == 'P') {
+								board[k][l] = '.';
+								eliminateSet.push([k, l]);
+							}
+						}
 					}
 				}
 			}

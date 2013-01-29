@@ -92,6 +92,46 @@ body {
 	background-position: -48px -48px;
 }
 
+.redTrigger {
+	background-image: url('img/blocks.png');
+	background-position: -96px -48px;
+}
+
+.greenTrigger {
+	background-image: url('img/blocks.png');
+	background-position: -144px -48px;
+}
+
+.blueTrigger {
+	background-image: url('img/blocks.png');
+	background-position: -192px -48px;
+}
+
+.yellowTrigger {
+	background-image: url('img/blocks.png');
+	background-position: -240px -48px;
+}
+
+.redGate {
+	background-image: url('img/blocks.png');
+	background-position: -288px -48px;
+}
+
+.greenGate {
+	background-image: url('img/blocks.png');
+	background-position: -336px -48px;
+}
+
+.blueGate {
+	background-image: url('img/blocks.png');
+	background-position: -384px -48px;
+}
+
+.yellowGate {
+	background-image: url('img/blocks.png');
+	background-position: -432px -48px;
+}
+
 .panel {
 	background: #dddddd; /* Old browsers */
 	background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%); /* FF3.6+ */
