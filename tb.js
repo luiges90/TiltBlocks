@@ -631,7 +631,10 @@ function eliminateBlocks() {
 						eliminateSet.push(eliminated[i]);
 					}
 				}
-				
+			}
+			
+			//gates
+			if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
 				// gates
 				if (bottomBoard[i][j] == 'H') {
 					for (var k = 0; k < BOARD_SIZE; ++k){
