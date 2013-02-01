@@ -457,7 +457,7 @@ function moveBlocks(dirR, dirC) {
 	// moving right
 	if (dirC > 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
-			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
+			for (var j = BOARD_SIZE - 1; j >= 0 ; --j) {
 				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
 					if (bottomBoard[i][j] == 'T') {
 						var elem = moveBlock(i, j, i, j);
@@ -527,7 +527,7 @@ function moveBlocks(dirR, dirC) {
 	// moving down
 	if (dirR > 0) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
-			for (var j = BOARD_SIZE - 1; j > 0 ; --j) {
+			for (var j = BOARD_SIZE - 1; j >= 0 ; --j) {
 				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0) {
 					if (bottomBoard[j][i] == 'T') {
 						var elem = moveBlock(j, i, j, i);
@@ -598,16 +598,16 @@ function eliminateBlocks() {
 					visited[startR][startC] = true;
 					eliminated.push([startR, startC]);
 					if (board[startR][startC] == '9'){
-						if ($.inArray(board[startR - 1][startC], BLOCK_CODE) >= 0 && !visited[startR - 1][startC]){
+						if (startR > 0 && $.inArray(board[startR - 1][startC], BLOCK_CODE) >= 0 && !visited[startR - 1][startC]){
 							dfs(startR - 1, startC);
 						}
-						if ($.inArray(board[startR + 1][startC], BLOCK_CODE) >= 0 && !visited[startR + 1][startC]){
+						if (startR < BOARD_SIZE - 1 && $.inArray(board[startR + 1][startC], BLOCK_CODE) >= 0 && !visited[startR + 1][startC]){
 							dfs(startR + 1, startC);
 						}
-						if ($.inArray(board[startR][startC - 1], BLOCK_CODE) >= 0 && !visited[startR][startC - 1]){
+						if (startC > 0 && $.inArray(board[startR][startC - 1], BLOCK_CODE) >= 0 && !visited[startR][startC - 1]){
 							dfs(startR, startC - 1);
 						}
-						if ($.inArray(board[startR][startC + 1], BLOCK_CODE) >= 0 && !visited[startR][startC + 1]){
+						if (startC < BOARD_SIZE - 1 && $.inArray(board[startR][startC + 1], BLOCK_CODE) >= 0 && !visited[startR][startC + 1]){
 							dfs(startR, startC + 1);
 						}
 					}
