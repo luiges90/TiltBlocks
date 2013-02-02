@@ -10,6 +10,7 @@ var STATE_ANIMATING = 2;
 var STATE_CLEARED = 3;
 var STATE_FAILED = 4;
 var STATE_MAIN_MENU = 5;
+var STATE_TIP = 6;
 var inEditor = false;
 
 // key constants
@@ -122,6 +123,7 @@ $(document).ready(function() {
 		$(".popup-bg").fadeOut();
 		$(".scene").fadeOut();
 		$("#main-menu-scene").fadeIn();
+		$(".tip-popup").fadeOut();
 		state = STATE_MAIN_MENU;
 		// clear board data
 		clearBoard();
@@ -305,6 +307,20 @@ function loadLevelFromString(string, blockAppendTo) {
 	updateBoardFromData(blockAppendTo);
 }
 
+function setupTipPopup(text, x, y, callback) {
+	$(".tip-main").html(text);
+	$(".tip-popup").css("left", x).css("top", y).show().one("click", function(){
+		$(".tip-popup").fadeOut(function(){
+			if (callback){
+				callback();
+			} else {
+				state = STATE_READY;
+			}
+		});
+		return false;
+	});
+}
+
 function loadLevel(number) {
 	state = STATE_LOADING;
 	$.ajax({
@@ -322,11 +338,37 @@ function loadLevel(number) {
 			
 			level = number;
 			if (level > furthestLevel){
-				furtherLevel = level;
+				furthestLevel = level;
 			}
 			
 			// ready
-			state = STATE_READY;
+			switch (furthestLevel) {
+				case 0:
+					setupTipPopup("These are blocks. Eliminate them by putting them together.", 450, 420, function(){
+						setupTipPopup("By clicking these arrows, you move blocks all the way until they hit something.", 800, 380);
+					});
+					state = STATE_TIP;
+					break;
+				case 10:
+					setupTipPopup("These are stones. They do not eliminate and need not be eliminated.", 500, 420);
+					break;
+				case 20:
+					setupTipPopup("These are rainbow blocks. They eliminate with any other colored blocks.", 700, 470);
+					break;
+				case 30:
+					setupTipPopup("These are arrows. They only allow blocks moving at its direction.", 600, 470);
+					break;
+				case 40:
+					setupTipPopup("These are stickies. Blocks going onto them will be stopped and become unmovable.", 600, 420);
+					break;
+				case 50:
+					setupTipPopup("These are gates. They open up when blocks land on switches of the same color.", 600, 470, function(){
+						setupTipPopup("These are switches, used to open gates of the same color.", 700, 200);
+					});
+					break;
+				default:
+					state = STATE_READY;
+			}
 		}
 	});
 }

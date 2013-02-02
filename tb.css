@@ -539,3 +539,43 @@ body {
 	background-color: #CCC;
 	color: #FFF;
 }
+
+.tip-popup {
+	width: 280px;
+	height: 80px;
+	background-color: #FA4;
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+	box-shadow: 5px 5px #AAA;
+	color: #FFF;
+	position: absolute;
+	font-weight: 300;
+	padding: 10px;
+	display: none;
+}
+
+.tip-popup:hover {
+	cursor: pointer;
+}
+
+.tip-box {
+	display: table;
+	left: 0;
+	top: 0;
+	width: 280px;
+	height: 80px;
+}
+
+.tip-text {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.tip-main {
+	font: 18px arial,sans-serif;
+}
+
+.tip-dismiss {
+	font: 14px arial,sans-serif;
+}
