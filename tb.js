@@ -110,7 +110,7 @@ $(document).ready(function() {
 	$("#main-menu-scene .level-editor").click(function(){
 		$(".scene").fadeOut();
 		$("#level-editor-scene .panel.playing").hide();
-		$("#level-editor-scene").fadeIn();
+		$("#level-editor-scene").fadeIn(function(){$(".palette-table").data('jsp').reinitialise();});
 		inEditor = true;
 	});
 	
@@ -138,6 +138,13 @@ $(document).ready(function() {
 		$(".popup-bg").fadeOut();
 	});
 	
+	$(".palette-table").jScrollPane().hover(
+	function(){
+		$(".palette-table .jspVerticalBar").animate({"opacity": 1}, 200);
+	}, 
+	function(){
+		$(".palette-table .jspVerticalBar").animate({"opacity": 0}, 200);
+	});
 });
 
 var board, bottomBoard;
@@ -308,6 +315,7 @@ function loadLevelFromString(string, blockAppendTo) {
 }
 
 function setupTipPopup(text, x, y, callback) {
+	state = STATE_TIP;
 	$(".tip-main").html(text);
 	$(".tip-popup").css("left", x).css("top", y).show().one("click", function(){
 		$(".tip-popup").fadeOut(function(){
@@ -347,7 +355,6 @@ function loadLevel(number) {
 					setupTipPopup("These are blocks. Eliminate them by putting them together.", 450, 420, function(){
 						setupTipPopup("By clicking these arrows, you move blocks all the way until they hit something.", 800, 380);
 					});
-					state = STATE_TIP;
 					break;
 				case 10:
 					setupTipPopup("These are stones. They do not eliminate and need not be eliminated.", 500, 420);

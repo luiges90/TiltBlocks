@@ -132,6 +132,25 @@ body {
 	background-position: -432px -48px;
 }
 
+.palette-table {
+	width: 208px;
+	height: 300px;
+	overflow: auto;
+}
+
+.palette-table .jspVerticalBar {
+	opacity: 0;
+}
+
+.jspVerticalBar, .jspTrack {
+	background: transparent;
+}
+
+.jspDrag {
+	background: #CCC;
+	border-radius: 15px;
+}
+
 .panel {
 	background: #dddddd; /* Old browsers */
 	background: -moz-linear-gradient(top, #dddddd 0%, #ffffff 100%); /* FF3.6+ */
