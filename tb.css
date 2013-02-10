@@ -1,7 +1,3 @@
-body {
-	overflow: hidden;
-}
-
 .palette {
 	width: 48px;
 	height: 48px;
@@ -130,6 +126,35 @@ body {
 .yellowGate {
 	background-image: url('img/blocks.png');
 	background-position: -432px -48px;
+}
+
+.wallUp {
+	background-image: url('img/blocks.png');
+	background-position: 0px -96px;
+	z-index: 10;
+}
+
+.wallRight {
+	background-image: url('img/blocks.png');
+	background-position: -48px -96px;
+	z-index: 10;
+}
+
+.wallDown {
+	background-image: url('img/blocks.png');
+	background-position: -96px -96px;
+	z-index: 10;
+}
+
+.wallLeft {
+	background-image: url('img/blocks.png');
+	background-position: -144px -96px;
+	z-index: 10;
+}
+
+.noMatch {
+	background-image: url('img/blocks.png');
+	background-position: -192px -96px;
 }
 
 .palette-table {
@@ -418,8 +443,8 @@ body {
 }
 
 #popup-layer {
-	width: 3000px;
-	height: 3000px;
+	width: 100%;
+	height: 100%;
 	z-index: 50;
 	left: 0;
 	top: 0;
@@ -427,7 +452,7 @@ body {
 	opacity: 0.5;
 	filter: alpha(opacity=50);
 	display: none;
-	position: absolute;
+	position: fixed;
 }
 
 .scene {

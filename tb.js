@@ -25,12 +25,12 @@ var step, stepLimit;
 
 var level = 0;
 
-var BLOCK_CODE = ['1', '2', '3', '4', '5', '6', '9'];
+var BLOCK_CODE = ['1', '2', '3', '4', '9'];
 var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
 var GATE_CODE = ['U', 'I', 'O', 'P'];
-var SOLID_CODE = MOVABLE_CODE.concat(GATE_CODE).concat(['X']);
-var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T', 'H', 'J', 'K', 'L'];
-var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .upArrow, .downArrow, .sticky, .redTrigger, .greenTrigger, .blueTrigger, .yellowTrigger';
+var SOLID_CODE = MOVABLE_CODE.concat(GATE_CODE).concat(['X', 'F', 'C', 'V', 'B']);
+var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T', 'H', 'J', 'K', 'L', 'N'];
+var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .upArrow, .downArrow, .sticky, .redTrigger, .greenTrigger, .blueTrigger, .yellowTrigger, .noMatch';
 
 var PROGRESS_KEY = 'tb_level';
 
@@ -373,6 +373,12 @@ function loadLevel(number) {
 						setupTipPopup("These are switches, used to open gates of the same color.", 700, 200);
 					});
 					break;
+				case 60:
+					setupTipPopup("These are moving walls, which moves by a square according to its direction as you move.", 450, 400);
+					break;
+				case 70:
+					setupTipPopup("These are no-match area. Any blocks moving onto them will not be eliminated.", 300, 450);
+					break;
 				default:
 					state = STATE_READY;
 			}
@@ -389,22 +395,22 @@ function keyPressed(e) {
 	if (state != STATE_READY) return;
 	switch (e.which) {
 		case KEY_UP: 
-			if ($(".up").hasClass("lastDir")) return;
+			//if ($(".up").hasClass("lastDir")) return;
 			makeStep(-1, 0); 
 			markMoved("up"); 
 			break;
 		case KEY_DOWN: 
-			if ($(".down").hasClass("lastDir")) return;
+			//if ($(".down").hasClass("lastDir")) return;
 			makeStep(1, 0); 
 			markMoved("down"); 
 			break;
 		case KEY_LEFT: 
-			if ($(".left").hasClass("lastDir")) return;
+			//if ($(".left").hasClass("lastDir")) return;
 			makeStep(0, -1); 
 			markMoved("left"); 
 			break;
 		case KEY_RIGHT: 
-			if ($(".right").hasClass("lastDir")) return;
+			//if ($(".right").hasClass("lastDir")) return;
 			makeStep(0, 1); 
 			markMoved("right"); 
 			break;
@@ -414,7 +420,7 @@ function keyPressed(e) {
 function arrowPressed(e) {
 	if (state != STATE_READY) return;
 	var $this = $(this);
-	if ($this.hasClass("lastDir")) return;
+	//if ($this.hasClass("lastDir")) return;
 	if ($this.hasClass("up")) {
 		makeStep(-1, 0);
 		markMoved("up"); 
@@ -438,6 +444,8 @@ function makeStep(dirX, dirY) {
 		var eliminated = eliminateBlocks();
 		steps.push(eliminated);
 	} while (eliminated.length > 0);
+	var wallMoved = moveWalls();
+	steps.push(wallMoved);
 	--step;
 	$("#game-scene .steps .content").html(step + "/" + stepLimit);
 	$("#level-editor-scene .panel.playing .steps .content").html(step + "/" + stepLimit);
@@ -623,11 +631,93 @@ function moveBlocks(dirR, dirC) {
 	return changeSet;
 }
 
+function moveWalls() {
+	var changeSet = [];
+
+	for (var i = 0; i < BOARD_SIZE; ++i) {
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if (board[i][j] == 'F') {
+				if (i > 0 && $.inArray(board[i-1][j], SOLID_CODE) < 0) {
+					var elem = moveBlock(i, j, i - 1, j);
+					if (elem) {
+						changeSet.push(elem);
+					}
+				} else {
+					if ($.inArray(board[i+1][j], SOLID_CODE) < 0) {
+						board[i][j] = 'V';
+					}
+				}
+			}
+		}
+	}
+	
+	for (var i = BOARD_SIZE - 1; i >= 0; --i) {
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if (board[i][j] == 'V') {
+				if (i < BOARD_SIZE - 1 && $.inArray(board[i+1][j], SOLID_CODE) < 0) {
+					var elem = moveBlock(i, j, i + 1, j);
+					if (elem) {
+						changeSet.push(elem);
+					}
+				} else {
+					if ($.inArray(board[i-1][j], SOLID_CODE) < 0) {
+						board[i][j] = 'F';
+						var elem = moveBlock(i, j, i - 1, j);
+						if (elem) {
+							changeSet.push(elem);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	for (var i = 0; i < BOARD_SIZE; ++i) {
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if (board[i][j] == 'C') {
+				if (j > 0 && $.inArray(board[i][j-1], SOLID_CODE) < 0) {
+					var elem = moveBlock(i, j, i, j - 1);
+					if (elem) {
+						changeSet.push(elem);
+					}
+				} else {
+					if ($.inArray(board[i][j+1], SOLID_CODE) < 0) {
+						board[i][j] = 'B';
+					}
+				}
+			}
+		}
+	}
+	
+	for (var i = 0; i < BOARD_SIZE; ++i) {
+		for (var j = BOARD_SIZE - 1; j >= 0; --j) {
+			if (board[i][j] == 'B') {
+				if (j < BOARD_SIZE - 1 && $.inArray(board[i][j+1], SOLID_CODE) < 0) {
+					var elem = moveBlock(i, j, i, j + 1);
+					if (elem) {
+						changeSet.push(elem);
+					}
+				} else {
+					if ($.inArray(board[i][j-1], SOLID_CODE) < 0) {
+						board[i][j] = 'C';
+						var elem = moveBlock(i, j, i, j - 1);
+						if (elem) {
+							changeSet.push(elem);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return changeSet;
+}
+
 function eliminateBlocks() {
 	var eliminateSet = [];
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
+			if ($.inArray(board[i][j], BLOCK_CODE) >= 0 && bottomBoard[i][j] != 'N') {
 				// normal blocks
 				var color = board[i][j];
 				var visited = [];
@@ -645,6 +735,7 @@ function eliminateBlocks() {
 					startR = parseInt(startR, 10);
 					startC = parseInt(startC, 10);
 					visited[startR][startC] = true;
+					if (bottomBoard[startR][startC] == 'N') return;
 					eliminated.push([startR, startC]);
 					if (board[startR][startC] == '9'){
 						if (startR > 0 && $.inArray(board[startR - 1][startC], BLOCK_CODE) >= 0 && !visited[startR - 1][startC]){
@@ -740,7 +831,7 @@ function animateBlocks(steps, callback) {
 	state = STATE_ANIMATING;
 	
 	var animationTime = 0;
-	for (var i = 0; i < steps.length; i += 2) {
+	for (var i = 0; i < steps.length - 1; i += 2) {
 		// move
 		var maxDistance = -1;
 		for (var j in steps[i]) {
@@ -778,7 +869,32 @@ function animateBlocks(steps, callback) {
 		}
 	}
 
-	setTimeout(callback, animationTime);
+	setTimeout(function(){
+		var lastSteps = steps[steps.length - 1];
+		if (lastSteps.length <= 0) {
+			callback();
+		} else {
+			for (var j in lastSteps) {
+				var start = lastSteps[j].start;
+				var end = lastSteps[j].end;
+				var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
+				if (distance > maxDistance) {
+					maxDistance = distance;
+				}
+			}
+
+			for (var j in lastSteps) {
+				var start = lastSteps[j].start;
+				var end = lastSteps[j].end;
+				var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
+				
+				$(".r" + start[0] + "c" + start[1]).not(BOTTOM_LAYER_CLASSES)
+					.animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
+					.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]).delay(maxDistance * MOVING_SPEED - distance * MOVING_SPEED);
+			}
+			setTimeout(callback, MOVING_SPEED);
+		}
+	}, animationTime);
 }
 
 function checkComplete() {
