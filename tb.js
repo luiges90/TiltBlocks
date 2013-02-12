@@ -988,10 +988,10 @@ function solve() {
 		
 		steps.push(dir);
 		switch (dir) {
-			case '°Ù': moveBlocks(board, bottomBoard, -1, 0); break;
-			case '°ˆ': moveBlocks(board, bottomBoard, 0, -1); break;
-			case '°ı': moveBlocks(board, bottomBoard, 1, 0); break;
-			case '°˜': moveBlocks(board, bottomBoard, 0 ,1); break;
+			case '‚Üë': moveBlocks(board, bottomBoard, -1, 0); break;
+			case '‚Üê': moveBlocks(board, bottomBoard, 0, -1); break;
+			case '‚Üì': moveBlocks(board, bottomBoard, 1, 0); break;
+			case '‚Üí': moveBlocks(board, bottomBoard, 0 ,1); break;
 		}
 		eliminateBlocks(board, bottomBoard);
 		moveWalls(board, bottomBoard);
@@ -1002,10 +1002,10 @@ function solve() {
 			steps.pop();
 			return false;
 		} else {
-			solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '°Ù', steps);
-			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '°ˆ', steps);
-			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '°ı', steps);
-			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '°˜', steps); 
+			solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '‚Üë', steps);
+			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '‚Üê', steps);
+			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '‚Üì', steps);
+			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '‚Üí', steps); 
 			return solvedSteps;
 		}
 	}
@@ -1013,10 +1013,10 @@ function solve() {
 	function dls(maxStep) {
 		var solvedSteps; 
 		
-		solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '°Ù', []);
-		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '°ˆ', []);
-		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '°ı', []);
-		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '°˜', []);
+		solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '‚Üë', []);
+		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '‚Üê', []);
+		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '‚Üì', []);
+		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '‚Üí', []);
 		return solvedSteps;
 	}
 	
