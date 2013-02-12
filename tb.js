@@ -986,6 +986,7 @@ function checkFail(board, bottomBoard) {
 
 function solve() {
 	var solvedSteps;
+	delete canIgnoreSameDir.cache;
 
 	function dls_r(board, bottomBoard, maxStep, currentStep, dir, steps) {
 		var solvedSteps, complete;
@@ -1000,15 +1001,20 @@ function solve() {
 
 		if (complete) {
 			return steps;
-		} else if (currentStep >= maxStep) {
+		} else if (currentStep >= maxStep || isImpossible(board, bottomBoard)) {
 			steps.pop();
 			return false;
 		} else {
-			solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↑', steps);
-			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '←', steps);
-			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↓', steps);
-			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '→', steps); 
-			if (!solvedSteps) steps.pop();
+			if (dir != '↑' || !canIgnoreSameDir(board, bottomBoard)) 
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↑', steps);
+			if (!solvedSteps && (dir != '←' || !canIgnoreSameDir(board, bottomBoard)))
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '←', steps);
+			if (!solvedSteps && (dir != '↓' || !canIgnoreSameDir(board, bottomBoard)))
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↓', steps);
+			if (!solvedSteps && (dir != '→' || !canIgnoreSameDir(board, bottomBoard)))
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '→', steps); 
+			if (!solvedSteps) 
+				steps.pop();
 			return solvedSteps;
 		}
 	}
@@ -1027,6 +1033,51 @@ function solve() {
 		solvedSteps = dls(i);
 	}
 	
-	console.log(solvedSteps);
 	return solvedSteps;
+}
+
+function isImpossible(board, bottomBoard) {
+	var blockCount = [];
+	for (var i = 0; i < BOARD_SIZE; ++i) {
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if (typeof blockCount[board[i][j]] == 'undefined') {
+				blockCount[board[i][j]] = 1;
+			} else {
+				blockCount[board[i][j]]++;
+			}
+		}
+	}
+	
+	for (var i in blockCount) {
+		if ($.inArray(i, ['1', '2', '3', '4']) && blockCount[i] == 1 && blockCount['9'] == 0) {
+			return true;
+		}
+		if (blockCount['9'] == 1 && blockCount['1'] == 0 && blockCount['2'] == 0 && blockCount['3'] == 0 && blockCount['4'] == 0) {
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+
+function canIgnoreSameDir(board, bottomBoard) {
+	if (typeof canIgnoreSameDir.cache != 'undefined') {
+		return canIgnoreSameDir.cache;
+	}
+	
+	var result = true;
+	for (var i = 0; i < BOARD_SIZE; ++i) {
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if ($.inArray(board[i][j], ['C', 'F', 'V', 'B']) > 0) {
+				result = false;
+			}
+		}
+	}
+
+	if (typeof canIgnoreSameDir.cache == 'undefined') {
+        canIgnoreSameDir.cache = result;
+    }
+	
+	return result;
 }
