@@ -438,6 +438,7 @@ function arrowPressed(e) {
 
 function makeStep(board, bottomBoard, dirX, dirY, playing) {
 	var steps = [];
+	canIgnoreOppositeDir = true;
 	do {
 		var moved = moveBlocks(board, bottomBoard, dirX, dirY);
 		if (playing) steps.push(moved);
@@ -477,6 +478,7 @@ function moveBlock(board, bottomBoard, startR, startC, endR, endC) {
 	return {start: [startR, startC], end: [endR, endC]};
 }
 
+var canIgnoreOppositeDir = true;
 function moveBlocks(board, bottomBoard, dirR, dirC) {
 	var changeSet = [];
 	
@@ -506,7 +508,10 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								if (elem) {
 									changeSet.push(elem);
 								}
+								canIgnoreOppositeDir = false;
 								break;
+							} else if (board[i][k] == 'A'){
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -541,7 +546,10 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								if (elem) {
 									changeSet.push(elem);
 								}
+								canIgnoreOppositeDir = false;
 								break;
+							} else if (board[i][k] == 'D') {
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -576,7 +584,10 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								if (elem) {
 									changeSet.push(elem);
 								}
+								canIgnoreOppositeDir = false;
 								break;
+							} else if (board[k][i] == 'W') {
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -611,7 +622,10 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								if (elem) {
 									changeSet.push(elem);
 								}
+								canIgnoreOppositeDir = false;
 								break;
+							} else if (board[k][i] == 'S'){
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -643,6 +657,7 @@ function moveWalls(board, bottomBoard) {
 			if (board[i][j] == 'F') {
 				if (i > 0 && $.inArray(board[i-1][j], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i - 1, j);
+					canIgnoreOppositeDir = false;
 					if (elem) {
 						changeSet.push(elem);
 					}
@@ -660,6 +675,7 @@ function moveWalls(board, bottomBoard) {
 			if (board[i][j] == 'V') {
 				if (i < BOARD_SIZE - 1 && $.inArray(board[i+1][j], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i + 1, j);
+					canIgnoreOppositeDir = false;
 					if (elem) {
 						changeSet.push(elem);
 					}
@@ -681,6 +697,7 @@ function moveWalls(board, bottomBoard) {
 			if (board[i][j] == 'C') {
 				if (j > 0 && $.inArray(board[i][j-1], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i, j - 1);
+					canIgnoreOppositeDir = false;
 					if (elem) {
 						changeSet.push(elem);
 					}
@@ -698,6 +715,7 @@ function moveWalls(board, bottomBoard) {
 			if (board[i][j] == 'B') {
 				if (j < BOARD_SIZE - 1 && $.inArray(board[i][j+1], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i, j + 1);
+					canIgnoreOppositeDir = false;
 					if (elem) {
 						changeSet.push(elem);
 					}
@@ -770,6 +788,7 @@ function eliminateBlocks(board, bottomBoard) {
 				})(i, j);
 				
 				if (eliminated.length > 1) {
+					canIgnoreOppositeDir = false;
 					for (var i in eliminated) {
 						board[eliminated[i][0]][eliminated[i][1]] = bottomBoard[eliminated[i][0]][eliminated[i][1]];
 						eliminateSet.push(eliminated[i]);
@@ -786,6 +805,7 @@ function eliminateBlocks(board, bottomBoard) {
 							if (board[k][l] == 'U') {
 								board[k][l] = '.';
 								eliminateSet.push([k, l]);
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -797,6 +817,7 @@ function eliminateBlocks(board, bottomBoard) {
 							if (board[k][l] == 'I') {
 								board[k][l] = '.';
 								eliminateSet.push([k, l]);
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -808,6 +829,7 @@ function eliminateBlocks(board, bottomBoard) {
 							if (board[k][l] == 'O') {
 								board[k][l] = '.';
 								eliminateSet.push([k, l]);
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -819,6 +841,7 @@ function eliminateBlocks(board, bottomBoard) {
 							if (board[k][l] == 'P') {
 								board[k][l] = '.';
 								eliminateSet.push([k, l]);
+								canIgnoreOppositeDir = false;
 							}
 						}
 					}
@@ -998,6 +1021,7 @@ function solve() {
 			case '↓': complete = makeStep(board, bottomBoard, 1, 0); break;
 			case '→': complete = makeStep(board, bottomBoard, 0 ,1); break;
 		}
+		var thisStepIgnoreOpposite = canIgnoreOppositeDir;
 
 		if (complete) {
 			return steps;
@@ -1005,13 +1029,13 @@ function solve() {
 			steps.pop();
 			return false;
 		} else {
-			if (dir != '↑' || !canIgnoreSameDir(board, bottomBoard)) 
+			if ((dir != '↑' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '↓' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↑', steps);
-			if (!solvedSteps && (dir != '←' || !canIgnoreSameDir(board, bottomBoard)))
+			if (!solvedSteps && (dir != '←' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '→' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '←', steps);
-			if (!solvedSteps && (dir != '↓' || !canIgnoreSameDir(board, bottomBoard)))
+			if (!solvedSteps && (dir != '↓' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '↑' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↓', steps);
-			if (!solvedSteps && (dir != '→' || !canIgnoreSameDir(board, bottomBoard)))
+			if (!solvedSteps && (dir != '→' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '←' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '→', steps); 
 			if (!solvedSteps) 
 				steps.pop();
@@ -1031,6 +1055,7 @@ function solve() {
 	
 	for (var i = 1; i <= stepLimit && !solvedSteps; ++i) {
 		solvedSteps = dls(i);
+		console.log('Steps spent: ' + i); 
 	}
 	
 	return solvedSteps;
@@ -1049,12 +1074,13 @@ function isImpossible(board, bottomBoard) {
 	}
 	
 	for (var i in blockCount) {
-		if ($.inArray(i, ['1', '2', '3', '4']) && blockCount[i] == 1 && blockCount['9'] == 0) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0 && blockCount[i] == 1 && (typeof blockCount['9'] == 'undefined')) {
 			return true;
 		}
-		if (blockCount['9'] == 1 && blockCount['1'] == 0 && blockCount['2'] == 0 && blockCount['3'] == 0 && blockCount['4'] == 0) {
-			return true;
-		}
+	}
+	
+	if (blockCount['9'] == 1 && (typeof blockCount['1'] == 'undefined') && (typeof blockCount['2'] == 'undefined') && (typeof blockCount['3'] == 'undefined') && (typeof blockCount['4'] == 'undefined')) {
+		return true;
 	}
 	
 	return false;
