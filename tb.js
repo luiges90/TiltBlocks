@@ -396,22 +396,22 @@ function keyPressed(e) {
 	switch (e.which) {
 		case KEY_UP: 
 			//if ($(".up").hasClass("lastDir")) return;
-			makeStep(board, bottomBoard, -1, 0); 
+			makeStep(board, bottomBoard, -1, 0, true); 
 			markMoved("up"); 
 			break;
 		case KEY_DOWN: 
 			//if ($(".down").hasClass("lastDir")) return;
-			makeStep(board, bottomBoard, 1, 0); 
+			makeStep(board, bottomBoard, 1, 0, true); 
 			markMoved("down"); 
 			break;
 		case KEY_LEFT: 
 			//if ($(".left").hasClass("lastDir")) return;
-			makeStep(board, bottomBoard, 0, -1); 
+			makeStep(board, bottomBoard, 0, -1, true); 
 			markMoved("left"); 
 			break;
 		case KEY_RIGHT: 
 			//if ($(".right").hasClass("lastDir")) return;
-			makeStep(board, bottomBoard, 0, 1); 
+			makeStep(board, bottomBoard, 0, 1, true); 
 			markMoved("right"); 
 			break;
 	}
@@ -422,42 +422,46 @@ function arrowPressed(e) {
 	var $this = $(this);
 	//if ($this.hasClass("lastDir")) return;
 	if ($this.hasClass("up")) {
-		makeStep(board, bottomBoard, -1, 0);
+		makeStep(board, bottomBoard, -1, 0, true);
 		markMoved("up"); 
 	} else if ($this.hasClass("down")) {
-		makeStep(board, bottomBoard, 1, 0);
+		makeStep(board, bottomBoard, 1, 0, true);
 		markMoved("down"); 
 	} else if ($this.hasClass("left")) {
-		makeStep(board, bottomBoard, 0, -1);
+		makeStep(board, bottomBoard, 0, -1, true);
 		markMoved("left"); 
 	} else if ($this.hasClass("right")) {
-		makeStep(board, bottomBoard, 0, 1);
+		makeStep(board, bottomBoard, 0, 1, true);
 		markMoved("right"); 
 	}
 }
 
-function makeStep(board, bottomBoard, dirX, dirY) {
+function makeStep(board, bottomBoard, dirX, dirY, playing) {
 	var steps = [];
 	do {
 		var moved = moveBlocks(board, bottomBoard, dirX, dirY);
-		steps.push(moved);
+		if (playing) steps.push(moved);
 		var eliminated = eliminateBlocks(board, bottomBoard);
-		steps.push(eliminated);
+		if (playing) steps.push(eliminated);
 	} while (eliminated.length > 0);
 	var wallMoved = moveWalls(board, bottomBoard);
-	steps.push(wallMoved);
-	--step;
-	$("#game-scene .steps .content").html(step + "/" + stepLimit);
-	$("#level-editor-scene .panel.playing .steps .content").html(step + "/" + stepLimit);
-	if (step < 2) {
-		$("#game-scene .steps .content").addClass("warning");
-		$("#level-editor-scene .panel.playing .steps .content").addClass("warning");
+	if (playing) steps.push(wallMoved);
+	if (playing) {
+		--step;
+		$("#game-scene .steps .content").html(step + "/" + stepLimit);
+		$("#level-editor-scene .panel.playing .steps .content").html(step + "/" + stepLimit);
+		if (step < 2) {
+			$("#game-scene .steps .content").addClass("warning");
+			$("#level-editor-scene .panel.playing .steps .content").addClass("warning");
+		}
+		animateBlocks(steps, function(){
+			state = STATE_READY;
+			checkComplete(board, bottomBoard, true);
+			checkFail(board, bottomBoard);
+		});
+	} else {
+		return checkComplete(board, bottomBoard, false);
 	}
-	animateBlocks(steps, function(){
-		state = STATE_READY;
-		checkComplete(board, bottomBoard, true);
-		checkFail(board, bottomBoard);
-	});
 }
 
 function moveBlock(board, bottomBoard, startR, startC, endR, endC) {
@@ -897,7 +901,7 @@ function animateBlocks(steps, callback) {
 	}, animationTime);
 }
 
-function checkComplete(board, bottomBoard, showSuccess) {
+function checkComplete(board, bottomBoard, playing) {
 	var completed = true;
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
@@ -906,7 +910,7 @@ function checkComplete(board, bottomBoard, showSuccess) {
 			}
 		}
 	}
-	if (completed && showSuccess) {
+	if (completed && playing) {
 		$(".level-cleared .content").html("Steps remain: " + step);
 		$("#popup-layer").css('background-color', 'transparent').fadeIn();
 		$(".level-cleared").fadeIn();
@@ -984,18 +988,16 @@ function solve() {
 	var solvedSteps;
 
 	function dls_r(board, bottomBoard, maxStep, currentStep, dir, steps) {
-		var solvedSteps;
+		var solvedSteps, complete;
 		
 		steps.push(dir);
 		switch (dir) {
-			case '↑': moveBlocks(board, bottomBoard, -1, 0); break;
-			case '←': moveBlocks(board, bottomBoard, 0, -1); break;
-			case '↓': moveBlocks(board, bottomBoard, 1, 0); break;
-			case '→': moveBlocks(board, bottomBoard, 0 ,1); break;
+			case '↑': complete = makeStep(board, bottomBoard, -1, 0); break;
+			case '←': complete = makeStep(board, bottomBoard, 0, -1); break;
+			case '↓': complete = makeStep(board, bottomBoard, 1, 0); break;
+			case '→': complete = makeStep(board, bottomBoard, 0 ,1); break;
 		}
-		eliminateBlocks(board, bottomBoard);
-		moveWalls(board, bottomBoard);
-		var complete = checkComplete(board, bottomBoard, false);
+
 		if (complete) {
 			return steps;
 		} else if (currentStep >= maxStep) {
@@ -1006,6 +1008,7 @@ function solve() {
 			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '←', steps);
 			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↓', steps);
 			if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '→', steps); 
+			if (!solvedSteps) steps.pop();
 			return solvedSteps;
 		}
 	}
@@ -1020,7 +1023,7 @@ function solve() {
 		return solvedSteps;
 	}
 	
-	for (var i = 1; i <= 20 && !solvedSteps; ++i) {
+	for (var i = 1; i <= stepLimit && !solvedSteps; ++i) {
 		solvedSteps = dls(i);
 	}
 	
