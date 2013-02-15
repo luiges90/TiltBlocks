@@ -380,6 +380,9 @@ function loadLevel(number) {
 				case 70:
 					setupTipPopup("These are no-match area. Any blocks moving onto them will not be eliminated.", 300, 450);
 					break;
+				case 80:
+					setupTipPopup("These are wraps, which brings any blocks to another same-colored wraps.", 500, 200);
+					break;
 				default:
 					state = STATE_READY;
 			}
