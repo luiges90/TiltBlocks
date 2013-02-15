@@ -381,7 +381,7 @@ function loadLevel(number) {
 					setupTipPopup("These are no-match area. Any blocks moving onto them will not be eliminated.", 300, 450);
 					break;
 				case 80:
-					setupTipPopup("These are wraps, which brings any blocks to another same-colored wraps.", 500, 200);
+					setupTipPopup("These are wraps, which brings any blocks to another same-colored wraps.", 700, 220);
 					break;
 				default:
 					state = STATE_READY;
@@ -452,6 +452,9 @@ function makeStep(board, bottomBoard, dirX, dirY, playing) {
 	var wallMoved = moveWalls(board, bottomBoard);
 	if (playing) steps.push(wallMoved);
 	var wrapped = wrapBlocks(board, bottomBoard);
+	var eliminateAfterWrap = [];
+    eliminated = eliminateBlocks(board, bottomBoard);
+	if (playing) eliminateAfterWrap = eliminated;
 	if (playing) {
 		--step;
 		$("#game-scene .steps .content").html(step + "/" + stepLimit);
@@ -460,7 +463,7 @@ function makeStep(board, bottomBoard, dirX, dirY, playing) {
 			$("#game-scene .steps .content").addClass("warning");
 			$("#level-editor-scene .panel.playing .steps .content").addClass("warning");
 		}
-		animateBlocks(steps, wrapped, function(){
+		animateBlocks(steps, wrapped, eliminateAfterWrap, function(){
 			state = STATE_READY;
 			checkComplete(board, bottomBoard, true);
 			checkFail(board, bottomBoard);
@@ -875,7 +878,7 @@ function wrapBlocks(board, bottomBoard) {
 var MOVING_SPEED = 100;
 var WRAPPING_SPEED = 400;
 var ELIMINATE_SPEED = 400;
-function animateBlocks(steps, wrapped, callback) {
+function animateBlocks(steps, wrapped, eliminateAfterWrap, callback) {
 	state = STATE_ANIMATING;
 	
 	var animationTime = 0;
@@ -931,7 +934,21 @@ function animateBlocks(steps, wrapped, callback) {
 					.fadeIn(WRAPPING_SPEED)
 					.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]);
 					
-				setTimeout(callback, WRAPPING_SPEED * 2);
+				setTimeout(function(){
+					var waitForEliminate = false;
+					if (eliminateAfterWrap.length > 0) {
+						for (var j in eliminateAfterWrap) {
+							waitForEliminate = true;
+							$(".r" + eliminateAfterWrap[j][0] + "c" + eliminateAfterWrap[j][1]).not(BOTTOM_LAYER_CLASSES)
+								.fadeOut(ELIMINATE_SPEED, function(){$(this).remove();});
+						}
+					}
+					if (waitForEliminate){
+						setTimeout(callback, ELIMINATE_SPEED);
+					} else {
+						callback();
+					}
+				}, WRAPPING_SPEED * 2);
 			}
 		}
 	}
