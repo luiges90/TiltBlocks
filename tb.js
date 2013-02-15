@@ -800,54 +800,25 @@ function eliminateBlocks(board, bottomBoard) {
 			
 			//gates
 			if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
-				// gates
-				if (bottomBoard[i][j] == 'H') {
-					for (var k = 0; k < BOARD_SIZE; ++k){
-						for (var l = 0; l < BOARD_SIZE; ++l) {
-							if (board[k][l] == 'U') {
-								board[k][l] = '.';
-								eliminateSet.push([k, l]);
-								canIgnoreOppositeDir = false;
+			
+				var gateSwitch = function(switchCode, gateCode) {
+					if (bottomBoard[i][j] == switchCode) {
+						for (var k = 0; k < BOARD_SIZE; ++k){
+							for (var l = 0; l < BOARD_SIZE; ++l) {
+								if (board[k][l] == gateCode) {
+									board[k][l] = '.';
+									eliminateSet.push([k, l]);
+									canIgnoreOppositeDir = false;
+								}
 							}
 						}
 					}
 				}
 				
-				if (bottomBoard[i][j] == 'J') {
-					for (var k = 0; k < BOARD_SIZE; ++k){
-						for (var l = 0; l < BOARD_SIZE; ++l) {
-							if (board[k][l] == 'I') {
-								board[k][l] = '.';
-								eliminateSet.push([k, l]);
-								canIgnoreOppositeDir = false;
-							}
-						}
-					}
-				}
-				
-				if (bottomBoard[i][j] == 'K') {
-					for (var k = 0; k < BOARD_SIZE; ++k){
-						for (var l = 0; l < BOARD_SIZE; ++l) {
-							if (board[k][l] == 'O') {
-								board[k][l] = '.';
-								eliminateSet.push([k, l]);
-								canIgnoreOppositeDir = false;
-							}
-						}
-					}
-				}
-				
-				if (bottomBoard[i][j] == 'L') {
-					for (var k = 0; k < BOARD_SIZE; ++k){
-						for (var l = 0; l < BOARD_SIZE; ++l) {
-							if (board[k][l] == 'P') {
-								board[k][l] = '.';
-								eliminateSet.push([k, l]);
-								canIgnoreOppositeDir = false;
-							}
-						}
-					}
-				}
+				gateSwitch('H', 'U');
+				gateSwitch('J', 'I');
+				gateSwitch('K', 'O');
+				gateSwitch('L', 'P');
 			}
 		}
 	}
@@ -857,7 +828,7 @@ function eliminateBlocks(board, bottomBoard) {
 function wrapBlocks(board, bottomBoard) {
 	var changeSet = [];
 	var wrapped = [];
-	
+
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if ($.inArray(bottomBoard[i][j], WRAP_CODE) >= 0 && $.inArray(board[i][j], MOVABLE_CODE) >= 0) {
