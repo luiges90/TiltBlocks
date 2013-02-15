@@ -835,6 +835,7 @@ function wrapBlocks(board, bottomBoard) {
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if ($.inArray(bottomBoard[i][j], WRAP_CODE) >= 0 && $.inArray(board[i][j], MOVABLE_CODE) >= 0) {
+				canIgnoreOppositeDir = false;
 				var doneWrap = false;
 				for (var k in wrapped) {
 					if (wrapped[k].r == i && wrapped[k].c == j) doneWrap = true;
@@ -1107,7 +1108,7 @@ function canIgnoreSameDir(board, bottomBoard) {
 	var result = true;
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if ($.inArray(board[i][j], ['C', 'F', 'V', 'B']) > 0) {
+			if ($.inArray(board[i][j], ['C', 'F', 'V', 'B', 'Q', 'Z', 'E', 'R']) > 0) {
 				result = false;
 			}
 		}
