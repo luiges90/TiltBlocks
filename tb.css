@@ -157,6 +157,26 @@
 	background-position: -192px -96px;
 }
 
+.redWrap {
+	background-image: url('img/blocks.png');
+	background-position: -240px -96px;
+}
+
+.greenWrap {
+	background-image: url('img/blocks.png');
+	background-position: -288px -96px;
+}
+
+.blueWrap {
+	background-image: url('img/blocks.png');
+	background-position: -336px -96px;
+}
+
+.yellowWrap {
+	background-image: url('img/blocks.png');
+	background-position: -384px -96px;
+}
+
 .palette-table {
 	width: 208px;
 	height: 300px;

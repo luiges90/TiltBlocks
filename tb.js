@@ -28,9 +28,10 @@ var level = 0;
 var BLOCK_CODE = ['1', '2', '3', '4', '9'];
 var MOVABLE_CODE = BLOCK_CODE.concat(['0']);
 var GATE_CODE = ['U', 'I', 'O', 'P'];
+var WRAP_CODE = ['Q', 'Z', 'E', 'R'];
 var SOLID_CODE = MOVABLE_CODE.concat(GATE_CODE).concat(['X', 'F', 'C', 'V', 'B']);
-var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T', 'H', 'J', 'K', 'L', 'N'];
-var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .upArrow, .downArrow, .sticky, .redTrigger, .greenTrigger, .blueTrigger, .yellowTrigger, .noMatch';
+var BOTTOM_LAYER_CODE = ['W', 'A', 'S', 'D', 'T', 'H', 'J', 'K', 'L', 'N', 'Q', 'Z', 'E', 'R'];
+var BOTTOM_LAYER_CLASSES = '.leftArrow, .rightArrow, .upArrow, .downArrow, .sticky, .redTrigger, .greenTrigger, .blueTrigger, .yellowTrigger, .noMatch, .redWrap, .greenWrap, .blueWrap, .yellowWrap';
 
 var PROGRESS_KEY = 'tb_level';
 
@@ -447,6 +448,7 @@ function makeStep(board, bottomBoard, dirX, dirY, playing) {
 	} while (eliminated.length > 0);
 	var wallMoved = moveWalls(board, bottomBoard);
 	if (playing) steps.push(wallMoved);
+	var wrapped = wrapBlocks(board, bottomBoard);
 	if (playing) {
 		--step;
 		$("#game-scene .steps .content").html(step + "/" + stepLimit);
@@ -455,7 +457,7 @@ function makeStep(board, bottomBoard, dirX, dirY, playing) {
 			$("#game-scene .steps .content").addClass("warning");
 			$("#level-editor-scene .panel.playing .steps .content").addClass("warning");
 		}
-		animateBlocks(steps, function(){
+		animateBlocks(steps, wrapped, function(){
 			state = STATE_READY;
 			checkComplete(board, bottomBoard, true);
 			checkFail(board, bottomBoard);
@@ -852,9 +854,53 @@ function eliminateBlocks(board, bottomBoard) {
 	return eliminateSet;
 }
 
+function wrapBlocks(board, bottomBoard) {
+	var changeSet = [];
+	var wrapped = [];
+	
+	for (var i = 0; i < BOARD_SIZE; ++i) {
+		for (var j = 0; j < BOARD_SIZE; ++j) {
+			if ($.inArray(bottomBoard[i][j], WRAP_CODE) >= 0 && $.inArray(board[i][j], MOVABLE_CODE) >= 0) {
+				var doneWrap = false;
+				for (var k in wrapped) {
+					if (wrapped[k].r == i && wrapped[k].c == j) doneWrap = true;
+				}
+				if (!doneWrap){
+					var elem = null;
+					for (var k = i; k < BOARD_SIZE && elem == null; ++k) {
+						for (var l = (k == i ? j : 0); l < BOARD_SIZE && elem == null; ++l) {
+							if (board[k][l] == bottomBoard[i][j]) {
+								elem = moveBlock(board, bottomBoard, i, j, k, l);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								wrapped.push({r: k, c: l});
+							}
+						}
+					}
+					for (var k = 0; k <= i && elem == null; ++k) {
+						for (var l = 0; l < (k == i ? j : BOARD_SIZE) && elem == null; ++l) {
+							if (board[k][l] == bottomBoard[i][j]) {
+								elem = moveBlock(board, bottomBoard, i, j, k, l);
+								if (elem) {
+									changeSet.push(elem);
+								}
+								wrapped.push({r: k, c: l});
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return changeSet;
+}
+
 var MOVING_SPEED = 100;
+var WRAPPING_SPEED = 400;
 var ELIMINATE_SPEED = 400;
-function animateBlocks(steps, callback) {
+function animateBlocks(steps, wrapped, callback) {
 	state = STATE_ANIMATING;
 	
 	var animationTime = 0;
@@ -895,31 +941,40 @@ function animateBlocks(steps, callback) {
 			}
 		}
 	}
+	
+	function wrap() {
+		if (wrapped.length <= 0){
+			callback();
+		} else {
+			for (var j in wrapped) {
+				var start = wrapped[j].start;
+				var end = wrapped[j].end;
+			
+				$(".r" + start[0] + "c" + start[1]).not(BOTTOM_LAYER_CLASSES)
+					.fadeOut(WRAPPING_SPEED)
+					.animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, 0, "linear")
+					.fadeIn(WRAPPING_SPEED)
+					.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]);
+					
+				setTimeout(callback, WRAPPING_SPEED * 2);
+			}
+		}
+	}
 
 	setTimeout(function(){
 		var lastSteps = steps[steps.length - 1];
 		if (lastSteps.length <= 0) {
-			callback();
+			wrap();
 		} else {
 			for (var j in lastSteps) {
 				var start = lastSteps[j].start;
 				var end = lastSteps[j].end;
-				var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
-				if (distance > maxDistance) {
-					maxDistance = distance;
-				}
-			}
-
-			for (var j in lastSteps) {
-				var start = lastSteps[j].start;
-				var end = lastSteps[j].end;
-				var distance = Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1]);
 				
 				$(".r" + start[0] + "c" + start[1]).not(BOTTOM_LAYER_CLASSES)
-					.animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, distance * MOVING_SPEED, "linear")
-					.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]).delay(maxDistance * MOVING_SPEED - distance * MOVING_SPEED);
+					.animate({top: SQUARE_SIZE * end[0], left: SQUARE_SIZE * end[1]}, MOVING_SPEED, "linear")
+					.removeClass("r" + start[0] + "c" + start[1]).addClass("r" + end[0] + "c" + end[1]);
 			}
-			setTimeout(callback, MOVING_SPEED);
+			setTimeout(wrap, MOVING_SPEED);
 		}
 	}, animationTime);
 }
@@ -973,23 +1028,6 @@ function checkFail(board, bottomBoard) {
 	if (step <= 0) {
 		failed = "Too many steps!";
 	}
-	/*var counts = [];
-	for (var i = 0; i < BOARD_SIZE; ++i){
-		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
-				if (counts[board[i][j]] === undefined){
-					counts[board[i][j]] = 1;
-				} else {
-					counts[board[i][j]]++;
-				}
-			}
-		}
-	}
-	for (var i in counts){
-		if (counts[i] == 1){
-			failed = "Impossible to clear!";
-		}
-	}*/
 	
 	if (failed) {
 		$(".level-failed .content").html(failed);
