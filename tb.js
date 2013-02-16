@@ -42,6 +42,9 @@ function getLevelString(number){
 var furthestLevel = 0;
 var storedLevel = 0;
 
+var canIgnoreOppositeDir = true;
+var canIgnoreSameDir = true;
+
 $(document).ready(function() {
 	state = STATE_MAIN_MENU;
 	
@@ -443,6 +446,7 @@ function arrowPressed(e) {
 function makeStep(board, bottomBoard, dirX, dirY, playing) {
 	var steps = [];
 	canIgnoreOppositeDir = true;
+	canIgnoreSameDir = true;
 	do {
 		var moved = moveBlocks(board, bottomBoard, dirX, dirY);
 		if (playing) steps.push(moved);
@@ -486,7 +490,6 @@ function moveBlock(board, bottomBoard, startR, startC, endR, endC) {
 	return {start: [startR, startC], end: [endR, endC]};
 }
 
-var canIgnoreOppositeDir = true;
 function moveBlocks(board, bottomBoard, dirR, dirC) {
 	var changeSet = [];
 	
@@ -663,6 +666,7 @@ function moveWalls(board, bottomBoard) {
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if (board[i][j] == 'F') {
+				canIgnoreSameDir = false;
 				if (i > 0 && $.inArray(board[i-1][j], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i - 1, j);
 					canIgnoreOppositeDir = false;
@@ -681,6 +685,7 @@ function moveWalls(board, bottomBoard) {
 	for (var i = BOARD_SIZE - 1; i >= 0; --i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if (board[i][j] == 'V') {
+				canIgnoreSameDir = false;
 				if (i < BOARD_SIZE - 1 && $.inArray(board[i+1][j], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i + 1, j);
 					canIgnoreOppositeDir = false;
@@ -703,6 +708,7 @@ function moveWalls(board, bottomBoard) {
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if (board[i][j] == 'C') {
+				canIgnoreSameDir = false;
 				if (j > 0 && $.inArray(board[i][j-1], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i, j - 1);
 					canIgnoreOppositeDir = false;
@@ -721,6 +727,7 @@ function moveWalls(board, bottomBoard) {
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = BOARD_SIZE - 1; j >= 0; --j) {
 			if (board[i][j] == 'B') {
+				canIgnoreSameDir = false;
 				if (j < BOARD_SIZE - 1 && $.inArray(board[i][j+1], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i, j + 1);
 					canIgnoreOppositeDir = false;
@@ -839,6 +846,7 @@ function wrapBlocks(board, bottomBoard) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if ($.inArray(bottomBoard[i][j], WRAP_CODE) >= 0 && $.inArray(board[i][j], MOVABLE_CODE) >= 0) {
 				canIgnoreOppositeDir = false;
+				canIgnoreSameDir = false;
 				var doneWrap = false;
 				for (var k in wrapped) {
 					if (wrapped[k].r == i && wrapped[k].c == j) doneWrap = true;
@@ -1039,7 +1047,6 @@ function checkFail(board, bottomBoard) {
 
 function solve() {
 	var solvedSteps;
-	delete canIgnoreSameDir.cache;
 
 	function dls_r(board, bottomBoard, maxStep, currentStep, dir, steps) {
 		var solvedSteps, complete;
@@ -1052,6 +1059,7 @@ function solve() {
 			case '→': complete = makeStep(board, bottomBoard, 0 ,1); break;
 		}
 		var thisStepIgnoreOpposite = canIgnoreOppositeDir;
+		var thisStepIgnoreSame = canIgnoreSameDir;
 
 		if (complete) {
 			return steps;
@@ -1059,13 +1067,13 @@ function solve() {
 			steps.pop();
 			return false;
 		} else {
-			if ((dir != '↑' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '↓' || !thisStepIgnoreOpposite))
+			if ((dir != '↑' || !thisStepIgnoreSame) && (dir != '↓' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↑', steps);
-			if (!solvedSteps && (dir != '←' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '→' || !thisStepIgnoreOpposite))
+			if (!solvedSteps && (dir != '←' || !thisStepIgnoreSame) && (dir != '→' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '←', steps);
-			if (!solvedSteps && (dir != '↓' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '↑' || !thisStepIgnoreOpposite))
+			if (!solvedSteps && (dir != '↓' || !thisStepIgnoreSame) && (dir != '↑' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↓', steps);
-			if (!solvedSteps && (dir != '→' || !canIgnoreSameDir(board, bottomBoard)) && (dir != '←' || !thisStepIgnoreOpposite))
+			if (!solvedSteps && (dir != '→' || !thisStepIgnoreSame) && (dir != '←' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '→', steps); 
 			if (!solvedSteps) 
 				steps.pop();
@@ -1114,26 +1122,4 @@ function isImpossible(board, bottomBoard) {
 	}
 	
 	return false;
-}
-
-
-function canIgnoreSameDir(board, bottomBoard) {
-	if (typeof canIgnoreSameDir.cache != 'undefined') {
-		return canIgnoreSameDir.cache;
-	}
-	
-	var result = true;
-	for (var i = 0; i < BOARD_SIZE; ++i) {
-		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if ($.inArray(board[i][j], ['C', 'F', 'V', 'B', 'Q', 'Z', 'E', 'R']) > 0) {
-				result = false;
-			}
-		}
-	}
-
-	if (typeof canIgnoreSameDir.cache == 'undefined') {
-        canIgnoreSameDir.cache = result;
-    }
-	
-	return result;
 }
