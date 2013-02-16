@@ -193,6 +193,20 @@ function createLevelSelectScene() {
 	}
 }
 
+function getSaveCode(board) {
+	var code = '';
+	for (var i = 0; i < board.length; ++i) {
+		for (var j = 0; j < board.length; ++j){
+			code += board[i][j];
+		}
+	}
+	var step = $("#level-editor-scene .panel .step-limit").val();
+	if (step.length < 2) step = '0' + step;
+	code += step;
+	
+	return code;
+}
+
 function createLevelEditorActions() {
 	var backupBoard;
 	var $board = $("#level-editor-scene .board");
@@ -231,15 +245,7 @@ function createLevelEditorActions() {
 	});
 	
 	$("#level-editor-scene .panel .save").click(function() {
-		var code = '';
-		for (var i = 0; i < board.length; ++i) {
-			for (var j = 0; j < board.length; ++j){
-				code += board[i][j];
-			}
-		}
-		var step = $("#level-editor-scene .panel .step-limit").val();
-		if (step.length < 2) step = '0' + step;
-		code += step;
+		var code = getSaveCode(board);
 	
 		$(".editor.save .level-code").val(code);
 		$(".editor.save").fadeIn();
@@ -1047,6 +1053,12 @@ function checkFail(board, bottomBoard) {
 
 function solve() {
 	var solvedSteps;
+	
+	console.log(getSaveCode(board));
+	
+	if (inEditor) {
+		stepLimit = $("#level-editor-scene .panel .step-limit").val();
+	}
 
 	function dls_r(board, bottomBoard, maxStep, currentStep, dir, steps) {
 		var solvedSteps, complete;
@@ -1091,10 +1103,13 @@ function solve() {
 		return solvedSteps;
 	}
 	
+	console.log('Trying to solve the board within ' + stepLimit + ' steps');
 	for (var i = 1; i <= stepLimit && !solvedSteps; ++i) {
 		solvedSteps = dls(i);
 		console.log('Steps spent: ' + i); 
 	}
+	
+	console.log("Solution: " + solvedSteps);
 	
 	return solvedSteps;
 }
