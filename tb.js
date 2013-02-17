@@ -1114,26 +1114,46 @@ function solve() {
 	return solvedSteps;
 }
 
+/**
+ * Determine whether a given board is definitely impossible to clear.
+ * This function is meant to prune some subtrees early in the IDS game tree search, and hence must be able to execute quickly.
+ */
 function isImpossible(board, bottomBoard) {
-	var blockCount = [];
+	var blockPositions = [];
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if (typeof blockCount[board[i][j]] == 'undefined') {
-				blockCount[board[i][j]] = 1;
+			if (typeof blockPositions[board[i][j]] == 'undefined') {
+				blockPositions[board[i][j]] = [{r: i, c: j}];
 			} else {
-				blockCount[board[i][j]]++;
+				blockPositions[board[i][j]].push({r: i, c: j});
 			}
 		}
 	}
 	
-	for (var i in blockCount) {
-		if ($.inArray(i, ['1', '2', '3', '4']) >= 0 && blockCount[i] == 1 && (typeof blockCount['9'] == 'undefined')) {
+	// color block counts
+	for (var i in blockPositions) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0 && blockPositions[i].length == 1 && (typeof blockPositions['9'] == 'undefined')) {
 			return true;
 		}
 	}
 	
-	if (blockCount['9'] == 1 && (typeof blockCount['1'] == 'undefined') && (typeof blockCount['2'] == 'undefined') && (typeof blockCount['3'] == 'undefined') && (typeof blockCount['4'] == 'undefined')) {
+	if (typeof blockPositions['9'] != 'undefined' && blockPositions['9'].length == 1 && (typeof blockPositions['1'] == 'undefined') && (typeof blockPositions['2'] == 'undefined') && (typeof blockPositions['3'] == 'undefined') && (typeof blockPositions['4'] == 'undefined')) {
 		return true;
+	}
+	
+	// stickies "T" consideration
+	for (var i in blockPositions) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
+			var stuck = 0;
+			for (var j in blockPositions[i]) {
+				if (bottomBoard[blockPositions[i][j].r][blockPositions[i][j].c] == 'T') {
+					stuck++;
+				}
+			}
+			if (stuck > (blockPositions[i].length + (typeof blockPositions['9'] == 'undefined' ? 0 : blockPositions['9'].length)) / 2) {
+				return true;
+			}
+		}
 	}
 	
 	return false;
