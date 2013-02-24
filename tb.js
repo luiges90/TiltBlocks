@@ -844,6 +844,24 @@ function eliminateBlocks(board, bottomBoard) {
 	return eliminateSet;
 }
 
+function getWrapLocation(board, bottomBoard, i, j){ 
+	for (var k = i; k < BOARD_SIZE; ++k) {
+		for (var l = (k == i ? j : 0); l < BOARD_SIZE; ++l) {
+			if (board[k][l] == bottomBoard[i][j]) {
+				return {r: k, c: l};
+			}
+		}
+	}
+	for (var k = 0; k <= i; ++k) {
+		for (var l = 0; l < (k == i ? j : BOARD_SIZE); ++l) {
+			if (board[k][l] == bottomBoard[i][j]) {
+				return {r: k, c: l};
+			}
+		}
+	}
+	return null;
+}
+
 function wrapBlocks(board, bottomBoard) {
 	var changeSet = [];
 	var wrapped = [];
@@ -858,28 +876,13 @@ function wrapBlocks(board, bottomBoard) {
 					if (wrapped[k].r == i && wrapped[k].c == j) doneWrap = true;
 				}
 				if (!doneWrap){
-					var elem = null;
-					for (var k = i; k < BOARD_SIZE && elem == null; ++k) {
-						for (var l = (k == i ? j : 0); l < BOARD_SIZE && elem == null; ++l) {
-							if (board[k][l] == bottomBoard[i][j]) {
-								elem = moveBlock(board, bottomBoard, i, j, k, l);
-								if (elem) {
-									changeSet.push(elem);
-								}
-								wrapped.push({r: k, c: l});
-							}
+					var wrapTarget = getWrapLocation(board, bottomBoard, i, j);
+					if (wrapTarget != null) {
+						var elem = moveBlock(board, bottomBoard, i, j, wrapTarget.r, wrapTarget.c);
+						if (elem) {
+							changeSet.push(elem);
 						}
-					}
-					for (var k = 0; k <= i && elem == null; ++k) {
-						for (var l = 0; l < (k == i ? j : BOARD_SIZE) && elem == null; ++l) {
-							if (board[k][l] == bottomBoard[i][j]) {
-								elem = moveBlock(board, bottomBoard, i, j, k, l);
-								if (elem) {
-									changeSet.push(elem);
-								}
-								wrapped.push({r: k, c: l});
-							}
-						}
+						wrapped.push(wrapTarget);
 					}
 				}
 			}
@@ -1141,17 +1144,48 @@ function isImpossible(board, bottomBoard) {
 		return true;
 	}
 	
-	// stickies "T" consideration
 	for (var i in blockPositions) {
-		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
-			var stuck = 0;
+		if ($.inArray(i, ['1', '2', '3', '4', '9']) >= 0) {
+			var connectGraph = [];
 			for (var j in blockPositions[i]) {
-				if (bottomBoard[blockPositions[i][j].r][blockPositions[i][j].c] == 'T') {
-					stuck++;
+				var pos = blockPositions[i][j];
+				
+				var visited = [];
+				for (var k = 0; k < BOARD_SIZE; ++k) 
+				{
+					visited[k] = [];
+					for (var l = 0; l < BOARD_SIZE; ++l) 
+					{
+						visited[k][l] = false;
+					}
 				}
-			}
-			if (stuck > (blockPositions[i].length + (typeof blockPositions['9'] == 'undefined' ? 0 : blockPositions['9'].length)) / 2) {
-				return true;
+				
+				var connected = [];
+				
+				(function dfs(startR, startC){
+					startR = parseInt(startR, 10);
+					startC = parseInt(startC, 10);
+					visited[startR][startC] = true;
+					
+					if (bottomBoard[startR][startC] == 'T') return false;
+					if ($.inArray(bottomBoard[startR][startC], WRAP_CODE) >= 0) {
+						var wrapTarget = getWrapLocation(board, bottomBoard, startR, startC);
+						dfs(wrapTarget.r, wrapTarget.c);
+					}
+					
+					if (startR > 0 && !visited[startR - 1][startC] && !$.inArray(board[startR - 1][startC], ['X', 'A', 'D', 'S'])) {
+						dfs(startR - 1, startC);
+					}
+					if (startR > 0 && !visited[startR + 1][startC] && !$.inArray(board[startR + 1][startC], ['X', 'W', 'A', 'D'])) {
+						dfs(startR + 1, startC);
+					}
+					if (startR > 0 && !visited[startR][startC - 1] && !$.inArray(board[startR][startC - 1], ['X', 'W', 'S', 'D'])) {
+						dfs(startR, startC - 1);
+					}
+					if (startR > 0 && !visited[startR][startC + 1] && !$.inArray(board[startR][startC + 1], ['X', 'W', 'A', 'S'])) {
+						dfs(startR, startC + 1);
+					}
+				})(pos.r, pos.c);
 			}
 		}
 	}
