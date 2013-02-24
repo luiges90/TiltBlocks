@@ -1144,9 +1144,11 @@ function isImpossible(board, bottomBoard) {
 		return true;
 	}
 	
+	// find if each block can reach other blocks, otherwise it is sure to be impossible
 	for (var i in blockPositions) {
 		if ($.inArray(i, ['1', '2', '3', '4', '9']) >= 0) {
-			var connectGraph = [];
+			// construct reachability graph
+			var outboundReachableGraph = [];
 			for (var j in blockPositions[i]) {
 				var pos = blockPositions[i][j];
 				
@@ -1160,7 +1162,7 @@ function isImpossible(board, bottomBoard) {
 					}
 				}
 				
-				var connected = [];
+				var outbound = [];
 				
 				(function dfs(startR, startC){
 					startR = parseInt(startR, 10);
@@ -1168,13 +1170,17 @@ function isImpossible(board, bottomBoard) {
 					visited[startR][startC] = true;
 					
 					if (board[startR][startC] == i || board[startR][startC] == '9' || (i == '9' && $.inArray(board[startR][startC], BLOCK_CODE) >= 0)){
-						 connected.push(startR + "-" + startC);
+						if (pos.r != startR || pos.c != startC) {
+							outbound.push(startR + "-" + startC);
+						}
 					}
 					
 					if (bottomBoard[startR][startC] == 'T') return;
 					if ($.inArray(bottomBoard[startR][startC], WRAP_CODE) >= 0) {
 						var wrapTarget = getWrapLocation(board, bottomBoard, startR, startC);
-						dfs(wrapTarget.r, wrapTarget.c);
+						if (!visited[wrapTarget.r][wrapTarget.c]) {
+							dfs(wrapTarget.r, wrapTarget.c);
+						}
 					}
 					
 					if (startR > 0 && !visited[startR - 1][startC] && $.inArray(board[startR - 1][startC], ['X', 'A', 'D', 'S']) < 0) {
@@ -1191,9 +1197,11 @@ function isImpossible(board, bottomBoard) {
 					}
 				})(pos.r, pos.c);
 				
-				connectGraph[pos.r + "-" + pos.c] = connected;
+				outboundReachableGraph[pos.r + "-" + pos.c] = outbound;
 			}
-			console.log(connectGraph);
+			
+			// determine graph is connected
+			
 		}
 	}
 	
