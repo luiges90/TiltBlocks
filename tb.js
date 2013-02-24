@@ -1145,7 +1145,7 @@ function isImpossible(board, bottomBoard) {
 	}
 	
 	// find if each block can reach other blocks, otherwise it is sure to be impossible
-	for (var i in blockPositions) {
+	/*for (var i in blockPositions) {
 		if ($.inArray(i, ['1', '2', '3', '4', '9']) >= 0) {
 			// construct reachability graph
 			var outboundReachableGraph = [];
@@ -1203,7 +1203,7 @@ function isImpossible(board, bottomBoard) {
 			// determine graph is connected
 			
 		}
-	}
+	}*/
 	
 	return false;
 }
