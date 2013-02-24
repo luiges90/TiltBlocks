@@ -1168,7 +1168,7 @@ function isImpossible(board, bottomBoard) {
 					visited[startR][startC] = true;
 					
 					if (board[startR][startC] == i || board[startR][startC] == '9' || (i == '9' && $.inArray(board[startR][startC], BLOCK_CODE) >= 0)){
-						 connected.push({r: startR, c: startC});
+						 connected.push(startR + "-" + startC);
 					}
 					
 					if (bottomBoard[startR][startC] == 'T') return;
