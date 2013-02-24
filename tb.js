@@ -1167,26 +1167,33 @@ function isImpossible(board, bottomBoard) {
 					startC = parseInt(startC, 10);
 					visited[startR][startC] = true;
 					
-					if (bottomBoard[startR][startC] == 'T') return false;
+					if (board[startR][startC] == i || board[startR][startC] == '9' || (i == '9' && $.inArray(board[startR][startC], BLOCK_CODE) >= 0)){
+						 connected.push({r: startR, c: startC});
+					}
+					
+					if (bottomBoard[startR][startC] == 'T') return;
 					if ($.inArray(bottomBoard[startR][startC], WRAP_CODE) >= 0) {
 						var wrapTarget = getWrapLocation(board, bottomBoard, startR, startC);
 						dfs(wrapTarget.r, wrapTarget.c);
 					}
 					
-					if (startR > 0 && !visited[startR - 1][startC] && !$.inArray(board[startR - 1][startC], ['X', 'A', 'D', 'S'])) {
+					if (startR > 0 && !visited[startR - 1][startC] && $.inArray(board[startR - 1][startC], ['X', 'A', 'D', 'S']) < 0) {
 						dfs(startR - 1, startC);
 					}
-					if (startR > 0 && !visited[startR + 1][startC] && !$.inArray(board[startR + 1][startC], ['X', 'W', 'A', 'D'])) {
+					if (startR < BOARD_SIZE - 1 && !visited[startR + 1][startC] && $.inArray(board[startR + 1][startC], ['X', 'W', 'A', 'D']) < 0) {
 						dfs(startR + 1, startC);
 					}
-					if (startR > 0 && !visited[startR][startC - 1] && !$.inArray(board[startR][startC - 1], ['X', 'W', 'S', 'D'])) {
+					if (startC > 0 && !visited[startR][startC - 1] && $.inArray(board[startR][startC - 1], ['X', 'W', 'S', 'D']) < 0) {
 						dfs(startR, startC - 1);
 					}
-					if (startR > 0 && !visited[startR][startC + 1] && !$.inArray(board[startR][startC + 1], ['X', 'W', 'A', 'S'])) {
+					if (startC < BOARD_SIZE - 1 && !visited[startR][startC + 1] && $.inArray(board[startR][startC + 1], ['X', 'W', 'A', 'S']) < 0) {
 						dfs(startR, startC + 1);
 					}
 				})(pos.r, pos.c);
+				
+				connectGraph[pos.r + "-" + pos.c] = connected;
 			}
+			console.log(connectGraph);
 		}
 	}
 	
