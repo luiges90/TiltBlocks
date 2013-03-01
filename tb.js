@@ -810,9 +810,9 @@ function eliminateBlocks(board, bottomBoard) {
 				
 				if (eliminated.length > 1) {
 					canIgnoreOppositeDir = false;
-					for (var i in eliminated) {
-						board[eliminated[i][0]][eliminated[i][1]] = bottomBoard[eliminated[i][0]][eliminated[i][1]];
-						eliminateSet.push(eliminated[i]);
+					for (var k in eliminated) {
+						board[eliminated[k][0]][eliminated[k][1]] = bottomBoard[eliminated[k][0]][eliminated[k][1]];
+						eliminateSet.push(eliminated[k]);
 					}
 				}
 			}
