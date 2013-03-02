@@ -1147,7 +1147,7 @@ function solve() {
 		return false;
 	}
 	
-	console.log('Trying to solve the board within ' + stepLimit + ' steps');
+	console.log('Trying to solve the board within ' + stepLimit + ' steps.');
 	for (var i = 1; i <= stepLimit && !solvedSteps; ++i) {
 		solvedSteps = dls(i);
 		console.log('Steps spent: ' + i); 
@@ -1156,7 +1156,13 @@ function solve() {
 		}
 	}
 	
-	console.log("Solution: " + solvedSteps);
+	if (solvedSteps === null) {
+		console.log("This level is definitely impossible!");
+	} else if (solvedSteps === false){
+		console.log("Unable to solve this level within " + stepLimit + " steps.");
+	} else {
+		console.log("Solution: " + solvedSteps);
+	}
 	
 	return solvedSteps;
 }
