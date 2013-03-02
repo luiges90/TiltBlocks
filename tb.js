@@ -1157,9 +1157,9 @@ function solve() {
 	}
 	
 	if (solvedSteps === null) {
-		console.log("This level is definitely impossible!");
+		console.log("This level is definitely impossible. You may need to tweak your level.");
 	} else if (solvedSteps === false){
-		console.log("Unable to solve this level within " + stepLimit + " steps.");
+		console.log("Unable to solve this level within " + stepLimit + " steps. Maybe raise your step limit?");
 	} else {
 		console.log("Solution: " + solvedSteps);
 	}
