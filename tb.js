@@ -1063,10 +1063,12 @@ function solve() {
 		stepLimit = $("#level-editor-scene .panel .step-limit").val();
 	}
 
-	function dls_r(board, bottomBoard, maxStep, currentStep, dir, steps) {
-		var solvedSteps, complete;
+	function dls_r(board, bottomBoard, maxStep, currentStep, dir, steps, pastSteps) {
+		var solvedSteps = false;
+		var complete;
 		
 		steps.push(dir);
+		pastSteps.push($.extend(true, [], board));
 		switch (dir) {
 			case '↑': complete = makeStep(board, bottomBoard, -1, 0); break;
 			case '←': complete = makeStep(board, bottomBoard, 0, -1); break;
@@ -1080,40 +1082,76 @@ function solve() {
 			return steps;
 		} else if (currentStep >= maxStep) {
 			steps.pop();
+			pastSteps.pop();
 			return false;
-		} else if (isImpossible(board, bottomBoard)) {
+		} else if (isImpossible(board, bottomBoard) || duplicatedBoard(board, pastSteps)) {
 			steps.pop();
+			pastSteps.pop();
 			return null;
 		} else {
-			if ((dir != '↑' || !thisStepIgnoreSame) && (dir != '↓' || !thisStepIgnoreOpposite))
-				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↑', steps);
-			if (!solvedSteps && (dir != '←' || !thisStepIgnoreSame) && (dir != '→' || !thisStepIgnoreOpposite))
-				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '←', steps);
-			if (!solvedSteps && (dir != '↓' || !thisStepIgnoreSame) && (dir != '↑' || !thisStepIgnoreOpposite))
-				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↓', steps);
-			if (!solvedSteps && (dir != '→' || !thisStepIgnoreSame) && (dir != '←' || !thisStepIgnoreOpposite))
-				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '→', steps); 
-			if (!solvedSteps) 
-				steps.pop();
-			return solvedSteps;
+			var hardImpossible = true;
+			
+			if ((dir != '↑' || !thisStepIgnoreSame) && (dir != '↓' || !thisStepIgnoreOpposite)){
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↑', steps, pastSteps);
+				if (solvedSteps !== null) hardImpossible = false;
+				if (solvedSteps) return solvedSteps;
+			}
+				
+			if (!solvedSteps && (dir != '←' || !thisStepIgnoreSame) && (dir != '→' || !thisStepIgnoreOpposite)) {
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '←', steps, pastSteps);
+				if (solvedSteps !== null) hardImpossible = false;
+				if (solvedSteps) return solvedSteps;
+			}
+				
+			if (!solvedSteps && (dir != '↓' || !thisStepIgnoreSame) && (dir != '↑' || !thisStepIgnoreOpposite)) {
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↓', steps, pastSteps);
+				if (solvedSteps !== null) hardImpossible = false;
+				if (solvedSteps) return solvedSteps;
+			}
+				
+			if (!solvedSteps && (dir != '→' || !thisStepIgnoreSame) && (dir != '←' || !thisStepIgnoreOpposite)) {
+				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '→', steps, pastSteps); 
+				if (solvedSteps !== null) hardImpossible = false;
+				if (solvedSteps) return solvedSteps;
+			}
+
+			steps.pop();
+			pastSteps.pop();
+			
+			if (hardImpossible) return null;
+			return false;
 		}
 	}
 	
 	function dls(maxStep) {
-		var solvedSteps; 
+		var solvedSteps = false; 
+		var hardImpossible = true;
 		
-		solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '↑', []);
-		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '←', []);
-		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '↓', []);
-		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '→', []);
-		return solvedSteps;
+		solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '↑', [], []);
+		if (solvedSteps !== null) hardImpossible = false;
+		if (solvedSteps) return solvedSteps;
+		
+		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '←', [], []);
+		if (solvedSteps !== null) hardImpossible = false;
+		if (solvedSteps) return solvedSteps;
+		
+		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '↓', [], []);
+		if (solvedSteps !== null) hardImpossible = false;
+		if (solvedSteps) return solvedSteps;
+		
+		if (!solvedSteps) solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, 1, '→', [], []);
+		if (solvedSteps !== null) hardImpossible = false;
+		if (solvedSteps) return solvedSteps;
+		
+		if (hardImpossible) return null;
+		return false;
 	}
 	
 	console.log('Trying to solve the board within ' + stepLimit + ' steps');
 	for (var i = 1; i <= stepLimit && !solvedSteps; ++i) {
 		solvedSteps = dls(i);
 		console.log('Steps spent: ' + i); 
-		if (solvedSteps == null){
+		if (solvedSteps === null){
 			break;
 		}
 	}
@@ -1121,6 +1159,21 @@ function solve() {
 	console.log("Solution: " + solvedSteps);
 	
 	return solvedSteps;
+}
+
+function duplicatedBoard(board, pastSteps) {
+	for (var i = pastSteps.length - 1; i >= 0; --i) {
+		var same = true;
+		for (var j in pastSteps[i]) {
+			for (var k in pastSteps[i][j]) {
+				if (pastSteps[i][j][k] != board[j][k]) {
+					same = false;
+				}
+			}
+		}
+		if (same) return true;
+	}
+	return false;
 }
 
 /**
