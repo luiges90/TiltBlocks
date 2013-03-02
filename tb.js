@@ -1144,6 +1144,21 @@ function isImpossible(board, bottomBoard) {
 		return true;
 	}
 	
+	// stickies "T" consideration
+	for (var i in blockPositions) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
+			var stuck = 0;
+			for (var j in blockPositions[i]) {
+				if (bottomBoard[blockPositions[i][j].r][blockPositions[i][j].c] == 'T') {
+					stuck++;
+				}
+			}
+			if (stuck > (blockPositions[i].length + (typeof blockPositions['9'] == 'undefined' ? 0 : blockPositions['9'].length)) / 2) {
+				return true;
+			}
+		}
+	}
+	
 	// find if each block can reach other blocks, otherwise it is sure to be impossible
 	/*for (var i in blockPositions) {
 		if ($.inArray(i, ['1', '2', '3', '4', '9']) >= 0) {
