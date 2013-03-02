@@ -1078,9 +1078,12 @@ function solve() {
 
 		if (complete) {
 			return steps;
-		} else if (currentStep >= maxStep || isImpossible(board, bottomBoard)) {
+		} else if (currentStep >= maxStep) {
 			steps.pop();
 			return false;
+		} else if (isImpossible(board, bottomBoard)) {
+			steps.pop();
+			return null;
 		} else {
 			if ((dir != '↑' || !thisStepIgnoreSame) && (dir != '↓' || !thisStepIgnoreOpposite))
 				solvedSteps = dls_r($.extend(true, [], board), $.extend(true, [], bottomBoard), maxStep, currentStep + 1, '↑', steps);
@@ -1110,6 +1113,9 @@ function solve() {
 	for (var i = 1; i <= stepLimit && !solvedSteps; ++i) {
 		solvedSteps = dls(i);
 		console.log('Steps spent: ' + i); 
+		if (solvedSteps == null){
+			break;
+		}
 	}
 	
 	console.log("Solution: " + solvedSteps);
