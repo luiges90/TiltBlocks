@@ -1198,6 +1198,12 @@ function isImpossible(board, bottomBoard) {
 		}
 	}
 	
+	if (typeof(extraImpossible) == "function") {
+		if (extraImpossible(board, bottomBoard, blockPositions)) {
+			return true;
+		}
+	}
+	
 	// color block counts
 	for (var i in blockPositions) {
 		if ($.inArray(i, ['1', '2', '3', '4']) >= 0 && blockPositions[i].length == 1 && (typeof blockPositions['9'] == 'undefined')) {

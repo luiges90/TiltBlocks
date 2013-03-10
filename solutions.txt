@@ -1,4 +1,6 @@
-﻿1-1: ↑,← 
+﻿Solutions with solver. Level marked with (*) are with human-assist, see assist functions at the end of this file.
+
+1-1: ↑,← 
 1-2: ↓,← 
 1-3: ↑,←,↑ 
 1-4: ↓,→ 
@@ -107,3 +109,85 @@
 10-8:
 10-9:
 10-10:
+
+------
+
+Assist functions:
+
+5-9:
+function extraImpossible(board, bottomBoard, blockPositions) {
+	for (var i in blockPositions['0']) {
+		if (blockPositions['0'][i].r == 5 && (blockPositions['0'][i].c == 3 || blockPositions['0'][i].c == 8)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+7-3:
+function extraImpossible(board, bottomBoard, blockPositions) {
+	for (var i in blockPositions) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
+			for (var j in blockPositions[i]) {
+				if (blockPositions[i][j].r <= 1) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+8-6:
+function extraImpossible(board, bottomBoard, blockPositions) {
+	for (var i in blockPositions) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
+			for (var j in blockPositions[i]) {
+				if (blockPositions[i][j].r <= 2 || blockPositions[i][j].r >= 9) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+8-9:
+function extraImpossible(board, bottomBoard, blockPositions) {
+	for (var i in blockPositions) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
+			for (var j in blockPositions[i]) {
+				if (blockPositions[i][j].r <= 4 && blockPositions[i][j].c >= 9) {
+					return true;
+				}
+				if (blockPositions[i][j].r == 5 && blockPositions[i][j].c == 8) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+8-10:
+function extraImpossible(board, bottomBoard, blockPositions) {
+	for (var i in blockPositions) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
+			for (var j in blockPositions[i]) {
+				if (blockPositions[i][j].r == 1 && blockPositions[i][j].c == 1) {
+					return true;
+				}
+				if (blockPositions[i][j].r == 1 && blockPositions[i][j].c == 10) {
+					return true;
+				}
+				if (blockPositions[i][j].r == 10 && blockPositions[i][j].c == 1) {
+					return true;
+				}
+				if (blockPositions[i][j].r == 10 && blockPositions[i][j].c == 10) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
