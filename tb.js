@@ -327,7 +327,7 @@ function loadLevelFromString(string, blockAppendTo) {
 function setupTipPopup(text, x, y, callback) {
 	state = STATE_TIP;
 	$(".tip-main").html(text);
-	$(".tip-popup").css("left", x).css("top", y).show().one("click", function(){
+	$(".tip-popup").css("left", $("#game-scene").offset().left + x).css("top", $("#game-scene").offset().top + y).show().one("click", function(){
 		$(".tip-popup").fadeOut(function(){
 			if (callback){
 				callback();
@@ -362,35 +362,35 @@ function loadLevel(number) {
 			// ready
 			switch (furthestLevel) {
 				case 0:
-					setupTipPopup("These are blocks. Eliminate them by putting them together.", 450, 420, function(){
-						setupTipPopup("By clicking these arrows, you move blocks all the way until they hit something.", 800, 380);
+					setupTipPopup("These are blocks. Eliminate them by putting them together.", 150, 380, function(){
+						setupTipPopup("By clicking these arrows, you move blocks all the way until they hit something.", 500, 340);
 					});
 					break;
 				case 10:
-					setupTipPopup("These are stones. They do not eliminate and need not be eliminated.", 500, 420);
+					setupTipPopup("These are stones. They do not eliminate and need not be eliminated.", 200, 380);
 					break;
 				case 20:
-					setupTipPopup("These are rainbow blocks. They eliminate with any other colored blocks.", 700, 470);
+					setupTipPopup("These are rainbow blocks. They eliminate with any other colored blocks.", 400, 430);
 					break;
 				case 30:
-					setupTipPopup("These are arrows. They only allow blocks moving at its direction.", 600, 470);
+					setupTipPopup("These are arrows. They only allow blocks moving at its direction.", 300, 430);
 					break;
 				case 40:
-					setupTipPopup("These are stickies. Blocks going onto them will be stopped and become unmovable.", 600, 420);
+					setupTipPopup("These are stickies. Blocks going onto them will be stopped and become unmovable.", 300, 380);
 					break;
 				case 50:
-					setupTipPopup("These are gates. They open up when blocks land on switches of the same color.", 600, 470, function(){
-						setupTipPopup("These are switches, used to open gates of the same color.", 700, 200);
+					setupTipPopup("These are gates. They open up when blocks land on switches of the same color.", 300, 430, function(){
+						setupTipPopup("These are switches, used to open gates of the same color.", 400, 160);
 					});
 					break;
 				case 60:
-					setupTipPopup("These are moving walls, which moves by a square according to its direction as you move.", 450, 400);
+					setupTipPopup("These are moving walls, which moves by a square according to its direction as you move.", 150, 360);
 					break;
 				case 70:
-					setupTipPopup("These are no-match area. Any blocks moving onto them will not be eliminated.", 300, 450);
+					setupTipPopup("These are no-match area. Any blocks moving onto them will not be eliminated.", 0, 410);
 					break;
 				case 80:
-					setupTipPopup("These are wraps, which brings any blocks to another same-colored wraps.", 700, 220);
+					setupTipPopup("These are wraps, which brings any blocks to another same-colored wraps.", 400, 180);
 					break;
 				default:
 					state = STATE_READY;
