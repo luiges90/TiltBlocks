@@ -162,6 +162,8 @@ $(document).ready(function() {
 			} else if ($(".level-failed").is(':visible')) {
 				$(".retry").click();
 			}
+		} else if (e.which == 82) { //"R" key
+			$(".retry").click();
 		}
 	});
 });
