@@ -154,6 +154,16 @@ $(document).ready(function() {
 	function(){
 		$(".palette-table .jspVerticalBar").animate({"opacity": 0}, 200);
 	});
+	
+	$(document).on("keyup", function(e){
+		if (e.which == 13){
+			if ($(".level-cleared").is(':visible')) {
+				$(".next").click();
+			} else if ($(".level-failed").is(':visible')) {
+				$(".retry").click();
+			}
+		}
+	});
 });
 
 var board, bottomBoard;
@@ -1005,6 +1015,8 @@ function checkComplete(board, bottomBoard, playing) {
 		}
 	}
 	if (completed && playing) {
+		state = STATE_CLEARED;
+		
 		if (level >= furthestLevel){
 			furthestLevel++;
 			raisedLevel = true;
@@ -1025,7 +1037,6 @@ function checkComplete(board, bottomBoard, playing) {
 			$(".level-cleared .content").html("Steps remain: " + step);
 			$("#popup-layer").css('background-color', 'transparent').fadeIn();
 			$(".level-cleared").fadeIn();
-			state = STATE_CLEARED;
 			if (inEditor){
 				$(".popup .buttons.main").hide();
 				$(".popup .buttons.editor").show();
@@ -1039,11 +1050,6 @@ function checkComplete(board, bottomBoard, playing) {
 					loadLevel(level);
 					$("#popup-layer").fadeOut();
 					$(".level-cleared").fadeOut();
-				});
-				$(document).one("keyup", function(e){
-					if (e.which == 13){
-						$(".next").click();
-					}
 				});
 			}
 		}
@@ -1070,11 +1076,6 @@ function checkFail(board, bottomBoard) {
 			$(".popup .buttons.main").show();
 		}
 		$(".level-failed").fadeIn();
-		$(document).one("keyup", function(e){
-			if (e.which == 13){
-				$(".retry").click();
-			}
-		});
 		state = STATE_FAILED;
 	}
 	return failed;
