@@ -371,6 +371,13 @@
 	filter: alpha(opacity=80);
 }
 
+#game-cleared-background {
+	background-color: #FFF;
+	box-shadow: 0px 0px 40px #FCC, 0px 0px 40px #FCC;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
 .editor.popup-bg {
 	background-color: #088;
 	box-shadow: 0px 0px 40px #0AA, 0px 0px 40px #0AA;
@@ -391,6 +398,16 @@
 #level-failed .title{
 	color: #00D;
 	text-shadow: 0px 0px 10px #007, 0px 0px 20px #007;
+}
+
+#game-cleared .title {
+	color: #FD0;
+	text-shadow: 0px 0px 20px #FF0, 0px 0px 40px #FF0;
+}
+
+#game-cleared .content {
+	color: #00F;
+	text-shadow: 0px 0px 10px #0CF, 0px 0px 20px #0CF;
 }
 
 .editor.popup .level-code {

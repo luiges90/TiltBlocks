@@ -475,8 +475,9 @@ function makeStep(board, bottomBoard, dirX, dirY, playing) {
 		}
 		animateBlocks(steps, wrapped, eliminateAfterWrap, function(){
 			state = STATE_READY;
-			checkComplete(board, bottomBoard, true);
-			checkFail(board, bottomBoard);
+			if (!checkComplete(board, bottomBoard, true)) {
+				checkFail(board, bottomBoard);
+			}
 		});
 	} else {
 		return checkComplete(board, bottomBoard, false);
@@ -990,6 +991,7 @@ function animateBlocks(steps, wrapped, eliminateAfterWrap, callback) {
 
 function checkComplete(board, bottomBoard, playing) {
 	var completed = true;
+	var raisedLevel = false;
 	for (var i = 0; i < BOARD_SIZE; ++i){
 		for (var j = 0; j < BOARD_SIZE; ++j) {
 			if ($.inArray(board[i][j], BLOCK_CODE) >= 0) {
@@ -998,33 +1000,47 @@ function checkComplete(board, bottomBoard, playing) {
 		}
 	}
 	if (completed && playing) {
-		$(".level-cleared .content").html("Steps remain: " + step);
-		$("#popup-layer").css('background-color', 'transparent').fadeIn();
-		$(".level-cleared").fadeIn();
-		state = STATE_CLEARED;
-		if (inEditor){
-			$(".popup .buttons.main").hide();
-			$(".popup .buttons.editor").show();
-		} else {
-			$(".popup .buttons.editor").hide();
-			$(".popup .buttons.main").show();
+		if (level >= furthestLevel){
+			furthestLevel++;
+			raisedLevel = true;
 		}
-		if (!inEditor) {
-			if (level >= furthestLevel){
-				furthestLevel++;
+		localStorage.setItem(PROGRESS_KEY, furthestLevel);
+		
+		if (!inEditor && level >= 99 && raisedLevel) {
+			$(".scene").fadeOut(4000);
+			setTimeout(function(){
+				$(".game-cleared").fadeIn(3000);
+				$(".game-cleared .home").one("click", function(){
+					$("#popup-layer").fadeOut();
+					$("#game-cleared").fadeOut();
+					$("#main-menu-scene").fadeIn();
+				});
+			}, 4000);
+		} else {
+			$(".level-cleared .content").html("Steps remain: " + step);
+			$("#popup-layer").css('background-color', 'transparent').fadeIn();
+			$(".level-cleared").fadeIn();
+			state = STATE_CLEARED;
+			if (inEditor){
+				$(".popup .buttons.main").hide();
+				$(".popup .buttons.editor").show();
+			} else {
+				$(".popup .buttons.editor").hide();
+				$(".popup .buttons.main").show();
 			}
-			localStorage.setItem(PROGRESS_KEY, furthestLevel);
-			$(".next").one("click", function() {
-				level++;
-				loadLevel(level);
-				$("#popup-layer").fadeOut();
-				$(".level-cleared").fadeOut();
-			});
-			$(document).keyup(function(e){
-				if (e.which == 13){
-					$(".next").click();
-				}
-			});
+			if (!inEditor) {
+				$(".next").one("click", function() {
+					level++;
+					loadLevel(level);
+					$("#popup-layer").fadeOut();
+					$(".level-cleared").fadeOut();
+				});
+				$(document).keyup(function(e){
+					if (e.which == 13){
+						$(".next").click();
+					}
+				});
+			}
 		}
 	}
 	return completed;
