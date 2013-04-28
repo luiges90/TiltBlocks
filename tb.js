@@ -362,35 +362,35 @@ function loadLevel(number) {
 			// ready
 			switch (furthestLevel) {
 				case 0:
-					setupTipPopup("These are blocks. Eliminate them by putting them together.", 150, 380, function(){
-						setupTipPopup("By clicking these arrows, you move blocks all the way until they hit something.", 500, 340);
+					setupTipPopup("These are blocks. Eliminate them by putting them together.", 150, 340, function(){
+						setupTipPopup("By clicking these arrows, you move blocks all the way until they hit something.", 500, 300);
 					});
 					break;
 				case 10:
-					setupTipPopup("These are stones. They do not eliminate and need not be eliminated.", 200, 380);
+					setupTipPopup("These are stones. They do not eliminate and need not be eliminated.", 200, 340);
 					break;
 				case 20:
-					setupTipPopup("These are rainbow blocks. They eliminate with any other colored blocks.", 400, 430);
+					setupTipPopup("These are rainbow blocks. They eliminate with any other colored blocks.", 400, 390);
 					break;
 				case 30:
-					setupTipPopup("These are arrows. They only allow blocks moving at its direction.", 300, 430);
+					setupTipPopup("These are arrows. They only allow blocks moving at its direction.", 300, 390);
 					break;
 				case 40:
-					setupTipPopup("These are stickies. Blocks going onto them will be stopped and become unmovable.", 300, 380);
+					setupTipPopup("These are stickies. Blocks going onto them will be stopped and become unmovable.", 300, 340);
 					break;
 				case 50:
-					setupTipPopup("These are gates. They open up when blocks land on switches of the same color.", 300, 430, function(){
-						setupTipPopup("These are switches, used to open gates of the same color.", 400, 160);
+					setupTipPopup("These are gates. They open up when blocks land on switches of the same color.", 300, 390, function(){
+						setupTipPopup("These are switches, used to open gates of the same color.", 400, 120);
 					});
 					break;
 				case 60:
-					setupTipPopup("These are moving walls, which moves by a square according to its direction as you move.", 150, 360);
+					setupTipPopup("These are moving walls, which moves by a square according to its direction as you move.", 150, 320);
 					break;
 				case 70:
-					setupTipPopup("These are no-match area. Any blocks moving onto them will not be eliminated.", 0, 410);
+					setupTipPopup("These are no-match area. Any blocks moving onto them will not be eliminated.", 0, 370);
 					break;
 				case 80:
-					setupTipPopup("These are wraps, which brings any blocks to another same-colored wraps.", 400, 180);
+					setupTipPopup("These are wraps, which brings any blocks to another same-colored wraps.", 400, 140);
 					break;
 				default:
 					state = STATE_READY;
@@ -1035,7 +1035,7 @@ function checkComplete(board, bottomBoard, playing) {
 					$("#popup-layer").fadeOut();
 					$(".level-cleared").fadeOut();
 				});
-				$(document).keyup(function(e){
+				$(document).one("keyup", function(e){
 					if (e.which == 13){
 						$(".next").click();
 					}
@@ -1065,6 +1065,11 @@ function checkFail(board, bottomBoard) {
 			$(".popup .buttons.main").show();
 		}
 		$(".level-failed").fadeIn();
+		$(document).one("keyup", function(e){
+			if (e.which == 13){
+				$(".retry").click();
+			}
+		});
 		state = STATE_FAILED;
 	}
 	return failed;
