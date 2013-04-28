@@ -2,6 +2,7 @@
 
 var BOARD_SIZE = 12;
 var SQUARE_SIZE = 48;
+var TOTAL_LEVELS = 100;
 
 // state constants
 var STATE_LOADING = 0;
@@ -66,7 +67,11 @@ $(document).ready(function() {
 		$(".scene").fadeOut();
 		$("#game-scene").fadeIn();
 		$("#main-menu-scene #progress-clear-alert").hide();
-		loadLevel(furthestLevel);
+		if (furthestLevel > TOTAL_LEVELS){
+			loadLevel(0);
+		} else {
+			loadLevel(furthestLevel);
+		}
 	});
 
 	$("#main-menu-scene .level-select").click(function(){
@@ -1006,7 +1011,7 @@ function checkComplete(board, bottomBoard, playing) {
 		}
 		localStorage.setItem(PROGRESS_KEY, furthestLevel);
 		
-		if (!inEditor && level >= 99 && raisedLevel) {
+		if (!inEditor && level >= TOTAL_LEVELS - 1 && raisedLevel) {
 			$(".scene").fadeOut(4000);
 			setTimeout(function(){
 				$(".game-cleared").fadeIn(3000);
