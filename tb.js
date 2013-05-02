@@ -1019,11 +1019,13 @@ function checkComplete(board, bottomBoard, playing) {
 	if (completed && playing) {
 		state = STATE_CLEARED;
 		
-		if (level >= furthestLevel){
-			furthestLevel++;
-			raisedLevel = true;
+		if (!inEditor) {
+			if (level >= furthestLevel){
+				furthestLevel++;
+				raisedLevel = true;
+			}
+			localStorage.setItem(PROGRESS_KEY, furthestLevel);
 		}
-		localStorage.setItem(PROGRESS_KEY, furthestLevel);
 		
 		if (!inEditor && level >= TOTAL_LEVELS - 1 && raisedLevel) {
 			$(".scene").fadeOut(4000);
