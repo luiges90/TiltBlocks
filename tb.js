@@ -412,6 +412,9 @@ function loadLevel(number) {
 				default:
 					state = STATE_READY;
 			}
+		},
+		error: function(){
+			window.alert("Too bad! Looks like I am unable to load the level. Check if you are connected to the internet.");
 		}
 	});
 }
