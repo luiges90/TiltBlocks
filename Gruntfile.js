@@ -14,6 +14,21 @@ module.exports = function(grunt) {
 				dest: 'build/tb.min.css'
 			}
 		},
+		htmlmin: {
+			dist: {
+				options: {
+					removeComments: true,
+					removeCommentsFromCDATA: true,
+					removeCDATASectionsFromCDATA: true,
+					collapseBooleanAttributes: true,
+					removeRedundantAttributes: true,
+					removeEmptyAttributes: true
+				},
+				files: {
+					'build/index.html': 'tb.html'
+				}
+			},
+		},
 		copy: {
 			build: {
 				files: [
@@ -26,8 +41,9 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 
-	grunt.registerTask('default', ['uglify', 'cssmin', 'copy']);
+	grunt.registerTask('default', ['uglify', 'cssmin', 'htmlmin', 'copy']);
 
 };
