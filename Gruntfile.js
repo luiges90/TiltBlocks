@@ -24,6 +24,7 @@ module.exports = function(grunt) {
 		copy: {
 			build: {
 				files: [
+					{expand: true, src: ['lib/jquery.jscrollpane.css'], dest: 'build/'},
 					{expand: true, src: ['img/*.png', 'levels/**'], dest: 'build/'},
 				]
 			}
