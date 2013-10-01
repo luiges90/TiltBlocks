@@ -1,0 +1,15 @@
+{
+  "name": "TiltBlocks",
+  "version": "0.8.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/luiges90/TiltBlocks.git"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-contrib-copy": "~0.4.1"
+  }
+}
