@@ -50,7 +50,7 @@ $(document).ready(function() {
 	state = STATE_MAIN_MENU;
 	
 	furthestLevel = localStorage.getItem(PROGRESS_KEY);
-	furthestLevel = parseInt(furthestLevel);
+	furthestLevel = parseInt(furthestLevel, 10);
 	if (isNaN(furthestLevel)) furthestLevel = 0;
 	level = furthestLevel;
 	
@@ -78,7 +78,7 @@ $(document).ready(function() {
 		$("#level-select-scene .level").each(function(){
 			if ($(this).data('level') < furthestLevel) {
 				$(this).css("background-color", "#0F0").addClass("cleared-level open-level");
-			} else if ($(this).data('level') == furthestLevel) {
+			} else if ($(this).data('level') === furthestLevel) {
 				$(this).css("background-color", "#FF0").addClass("current-level open-level");
 			} else {
 				$(this).css("background-color", "#CCC").addClass("locked-level");
@@ -156,13 +156,13 @@ $(document).ready(function() {
 	});
 	
 	$(document).on("keyup", function(e){
-		if (e.which == 13){
+		if (e.which === 13){
 			if ($(".level-cleared").is(':visible')) {
 				$(".next").click();
 			} else if ($(".level-failed").is(':visible')) {
 				$(".retry").click();
 			}
-		} else if (e.which == 82) { //"R" key
+		} else if (e.which === 82) { //"R" key
 			$(".retry").click();
 		}
 	});
@@ -240,7 +240,7 @@ function createLevelEditorActions() {
 			var boardTop = Math.floor((y - $board.offset().top) / SQUARE_SIZE);
 			
 			var currentCode = String($(".palette.active").data('code'));
-			if (currentCode == "undefined") currentCode = '.';
+			if (currentCode === "undefined") currentCode = '.';
 			
 			if (board[boardTop][boardLeft] != currentCode) {
 				board[boardTop][boardLeft] = currentCode;
@@ -335,7 +335,7 @@ function loadLevelFromString(string, blockAppendTo) {
 	for (var i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
 		board[Math.floor(i / BOARD_SIZE)][i % BOARD_SIZE] = string.charAt(i);
 	}
-	stepLimit = parseInt(string.slice(-2));
+	stepLimit = parseInt(string.slice(-2), 10);
 	step = stepLimit;
 	
 	updateBoardFromData(blockAppendTo);
@@ -525,7 +525,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
 				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
-					if (bottomBoard[i][j] == 'T') {
+					if (bottomBoard[i][j] === 'T') {
 						var elem = moveBlock(board, bottomBoard, i, j, i, j);
 						if (elem) {
 							changeSet.push(elem);
@@ -533,14 +533,14 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 					} else {
 						for (var k = j - 1; ; --k) 
 						{
-							if (k == -1 || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'D']) >= 0) {
+							if (k === -1 || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'D']) >= 0) {
 								var elem = moveBlock(board, bottomBoard, i, j, i, k + 1);
 								if (elem) {
 									changeSet.push(elem);
 								}
 								break;
 							} 
-							else if (board[i][k] == 'T') 
+							else if (board[i][k] === 'T') 
 							{
 								var elem = moveBlock(board, bottomBoard, i, j, i, k);
 								if (elem) {
@@ -548,7 +548,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								}
 								canIgnoreOppositeDir = false;
 								break;
-							} else if (board[i][k] == 'A'){
+							} else if (board[i][k] === 'A'){
 								canIgnoreOppositeDir = false;
 							}
 						}
@@ -563,7 +563,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j >= 0 ; --j) {
 				if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
-					if (bottomBoard[i][j] == 'T') {
+					if (bottomBoard[i][j] === 'T') {
 						var elem = moveBlock(board, bottomBoard, i, j, i, j);
 						if (elem) {
 							changeSet.push(elem);
@@ -571,14 +571,14 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 					} else {
 						for (var k = j + 1; ; ++k) 
 						{
-							if (k == BOARD_SIZE || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'A']) >= 0) {
+							if (k === BOARD_SIZE || $.inArray(board[i][k], SOLID_CODE) >= 0 || $.inArray(board[i][k], ['W', 'S', 'A']) >= 0) {
 								var elem = moveBlock(board, bottomBoard, i, j, i, k - 1);
 								if (elem) {
 									changeSet.push(elem);
 								}
 								break;
 							} 
-							else if (board[i][k] == 'T') 
+							else if (board[i][k] === 'T') 
 							{
 								var elem = moveBlock(board, bottomBoard, i, j, i, k);
 								if (elem) {
@@ -586,7 +586,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								}
 								canIgnoreOppositeDir = false;
 								break;
-							} else if (board[i][k] == 'D') {
+							} else if (board[i][k] === 'D') {
 								canIgnoreOppositeDir = false;
 							}
 						}
@@ -601,7 +601,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = 0; j < BOARD_SIZE; ++j) {
 				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0) {
-					if (bottomBoard[j][i] == 'T') {
+					if (bottomBoard[j][i] === 'T') {
 						var elem = moveBlock(board, bottomBoard, j, i, j, i);
 						if (elem) {
 							changeSet.push(elem);
@@ -609,14 +609,14 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 					} else {
 						for (var k = j - 1; ; --k) 
 						{
-							if (k == -1 || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['A', 'S', 'D']) >= 0) {
+							if (k === -1 || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['A', 'S', 'D']) >= 0) {
 								var elem = moveBlock(board, bottomBoard, j, i, k + 1, i);
 								if (elem) {
 									changeSet.push(elem);
 								}
 								break;
 							} 
-							else if (board[k][i] == 'T') 
+							else if (board[k][i] === 'T') 
 							{
 								var elem = moveBlock(board, bottomBoard, j, i, k, i);
 								if (elem) {
@@ -624,7 +624,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								}
 								canIgnoreOppositeDir = false;
 								break;
-							} else if (board[k][i] == 'W') {
+							} else if (board[k][i] === 'W') {
 								canIgnoreOppositeDir = false;
 							}
 						}
@@ -639,7 +639,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 		for (var i = 0; i < BOARD_SIZE; ++i) {
 			for (var j = BOARD_SIZE - 1; j >= 0 ; --j) {
 				if ($.inArray(board[j][i], MOVABLE_CODE) >= 0) {
-					if (bottomBoard[j][i] == 'T') {
+					if (bottomBoard[j][i] === 'T') {
 						var elem = moveBlock(board, bottomBoard, j, i, j, i);
 						if (elem) {
 							changeSet.push(elem);
@@ -647,14 +647,14 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 					} else {
 						for (var k = j + 1; ; ++k) 
 						{
-							if (k == BOARD_SIZE || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['W', 'A', 'D']) >= 0) {
+							if (k === BOARD_SIZE || $.inArray(board[k][i], SOLID_CODE) >= 0 || $.inArray(board[k][i], ['W', 'A', 'D']) >= 0) {
 								var elem = moveBlock(board, bottomBoard, j, i, k - 1, i);
 								if (elem) {
 									changeSet.push(elem);
 								}
 								break;
 							} 
-							else if (board[k][i] == 'T') 
+							else if (board[k][i] === 'T') 
 							{
 								var elem = moveBlock(board, bottomBoard, j, i, k, i);
 								if (elem) {
@@ -662,7 +662,7 @@ function moveBlocks(board, bottomBoard, dirR, dirC) {
 								}
 								canIgnoreOppositeDir = false;
 								break;
-							} else if (board[k][i] == 'S'){
+							} else if (board[k][i] === 'S'){
 								canIgnoreOppositeDir = false;
 							}
 						}
@@ -692,7 +692,7 @@ function moveWalls(board, bottomBoard) {
 
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if (board[i][j] == 'F') {
+			if (board[i][j] === 'F') {
 				canIgnoreSameDir = false;
 				if (i > 0 && $.inArray(board[i-1][j], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i - 1, j);
@@ -711,7 +711,7 @@ function moveWalls(board, bottomBoard) {
 	
 	for (var i = BOARD_SIZE - 1; i >= 0; --i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if (board[i][j] == 'V') {
+			if (board[i][j] === 'V') {
 				canIgnoreSameDir = false;
 				if (i < BOARD_SIZE - 1 && $.inArray(board[i+1][j], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i + 1, j);
@@ -734,7 +734,7 @@ function moveWalls(board, bottomBoard) {
 	
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if (board[i][j] == 'C') {
+			if (board[i][j] === 'C') {
 				canIgnoreSameDir = false;
 				if (j > 0 && $.inArray(board[i][j-1], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i, j - 1);
@@ -753,7 +753,7 @@ function moveWalls(board, bottomBoard) {
 	
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = BOARD_SIZE - 1; j >= 0; --j) {
-			if (board[i][j] == 'B') {
+			if (board[i][j] === 'B') {
 				canIgnoreSameDir = false;
 				if (j < BOARD_SIZE - 1 && $.inArray(board[i][j+1], SOLID_CODE) < 0) {
 					var elem = moveBlock(board, bottomBoard, i, j, i, j + 1);
@@ -799,9 +799,9 @@ function eliminateBlocks(board, bottomBoard) {
 					startR = parseInt(startR, 10);
 					startC = parseInt(startC, 10);
 					visited[startR][startC] = true;
-					if (bottomBoard[startR][startC] == 'N') return;
+					if (bottomBoard[startR][startC] === 'N') return;
 					eliminated.push([startR, startC]);
-					if (board[startR][startC] == '9'){
+					if (board[startR][startC] === '9'){
 						if (startR > 0 && $.inArray(board[startR - 1][startC], BLOCK_CODE) >= 0 && !visited[startR - 1][startC]){
 							dfs(startR - 1, startC);
 						}
@@ -815,16 +815,16 @@ function eliminateBlocks(board, bottomBoard) {
 							dfs(startR, startC + 1);
 						}
 					}
-					if (startR > 0 && !visited[startR - 1][startC] && (board[startR - 1][startC] == board[startR][startC] || board[startR - 1][startC] == '9')) {
+					if (startR > 0 && !visited[startR - 1][startC] && (board[startR - 1][startC] === board[startR][startC] || board[startR - 1][startC] === '9')) {
 						dfs(startR - 1, startC);
 					}
-					if (startR < BOARD_SIZE - 1 && !visited[startR + 1][startC] && (board[startR + 1][startC] == board[startR][startC] || board[startR + 1][startC] == '9')) {
+					if (startR < BOARD_SIZE - 1 && !visited[startR + 1][startC] && (board[startR + 1][startC] === board[startR][startC] || board[startR + 1][startC] === '9')) {
 						dfs(startR + 1, startC);
 					}
-					if (startC > 0 && !visited[startR][startC - 1] && (board[startR][startC - 1] == board[startR][startC] || board[startR][startC - 1] == '9')) {
+					if (startC > 0 && !visited[startR][startC - 1] && (board[startR][startC - 1] === board[startR][startC] || board[startR][startC - 1] === '9')) {
 						dfs(startR, startC - 1);
 					}
-					if (startC < BOARD_SIZE - 1 && !visited[startR][startC + 1] && (board[startR][startC + 1] == board[startR][startC] || board[startR][startC + 1] == '9')) {
+					if (startC < BOARD_SIZE - 1 && !visited[startR][startC + 1] && (board[startR][startC + 1] === board[startR][startC] || board[startR][startC + 1] === '9')) {
 						dfs(startR, startC + 1);
 					}
 				})(i, j);
@@ -842,10 +842,10 @@ function eliminateBlocks(board, bottomBoard) {
 			if ($.inArray(board[i][j], MOVABLE_CODE) >= 0) {
 			
 				var gateSwitch = function(switchCode, gateCode) {
-					if (bottomBoard[i][j] == switchCode) {
+					if (bottomBoard[i][j] === switchCode) {
 						for (var k = 0; k < BOARD_SIZE; ++k){
 							for (var l = 0; l < BOARD_SIZE; ++l) {
-								if (board[k][l] == gateCode) {
+								if (board[k][l] === gateCode) {
 									board[k][l] = '.';
 									eliminateSet.push([k, l]);
 									canIgnoreOppositeDir = false;
@@ -867,15 +867,15 @@ function eliminateBlocks(board, bottomBoard) {
 
 function getWrapLocation(board, bottomBoard, i, j){ 
 	for (var k = i; k < BOARD_SIZE; ++k) {
-		for (var l = (k == i ? j : 0); l < BOARD_SIZE; ++l) {
-			if (board[k][l] == bottomBoard[i][j]) {
+		for (var l = (k === i ? j : 0); l < BOARD_SIZE; ++l) {
+			if (board[k][l] === bottomBoard[i][j]) {
 				return {r: k, c: l};
 			}
 		}
 	}
 	for (var k = 0; k <= i; ++k) {
-		for (var l = 0; l < (k == i ? j : BOARD_SIZE); ++l) {
-			if (board[k][l] == bottomBoard[i][j]) {
+		for (var l = 0; l < (k === i ? j : BOARD_SIZE); ++l) {
+			if (board[k][l] === bottomBoard[i][j]) {
 				return {r: k, c: l};
 			}
 		}
@@ -894,7 +894,7 @@ function wrapBlocks(board, bottomBoard) {
 				canIgnoreSameDir = false;
 				var doneWrap = false;
 				for (var k in wrapped) {
-					if (wrapped[k].r == i && wrapped[k].c == j) doneWrap = true;
+					if (wrapped[k].r === i && wrapped[k].c === j) doneWrap = true;
 				}
 				if (!doneWrap){
 					var wrapTarget = getWrapLocation(board, bottomBoard, i, j);
@@ -1065,7 +1065,7 @@ function checkComplete(board, bottomBoard, playing) {
 }
 
 function checkFail(board, bottomBoard) {
-	if (state == STATE_CLEARED) return;
+	if (state === STATE_CLEARED) return;
 
 	var failed = false;
 	if (step <= 0) {
@@ -1224,7 +1224,7 @@ function isImpossible(board, bottomBoard) {
 	var blockPositions = [];
 	for (var i = 0; i < BOARD_SIZE; ++i) {
 		for (var j = 0; j < BOARD_SIZE; ++j) {
-			if (typeof blockPositions[board[i][j]] == 'undefined') {
+			if (typeof blockPositions[board[i][j]] === 'undefined') {
 				blockPositions[board[i][j]] = [{r: i, c: j}];
 			} else {
 				blockPositions[board[i][j]].push({r: i, c: j});
@@ -1232,7 +1232,7 @@ function isImpossible(board, bottomBoard) {
 		}
 	}
 	
-	if (typeof(extraImpossible) == "function") {
+	if (typeof(extraImpossible) === "function") {
 		if (extraImpossible(board, bottomBoard, blockPositions)) {
 			return true;
 		}
@@ -1240,12 +1240,12 @@ function isImpossible(board, bottomBoard) {
 	
 	// color block counts
 	for (var i in blockPositions) {
-		if ($.inArray(i, ['1', '2', '3', '4']) >= 0 && blockPositions[i].length == 1 && (typeof blockPositions['9'] == 'undefined')) {
+		if ($.inArray(i, ['1', '2', '3', '4']) >= 0 && blockPositions[i].length === 1 && (typeof blockPositions['9'] === 'undefined')) {
 			return true;
 		}
 	}
 	
-	if (typeof blockPositions['9'] != 'undefined' && blockPositions['9'].length == 1 && (typeof blockPositions['1'] == 'undefined') && (typeof blockPositions['2'] == 'undefined') && (typeof blockPositions['3'] == 'undefined') && (typeof blockPositions['4'] == 'undefined')) {
+	if (typeof blockPositions['9'] != 'undefined' && blockPositions['9'].length === 1 && (typeof blockPositions['1'] === 'undefined') && (typeof blockPositions['2'] === 'undefined') && (typeof blockPositions['3'] === 'undefined') && (typeof blockPositions['4'] === 'undefined')) {
 		return true;
 	}
 	
@@ -1254,11 +1254,11 @@ function isImpossible(board, bottomBoard) {
 		if ($.inArray(i, ['1', '2', '3', '4']) >= 0) {
 			var stuck = 0;
 			for (var j in blockPositions[i]) {
-				if (bottomBoard[blockPositions[i][j].r][blockPositions[i][j].c] == 'T') {
+				if (bottomBoard[blockPositions[i][j].r][blockPositions[i][j].c] === 'T') {
 					stuck++;
 				}
 			}
-			if (stuck > (blockPositions[i].length + (typeof blockPositions['9'] == 'undefined' ? 0 : blockPositions['9'].length)) / 2) {
+			if (stuck > (blockPositions[i].length + (typeof blockPositions['9'] === 'undefined' ? 0 : blockPositions['9'].length)) / 2) {
 				return true;
 			}
 		}
@@ -1289,13 +1289,13 @@ function isImpossible(board, bottomBoard) {
 					startC = parseInt(startC, 10);
 					visited[startR][startC] = true;
 					
-					if (board[startR][startC] == i || board[startR][startC] == '9' || (i == '9' && $.inArray(board[startR][startC], BLOCK_CODE) >= 0)){
+					if (board[startR][startC] === i || board[startR][startC] === '9' || (i === '9' && $.inArray(board[startR][startC], BLOCK_CODE) >= 0)){
 						if (pos.r != startR || pos.c != startC) {
 							outbound.push(startR + "-" + startC);
 						}
 					}
 					
-					if (bottomBoard[startR][startC] == 'T') return;
+					if (bottomBoard[startR][startC] === 'T') return;
 					if ($.inArray(bottomBoard[startR][startC], WRAP_CODE) >= 0) {
 						var wrapTarget = getWrapLocation(board, bottomBoard, startR, startC);
 						if (!visited[wrapTarget.r][wrapTarget.c]) {
