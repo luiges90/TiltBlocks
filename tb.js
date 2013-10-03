@@ -323,7 +323,7 @@ function updateBoardFromData(blockAppendTo)
 			if (typeof codeDivs[board[i][j]] !== 'undefined'){
 				$(codeDivs[board[i][j]]).clone()
 					.removeClass("palette").addClass("inBoard").addClass("r" + i + "c" + j)
-					.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).appendTo(blockAppendTo);
+					.offset({top: SQUARE_SIZE * i, left: SQUARE_SIZE * j}).css('position', 'absolute').appendTo(blockAppendTo);
 			}
 			bottomBoard[i][j] = '.';
 		}
