@@ -238,7 +238,7 @@ body {
 	color: #F00;
 }
 
-#arrows {
+.arrows {
 	position: relative;
 	border: 6px ridge #BBB;
 	width: 180px;
@@ -257,59 +257,59 @@ body {
 	cursor: pointer;
 }
 
-#up {
+.arrow.up {
 	position: absolute;
 	left: 60px;
 	top: 0px;
 	background-image: url('img/arrows.png');
 	background-position: 0px 0px;
 }
-#up:hover {
+.arrow.up:hover {
 	background-position: 0px 60px;
 }
-#up.lastDir {
+.arrow.up.lastDir {
 	background-position: 0px 120px;
 }
 
-#down {
+.arrow.down {
 	position: absolute;
 	left: 60px;
 	top: 120px;
 	background-image: url('img/arrows.png');
 	background-position: 120px 0px;
 }
-#down:hover {
+.arrow.down:hover {
 	background-position: 120px 60px;
 }
-#down.lastDir {
+.arrow.down.lastDir {
 	background-position: 120px 120px;
 }
 
-#left {
+.arrow.left {
 	position: absolute;
 	left: 0px;
 	top: 60px;
 	background-image: url('img/arrows.png');
 	background-position: 60px 0px;
 }
-#left:hover {
+.arrow.left:hover {
 	background-position: 60px 60px;
 }
-#left.lastDir {
+.arrow.left.lastDir {
 	background-position: 60px 120px;
 }
 
-#right {
+.arrow.right {
 	position: absolute;
 	left: 120px;
 	top: 60px;
 	background-image: url('img/arrows.png');
 	background-position: 180px 0px;
 }
-#right:hover {
+.arrow.right:hover {
 	background-position: 180px 60px;
 }
-#right.lastDir {
+.arrow.right.lastDir {
 	background-position: 180px 120px;
 }
 
