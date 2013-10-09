@@ -21,6 +21,22 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		'string-replace': {
+			build: {
+				files: {
+					'build/index.html': 'build/index.html'
+				},
+				options: {
+					replacements: [{
+						pattern: /<%lastUpdate%>/ig,
+						replacement: '2013-10-3'
+					}, {
+						pattern: /<%gitRepo%>/ig,
+						replacement: 'tiltblocks'
+					}]
+				}
+			}
+		},
 		copy: {
 			build: {
 				files: [
@@ -34,8 +50,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-processhtml');
+	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 
-	grunt.registerTask('default', ['uglify', 'cssmin', 'processhtml', 'copy']);
+	grunt.registerTask('default', ['uglify', 'cssmin', 'processhtml', 'string-replace', 'copy']);
 
 };
